@@ -105,6 +105,26 @@
             </article>
           </div>
         </div>
+
+        <section class="feed-section">
+          <div class="feed-heading">
+            <div>
+              <p class="eyebrow">PRIVATE COMMUNITY</p>
+              <h2>Member feed</h2>
+              <p class="muted">Latest posts first · visible only to eligible SyncTrA members</p>
+            </div>
+            <button id="refresh-feed" class="secondary" type="button">Refresh</button>
+          </div>
+          <article class="panel composer">
+            <form id="post-form" class="form">
+              <label for="post-body">Share an update with the community</label>
+              <textarea id="post-body" rows="4" maxlength="3000" placeholder="What's on your creative mind?" required></textarea>
+              <div class="composer-footer"><small>Text posts only for now. Generated media will be added in a later phase.</small><button class="primary" type="submit">Publish post</button></div>
+            </form>
+          </article>
+          <div id="feed-list" class="feed-list"></div>
+          <div id="feed-message" class="message" role="status" aria-live="polite"></div>
+        </section>
         <div id="dashboard-message" class="message" role="status" aria-live="polite"></div>
       </section>
     </main>
