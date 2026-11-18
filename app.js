@@ -137,6 +137,7 @@ async function loadMember(user) {
   authView.classList.add("hidden");
   dashboardView.classList.remove("hidden");
   await loadFeed();
+  await loadBlockedUsers();
   await loadGroups();
 }
 
@@ -215,6 +216,15 @@ async function loadFeed() {
     const commentToggle = node("button", "reaction-button", `Comment · ${postComments.length}`);
     commentToggle.type = "button";
     actions.append(like, commentToggle);
+    if (post.author_id !== currentUser.id) {
+      const report = node("button", "reaction-button safety-action", "Report");
+      report.type = "button";
+      report.addEventListener("click", () => reportPost(post.id));
+      const block = node("button", "reaction-button safety-action", "Block member");
+      block.type = "button";
+      block.addEventListener("click", () => blockMember(post.author_id, author?.display_name || "this member"));
+      actions.append(report, block);
+    }
 
     const commentsBox = node("div", "comments-box");
     for (const c of postComments) {
@@ -247,6 +257,69 @@ async function loadFeed() {
     $("feed-list").append(card);
   }
   message(feedMessage, `Showing ${posts.length} latest post${posts.length === 1 ? "" : "s"}.`);
+  await loadBlockedUsers();
+}
+
+async function reportPost(postId) {
+  const reason = window.prompt("Why are you reporting this post? Include a clear reason (at least 3 characters).");
+  if (reason === null) return;
+  const clean = reason.trim();
+  if (clean.length < 3 || clean.length > 1000) {
+    return message(feedMessage, "Please enter a report reason between 3 and 1,000 characters.", true);
+  }
+  const { error } = await supabase.from("content_reports").insert({
+    reporter_id: currentUser.id, target_type: "post", target_id: postId, reason: clean
+  });
+  if (error) return message(feedMessage, "Report could not be submitted: " + error.message, true);
+  message(feedMessage, "Report submitted privately. It will be reviewed under the community rules.");
+}
+
+async function blockMember(userId, displayName) {
+  if (!window.confirm(`Block ${displayName}? Their posts will be hidden from your feed. You can unblock them later.`)) return;
+  const { error } = await supabase.from("blocked_users").insert({
+    blocker_id: currentUser.id, blocked_user_id: userId
+  });
+  if (error) return message(feedMessage, "Member could not be blocked: " + error.message, true);
+  message(feedMessage, "Member blocked. Their posts are now hidden from your feed.");
+  await loadFeed();
+  await loadBlockedUsers();
+}
+
+async function loadBlockedUsers() {
+  if (!currentUser || !$("blocked-list")) return;
+  const host = $("blocked-list");
+  host.replaceChildren();
+  const { data, error } = await supabase.from("blocked_users")
+    .select("blocked_user_id,created_at")
+    .eq("blocker_id", currentUser.id)
+    .order("created_at", { ascending: false });
+  if (error) return message($("blocked-message"), "Blocked list unavailable: " + error.message, true);
+  if (!data?.length) {
+    message($("blocked-message"), "You haven't blocked any members.");
+    return;
+  }
+  const ids = data.map(row => row.blocked_user_id);
+  const { data: profiles, error: profileError } = await supabase.from("profiles")
+    .select("user_id,display_name,username").in("user_id", ids);
+  if (profileError) return message($("blocked-message"), "Member details unavailable: " + profileError.message, true);
+  const map = new Map((profiles || []).map(p => [p.user_id, p]));
+  for (const row of data) {
+    const profile = map.get(row.blocked_user_id);
+    const item = node("div", "blocked-row");
+    const label = node("span", "", `${profile?.display_name || "SyncTrA member"} (@${profile?.username || "member"})`);
+    const unblock = node("button", "secondary unblock-button", "Unblock");
+    unblock.type = "button";
+    unblock.addEventListener("click", async () => {
+      const { error: removeError } = await supabase.from("blocked_users")
+        .delete().eq("blocker_id", currentUser.id).eq("blocked_user_id", row.blocked_user_id);
+      if (removeError) return message($("blocked-message"), "Could not unblock member: " + removeError.message, true);
+      await loadFeed();
+      await loadBlockedUsers();
+    });
+    item.append(label, unblock);
+    host.append(item);
+  }
+  message($("blocked-message"), `${data.length} blocked member${data.length === 1 ? "" : "s"}.`);
 }
 
 async function toggleLike(postId, alreadyLiked) {
