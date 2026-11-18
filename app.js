@@ -139,6 +139,7 @@ async function loadMember(user) {
   await loadFeed();
   await loadBlockedUsers();
   await loadGroups();
+  await loadModeratorQueue();
 }
 
 $("profile-form").addEventListener("submit", async (event) => {
@@ -468,6 +469,68 @@ $("group-message-form").addEventListener("submit",async e=>{
   $("group-message-body").value="";await loadGroupMessages();
 });
 
+
+
+// Phase 6 Moderator Center. Moderator authorization is enforced by Supabase RPCs.
+async function loadModeratorQueue() {
+  const panel = $("moderator-panel");
+  const host = $("moderator-queue");
+  const status = $("moderator-message");
+  if (!currentUser || !panel || !host || !status) return;
+  status.textContent = "Checking administrator access…";
+  host.replaceChildren();
+
+  const { data, error } = await supabase.rpc("synctra_moderation_queue");
+  if (error) {
+    panel.classList.add("hidden");
+    return; // Normal members do not see the admin panel.
+  }
+  panel.classList.remove("hidden");
+  status.textContent = `${data.length} report(s) waiting for review.`;
+  if (!data.length) {
+    host.append(node("p", "muted", "No reports are waiting for review."));
+    return;
+  }
+
+  for (const report of data) {
+    const card = node("article", "panel moderation-card");
+    const heading = node("h3", "", `${report.target_type} report · ${report.report_status}`);
+    const reason = node("p", "moderation-reason", report.reason);
+    const meta = node("small", "", `Report ID: ${report.report_id} · ${formatDate(report.created_at)}`);
+    const label = node("label", "moderation-label", "Decision explanation");
+    const note = node("textarea", "moderation-note");
+    note.maxLength = 2000; note.rows = 3;
+    note.placeholder = "Explain the policy reason and action…";
+    label.append(note);
+    const actions = node("div", "group-card-actions");
+    for (const [caption, nextStatus] of [["Mark reviewing","reviewing"],["Take action","actioned"],["Dismiss report","dismissed"]]) {
+      const button = node("button", "secondary", caption);
+      button.type = "button";
+      button.addEventListener("click", async () => {
+        const explanation = note.value.trim();
+        if (nextStatus !== "reviewing" && explanation.length < 5) {
+          message(status, "Enter an explanation of at least 5 characters before a final decision.", true);
+          return;
+        }
+        button.disabled = true;
+        const { error: saveError } = await supabase.rpc("synctra_review_report", {
+          p_report_id: report.report_id, p_status: nextStatus, p_note: explanation
+        });
+        button.disabled = false;
+        if (saveError) {
+          message(status, "Decision could not be saved: " + saveError.message, true);
+          return;
+        }
+        message(status, "Decision saved to the audit log.");
+        await loadModeratorQueue();
+      });
+      actions.append(button);
+    }
+    card.append(heading, reason, meta, label, actions);
+    host.append(card);
+  }
+}
+$("moderator-refresh")?.addEventListener("click", loadModeratorQueue);
 
 $("logout-button").addEventListener("click", async () => {
   const { error } = await supabase.auth.signOut();
