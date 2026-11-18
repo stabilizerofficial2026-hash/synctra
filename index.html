@@ -125,6 +125,41 @@
           <div id="feed-list" class="feed-list"></div>
           <div id="feed-message" class="message" role="status" aria-live="polite"></div>
         </section>
+
+
+        <section class="groups-section">
+          <div class="feed-heading">
+            <div><p class="eyebrow">PRIVATE COLLABORATION</p><h2>Groups &amp; Teams</h2><p class="muted">Private spaces for members to connect and collaborate.</p></div>
+            <button id="refresh-groups" class="secondary" type="button">Refresh</button>
+          </div>
+          <article class="panel group-create-panel">
+            <h3>Create a private group</h3>
+            <p id="group-plan-note" class="muted">Checking your subscription and group capacity…</p>
+            <form id="group-create-form" class="form">
+              <label>Group name<input id="new-group-name" maxlength="60" minlength="3" required placeholder="e.g. SyncTrA Creators"></label>
+              <label>Description<textarea id="new-group-description" maxlength="500" rows="3" placeholder="What is this group about?"></textarea></label>
+              <button id="create-group-button" class="primary" type="submit">Create group</button>
+            </form>
+          </article>
+          <article class="panel group-join-panel">
+            <h3>Join a private group</h3>
+            <p class="muted">Ask the group owner for its invitation ID. Your request must be approved.</p>
+            <form id="group-join-form" class="form">
+              <label>Group invitation ID<input id="group-invite-id" required placeholder="Paste the group ID"></label>
+              <button class="secondary" type="submit">Request to join</button>
+            </form>
+          </article>
+          <div id="groups-list" class="groups-list"></div>
+          <div id="groups-message" class="message" role="status" aria-live="polite"></div>
+          <section id="group-room" class="panel group-room hidden">
+            <div class="feed-heading"><div><p class="eyebrow">PRIVATE GROUP ROOM</p><h3 id="group-room-title">Group conversation</h3></div><button id="close-group-room" class="secondary" type="button">Close</button></div>
+            <div id="group-chat-list" class="group-chat-list"></div>
+            <form id="group-message-form" class="group-message-form">
+              <input id="group-message-body" maxlength="2000" required placeholder="Write a group message…">
+              <button class="primary" type="submit">Send</button>
+            </form>
+          </section>
+        </section>
         <div id="dashboard-message" class="message" role="status" aria-live="polite"></div>
       </section>
     </main>

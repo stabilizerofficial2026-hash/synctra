@@ -137,6 +137,7 @@ async function loadMember(user) {
   authView.classList.add("hidden");
   dashboardView.classList.remove("hidden");
   await loadFeed();
+  await loadGroups();
 }
 
 $("profile-form").addEventListener("submit", async (event) => {
@@ -276,6 +277,124 @@ $("post-form").addEventListener("submit", async (event) => {
   await loadFeed();
 });
 $("refresh-feed").addEventListener("click", loadFeed);
+
+
+let activeGroupId = null;
+let activeGroupName = null;
+async function loadGroups() {
+  if (!currentUser) return;
+  message($("groups-message"), "Loading your private groups…");
+  $("groups-list").replaceChildren();
+  const { data: plans } = await supabase.from("subscriptions")
+    .select("plan_id,status,subscription_plans(group_member_limit,name)")
+    .eq("user_id", currentUser.id).eq("status","active").limit(1);
+  const activePlan = plans?.[0];
+  const limit = activePlan?.subscription_plans?.group_member_limit;
+  $("group-plan-note").textContent = activePlan
+    ? `Your active ${activePlan.subscription_plans.name} plan allows you to create groups with up to ${Number(limit).toLocaleString()} members.`
+    : "Creating a group requires an active subscription. Your current account has no active paid plan; no charges or plan changes have been made.";
+  $("create-group-button").disabled = !activePlan;
+  const { data: groups, error } = await supabase.from("groups")
+    .select("id,owner_id,group_name,description,member_limit,created_at")
+    .eq("status","active").order("created_at",{ascending:false}).limit(50);
+  if (error) return message($("groups-message"),"Groups could not load: "+error.message,true);
+  if (!groups?.length) return message($("groups-message"),"You have no groups yet. Create one with an active plan or request access using a group invitation ID.");
+  const ids = groups.map(g=>g.id);
+  const [{data:members},{data:profiles}] = await Promise.all([
+    supabase.from("group_members").select("group_id,user_id,member_role,membership_status").in("group_id",ids),
+    supabase.from("profiles").select("user_id,display_name,username")
+  ]);
+  const profileMap = new Map((profiles||[]).map(p=>[p.user_id,p]));
+  for (const g of groups) {
+    const groupMembers = (members||[]).filter(m=>m.group_id===g.id);
+    const active = groupMembers.filter(m=>m.membership_status==="active");
+    const card=document.createElement("article"); card.className="panel group-card";
+    const h=document.createElement("h3"); h.textContent=g.group_name;
+    const desc=document.createElement("p"); desc.className="muted"; desc.textContent=g.description||"A private SyncTrA group.";
+    const meta=document.createElement("small"); meta.textContent=`${active.length} active members · capacity ${Number(g.member_limit).toLocaleString()} · ${g.owner_id===currentUser.id?"You own this group":"Member"}`;
+    const actions=document.createElement("div"); actions.className="group-card-actions";
+    const open=document.createElement("button"); open.type="button"; open.className="primary"; open.textContent="Open group"; open.addEventListener("click",()=>openGroup(g));
+    actions.append(open);
+    if(g.owner_id===currentUser.id){
+      const copy=document.createElement("button"); copy.type="button"; copy.className="secondary"; copy.textContent="Copy invitation ID";
+      copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(g.id);message($("groups-message"),"Invitation ID copied. Share it privately with the intended member.");}catch{message($("groups-message"),"Copy unavailable. Group ID: "+g.id);}});
+      actions.append(copy);
+      const pending=groupMembers.filter(m=>m.membership_status==="pending");
+      for(const req of pending){
+        const row=document.createElement("div");row.className="pending-row";
+        const who=profileMap.get(req.user_id);
+        const label=document.createElement("span");label.textContent=`Join request: ${who?.display_name||"Member"} (@${who?.username||"unknown"})`;
+        const yes=document.createElement("button");yes.type="button";yes.className="secondary";yes.textContent="Approve";
+        yes.addEventListener("click",()=>reviewGroupRequest(g.id,req.user_id,true));
+        const no=document.createElement("button");no.type="button";no.className="secondary";no.textContent="Decline";
+        no.addEventListener("click",()=>reviewGroupRequest(g.id,req.user_id,false));
+        row.append(label,yes,no);card.append(row);
+      }
+    }
+    card.append(h,desc,meta,actions); $("groups-list").append(card);
+  }
+  message($("groups-message"),`Showing ${groups.length} group${groups.length===1?"":"s"} you can access.`);
+}
+async function reviewGroupRequest(groupId,userId,approve){
+  const {error}=await supabase.rpc("synctra_review_group_member",{p_group_id:groupId,p_user_id:userId,p_approve:approve});
+  if(error)return message($("groups-message"),error.message,true);
+  message($("groups-message"),approve?"Member approved.":"Request declined.");
+  await loadGroups();
+}
+async function openGroup(group){
+  activeGroupId=group.id;activeGroupName=group.group_name;
+  $("group-room-title").textContent=group.group_name;
+  $("group-room").classList.remove("hidden");
+  await loadGroupMessages();
+  $("group-room").scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function loadGroupMessages(){
+  if(!activeGroupId)return;
+  $("group-chat-list").replaceChildren();
+  const {data:rows,error}=await supabase.from("group_messages")
+    .select("id,sender_id,body,created_at").eq("group_id",activeGroupId)
+    .order("created_at",{ascending:true}).limit(100);
+  if(error)return message($("groups-message"),"Messages unavailable: "+error.message,true);
+  const ids=[...new Set((rows||[]).map(r=>r.sender_id))];
+  const {data:profiles}=ids.length?await supabase.from("profiles").select("user_id,display_name").in("user_id",ids):{data:[]};
+  const map=new Map((profiles||[]).map(p=>[p.user_id,p.display_name]));
+  if(!rows?.length){const empty=document.createElement("p");empty.className="muted";empty.textContent="No messages yet. Start the conversation."; $("group-chat-list").append(empty);}
+  for(const row of rows||[]){
+    const item=document.createElement("div");item.className="group-message";
+    const author=document.createElement("b");author.textContent=map.get(row.sender_id)||"Member";
+    const body=document.createElement("p");body.textContent=row.body;
+    const time=document.createElement("small");time.textContent=new Date(row.created_at).toLocaleString();
+    item.append(author,body,time);$("group-chat-list").append(item);
+  }
+}
+$("group-create-form").addEventListener("submit",async e=>{
+  e.preventDefault();const name=$("new-group-name").value.trim(),description=$("new-group-description").value.trim();
+  const btn=$("create-group-button");btn.disabled=true;
+  const {data,error}=await supabase.rpc("synctra_create_group",{p_group_name:name,p_description:description});
+  btn.disabled=false;
+  if(error)return message($("groups-message"),error.message,true);
+  e.currentTarget.reset();message($("groups-message"),"Private group created. Invitation ID: "+data);
+  await loadGroups();
+});
+$("group-join-form").addEventListener("submit",async e=>{
+  e.preventDefault();const id=$("group-invite-id").value.trim();
+  const {data,error}=await supabase.rpc("synctra_request_group_membership",{p_group_id:id});
+  if(error)return message($("groups-message"),error.message,true);
+  message($("groups-message"),data==="already_member"?"You are already a member.":"Join request sent. The group owner must approve it.");
+  e.currentTarget.reset();
+});
+$("refresh-groups").addEventListener("click",loadGroups);
+$("close-group-room").addEventListener("click",()=>{$("group-room").classList.add("hidden");activeGroupId=null;});
+$("group-message-form").addEventListener("submit",async e=>{
+  e.preventDefault();if(!activeGroupId||!currentUser)return;
+  const body=$("group-message-body").value.trim();if(!body)return;
+  const button=e.currentTarget.querySelector("button");button.disabled=true;
+  const {error}=await supabase.from("group_messages").insert({group_id:activeGroupId,sender_id:currentUser.id,body});
+  button.disabled=false;
+  if(error)return message($("groups-message"),"Message not sent: "+error.message,true);
+  $("group-message-body").value="";await loadGroupMessages();
+});
+
 
 $("logout-button").addEventListener("click", async () => {
   const { error } = await supabase.auth.signOut();
