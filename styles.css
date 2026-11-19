@@ -19,3 +19,27 @@
 .moderation-card small{display:block;margin:10px 0;color:var(--muted);overflow-wrap:anywhere}
 .moderation-label{display:grid;gap:8px;color:#dce8ef;font-size:12px;font-weight:600;margin-top:14px}
 .moderation-note{width:100%;resize:vertical;background:#091824;color:var(--text);border:1px solid #30485b;border-radius:10px;padding:12px;font:13px "DM Sans"}
+
+
+/* Phase 7A — immersive welcome screen */
+.welcome-screen{position:relative;min-height:calc(100svh - 32px);display:grid;place-items:center;overflow:hidden;border:1px solid #294453;border-radius:28px;background:radial-gradient(ellipse at 50% 42%,#17384a 0%,#0d2231 43%,#07131e 78%);isolation:isolate}
+.welcome-content{position:relative;z-index:2;width:min(100% - 36px,560px);padding:58px 22px 48px;text-align:center;display:flex;align-items:center;flex-direction:column}
+.welcome-symbol{width:74px;height:74px;border:1px solid #66dccb77;border-radius:24px;display:grid;place-items:center;margin-bottom:26px;background:linear-gradient(145deg,#1d5360aa,#102332);box-shadow:0 0 55px #59d6c52b,inset 0 0 25px #59d6c51c}
+.welcome-symbol span{font-size:38px;color:#9af1e2;text-shadow:0 0 25px #64e4d0}
+.welcome-content h1{font:600 clamp(35px,8vw,58px)/1.08 "Space Grotesk";letter-spacing:-1.8px;margin:12px 0 18px;color:#edf8fb}
+.welcome-content h1 span{background:linear-gradient(100deg,#70e3d2,#c1f6e8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.welcome-mantra{font:500 clamp(18px,4vw,23px) "Space Grotesk";color:#8cebdc;margin:0 0 12px}
+.welcome-copy{max-width:430px;color:#afc4d0;font-size:14px;line-height:1.8;margin:0 auto 30px}
+.welcome-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:430px}
+.welcome-choice{min-height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:15px}
+.welcome-choice strong{font:700 15px "Space Grotesk";letter-spacing:1.5px}
+.welcome-choice small{font-size:11px;opacity:.82}
+.welcome-footnote{margin:26px 0 0;color:#7896a5;font-size:11px;letter-spacing:.5px}
+.welcome-orbit{position:absolute;z-index:0;border:1px solid #6adfce17;border-radius:50%;pointer-events:none}
+.orbit-one{width:min(90vw,700px);aspect-ratio:1;box-shadow:0 0 100px #55d9ca0b,inset 0 0 90px #55d9ca0b}
+.orbit-two{width:min(65vw,480px);aspect-ratio:1;border-color:#8de9dd12;box-shadow:0 0 90px #55d9ca10}
+.welcome-bottom-glow{position:absolute;z-index:0;bottom:-190px;width:80%;height:300px;background:#2dcbb52b;filter:blur(100px);pointer-events:none}
+.back-welcome{align-self:flex-start;margin-bottom:8px}
+.danger-button{border:1px solid #8d5360;background:#351e2a;color:#ffd7df;border-radius:10px;padding:10px 13px;font:600 12px "DM Sans";cursor:pointer}
+.danger-button:disabled{opacity:.5;cursor:wait}
+@media(max-width:420px){.welcome-content{padding:42px 18px}.welcome-actions{grid-template-columns:1fr}.welcome-choice{min-height:68px}.welcome-screen{border-radius:20px}}

@@ -36,6 +36,25 @@ function showTab(which) {
 $("tab-login").addEventListener("click", () => showTab("login"));
 $("tab-signup").addEventListener("click", () => showTab("signup"));
 
+$("welcome-express").addEventListener("click", () => {
+  $("welcome-screen").classList.add("hidden");
+  authView.classList.remove("hidden");
+  showTab("login");
+  $("login-email").focus();
+});
+$("welcome-evolve").addEventListener("click", () => {
+  $("welcome-screen").classList.add("hidden");
+  authView.classList.remove("hidden");
+  showTab("signup");
+  $("signup-username").focus();
+});
+$("back-to-welcome").addEventListener("click", () => {
+  authView.classList.add("hidden");
+  $("welcome-screen").classList.remove("hidden");
+  message(authMessage, "");
+});
+
+
 function calculateAge(dobText) {
   const dob = new Date(`${dobText}T00:00:00`);
   if (!dobText || Number.isNaN(dob.getTime())) return -1;
@@ -134,6 +153,7 @@ async function loadMember(user) {
   $("avatar-letter").textContent = (profile.display_name || "S").trim().charAt(0).toUpperCase();
   $("edit-display").value = profile.display_name || "";
   $("edit-bio").value = profile.bio || "";
+  $("welcome-screen").classList.add("hidden");
   authView.classList.add("hidden");
   dashboardView.classList.remove("hidden");
   await loadFeed();
@@ -385,7 +405,7 @@ async function loadGroups() {
     const card=document.createElement("article"); card.className="panel group-card";
     const h=document.createElement("h3"); h.textContent=g.group_name;
     const desc=document.createElement("p"); desc.className="muted"; desc.textContent=g.description||"A private SyncTrA group.";
-    const meta=document.createElement("small"); meta.textContent=`${active.length} active members · capacity ${Number(g.member_limit).toLocaleString()} · ${g.owner_id===currentUser.id?"You own this group":"Member"}`;
+    const meta=document.createElement("small"); meta.textContent=`${active.length} active members · capacity ${Number(g.member_limit).toLocaleString()} · ${g.owner_id===currentUser.id?"You own this group":"Member"} · ID ${g.id.slice(0,8)}`;
     const actions=document.createElement("div"); actions.className="group-card-actions";
     const open=document.createElement("button"); open.type="button"; open.className="primary"; open.textContent="Open group"; open.addEventListener("click",()=>openGroup(g));
     actions.append(open);
@@ -393,6 +413,20 @@ async function loadGroups() {
       const copy=document.createElement("button"); copy.type="button"; copy.className="secondary"; copy.textContent="Copy invitation ID";
       copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(g.id);message($("groups-message"),"Invitation ID copied. Share it privately with the intended member.");}catch{message($("groups-message"),"Copy unavailable. Group ID: "+g.id);}});
       actions.append(copy);
+      const remove=node("button","danger-button","Delete group");
+      remove.type="button";
+      remove.addEventListener("click",async()=>{
+        const confirmText=`Delete “${g.group_name}”? This permanently removes the group, its membership records and its group messages. This cannot be undone.`;
+        if(!window.confirm(confirmText)) return;
+        remove.disabled=true;
+        const {error:deleteError}=await supabase.from("groups").delete().eq("id",g.id).eq("owner_id",currentUser.id);
+        remove.disabled=false;
+        if(deleteError) return message($("groups-message"),"Group could not be deleted: "+deleteError.message,true);
+        if(activeGroupId===g.id){$("group-room").classList.add("hidden");activeGroupId=null;activeGroupName=null;}
+        message($("groups-message"),"Group deleted.");
+        await loadGroups();
+      });
+      actions.append(remove);
       const pending=groupMembers.filter(m=>m.membership_status==="pending");
       for(const req of pending){
         const row=document.createElement("div");row.className="pending-row";
