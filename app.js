@@ -608,7 +608,7 @@ async function loadGroupMessages(){
   const map=new Map((profiles||[]).map(p=>[p.user_id,p.display_name]));
   if(!rows?.length){const empty=document.createElement("p");empty.className="muted";empty.textContent="No messages yet. Start the conversation."; $("group-chat-list").append(empty);}
   for(const row of rows||[]){
-    const item=document.createElement("div");item.className="group-message";
+    const item=document.createElement("div");item.className="group-message "+(row.sender_id===currentUser.id?"chat-bubble-own":"chat-bubble-incoming");
     const author=document.createElement("b");author.textContent=map.get(row.sender_id)||"Member";
     const body=document.createElement("p");body.textContent=row.body;
     const time=document.createElement("small");time.textContent=new Date(row.created_at).toLocaleString();
@@ -733,7 +733,7 @@ async function loadCommunityMessages(){
   for(const row of rows||[]){
     if(renderedIds.has(row.id))continue;
     renderedIds.add(row.id);
-    const item=document.createElement("article");item.className="community-message";
+    const item=document.createElement("article");item.className="community-message "+(row.sender_id===currentUser.id?"chat-bubble-own":"chat-bubble-incoming");
     const head=document.createElement("div");head.className="community-message-head";
     const author=document.createElement("b");author.textContent=names.get(row.sender_id)||"SyncTrA member";
     const time=document.createElement("small");time.textContent=new Date(row.created_at).toLocaleString();head.append(author,time);

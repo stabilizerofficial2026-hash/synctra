@@ -687,3 +687,111 @@ body.community-room-open{overflow:hidden!important}
  #community-message-form #community-message-body{height:42px!important;min-height:42px!important;max-height:42px!important;line-height:40px!important}
  #community-message-form button{height:42px!important;min-height:42px!important}
 }
+
+/* Phase 17 — unified translucent messenger-style conversations.
+   Keep room artwork visible beneath the chat and composer; no backend behavior changes. */
+.group-chat-list,.community-chat-list,.message-history{
+  background:transparent!important;
+  gap:12px!important;
+  padding:14px 8px 18px!important;
+  scrollbar-width:thin;
+  scrollbar-color:#2e8b63 #07130f;
+}
+.group-message,.community-message,.message-entry{
+  position:relative;
+  width:fit-content;
+  max-width:min(84%,560px);
+  padding:12px 15px!important;
+  border:1px solid rgba(180,235,207,.20)!important;
+  border-radius:19px 19px 19px 6px!important;
+  background:rgba(9,25,22,.66)!important;
+  color:#effff6;
+  box-shadow:0 8px 24px rgba(0,0,0,.14);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+  overflow-wrap:anywhere;
+}
+.group-message.chat-bubble-own,.community-message.chat-bubble-own,.message-entry.message-own{
+  justify-self:end;
+  align-self:flex-end;
+  border-color:rgba(68,222,151,.36)!important;
+  border-radius:19px 19px 6px 19px!important;
+  background:rgba(14,91,57,.60)!important;
+}
+.group-message.chat-bubble-incoming,.community-message.chat-bubble-incoming,.message-entry.message-incoming{
+  justify-self:start;
+  align-self:flex-start;
+  background:rgba(9,25,34,.62)!important;
+}
+.group-message b,.community-message-head b,.message-entry>small:first-child{
+  color:#9cf2c6!important;
+  font-size:12px!important;
+  font-weight:700;
+}
+.group-message p,.community-message p,.message-entry p{
+  color:#f2fff8!important;
+  font-size:14px!important;
+  line-height:1.55!important;
+  margin:7px 0 3px!important;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.group-message small,.community-message small,.message-entry small{
+  color:rgba(218,242,229,.65)!important;
+  font-size:10px!important;
+}
+/* A quiet, semi-transparent composer lets the room image remain visible. */
+#community-message-form,#group-message-form,.inline-reply{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:10px!important;
+  margin-top:8px!important;
+  border:1px solid rgba(146,224,183,.20);
+  border-radius:20px;
+  background:rgba(4,17,13,.48)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+}
+#community-message-body,#group-message-body,.inline-reply .comment-input{
+  min-width:0;
+  flex:1 1 auto;
+  height:46px!important;
+  min-height:46px!important;
+  max-height:46px!important;
+  padding:0 15px!important;
+  border-radius:15px!important;
+  border:1px solid rgba(153,231,190,.28)!important;
+  background:rgba(7,25,20,.48)!important;
+  color:#f2fff7!important;
+  font:14px "DM Sans",sans-serif!important;
+  box-shadow:none!important;
+  resize:none!important;
+  outline:none;
+}
+#community-message-body::placeholder,#group-message-body::placeholder,.inline-reply .comment-input::placeholder{
+  color:rgba(220,244,230,.62);
+}
+#community-message-body:focus,#group-message-body:focus,.inline-reply .comment-input:focus{
+  border-color:rgba(93,231,163,.78)!important;
+  background:rgba(7,31,22,.70)!important;
+  box-shadow:0 0 0 3px rgba(68,222,151,.12)!important;
+}
+#community-message-form button,#group-message-form button,.inline-reply button{
+  flex:0 0 auto;
+  min-width:68px;
+  height:46px;
+  margin:0!important;
+  border-radius:14px;
+  padding:0 16px;
+}
+.message-thread{background:rgba(5,17,14,.30)!important;border:1px solid rgba(151,225,184,.13)!important;border-radius:18px;padding:13px!important;backdrop-filter:blur(7px)}
+.message-history{max-height:440px;overflow-y:auto}
+@media(max-width:520px){
+ .group-chat-list,.community-chat-list,.message-history{padding:10px 2px 14px!important}
+ .group-message,.community-message,.message-entry{max-width:88%}
+ #community-message-form,#group-message-form,.inline-reply{gap:7px;padding:8px!important;border-radius:17px}
+ #community-message-body,#group-message-body,.inline-reply .comment-input{height:44px!important;min-height:44px!important;max-height:44px!important;padding:0 12px!important;font-size:14px!important}
+ #community-message-form button,#group-message-form button,.inline-reply button{height:44px;min-width:60px;padding:0 12px}
+}
