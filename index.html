@@ -89,7 +89,20 @@
           </div>
           <button id="logout-button" class="secondary" type="button">Log out</button>
         </div>
-        <section id="membership-gate" class="panel membership-gate hidden" aria-live="polite">
+        <nav class="app-nav" aria-label="SyncTrA workspace navigation">
+        <a class="app-nav-brand" href="#dashboard-view"><span class="nav-orb">▶</span><span>SyncTrA<small>CREATIVE SOCIAL PLATFORM</small></span></a>
+        <a href="#feed-section">⌂ <span>Home Feed</span></a>
+        <a href="#social-hub">⌕ <span>Explore & Network</span></a>
+        <a href="#messages-panel">▤ <span>Messages</span></a>
+        <a href="#notifications-panel">♧ <span>Notifications</span></a>
+        <a href="#groups-section">♧ <span>Groups</span></a>
+        <a href="#creative-space">✧ <span>Creative Studio</span></a>
+        <a href="#membership-status">♛ <span>Membership</span></a>
+      </nav>
+      <section class="member-hero" aria-label="SyncTrA creative community">
+        <div class="hero-art"><span class="hero-kicker">A PRIVATE CREATIVE COMMUNITY</span><h2>CREATE <i>•</i> SHARE <i>•</i> COLLABORATE <i>•</i> EARN</h2><p>Sync the area of your being. Express freely. Create your own world with harmony.</p></div>
+      </section>
+      <section id="membership-gate" class="panel membership-gate hidden" aria-live="polite">
           <p class="eyebrow">PRIVATE MEMBERSHIP</p>
           <h2 id="gate-title">Your membership is not active yet</h2>
           <p id="gate-description" class="muted">Choose a SyncTrA plan to continue. Private community access is reserved for members with a verified, active subscription.</p>
@@ -99,7 +112,7 @@
         </section>
         <div id="member-content" class="member-content">
         <div class="dash-grid">
-          <article class="panel profile-card">
+          <article id="profile-card" class="panel profile-card">
             <div class="avatar" id="avatar-letter">S</div>
             <p class="eyebrow">YOUR MEMBER IDENTITY</p>
             <h2 id="profile-name">Member</h2>
@@ -115,7 +128,7 @@
           </article>
 
           <div class="dash-content">
-            <article class="panel">
+            <article id="creative-space" class="panel">
               <p class="eyebrow">YOUR CREATIVE SPACE</p>
               <h2>Start with your ideas.</h2>
               <p class="muted">AI image, video and music generation will be connected in a later phase. This dashboard does not generate media yet.</p>
@@ -135,7 +148,7 @@
           </div>
         </div>
 
-        <section class="feed-section">
+        <section id="feed-section" class="feed-section">
           <div class="feed-heading">
             <div>
               <p class="eyebrow">PRIVATE COMMUNITY</p>
@@ -197,7 +210,7 @@
           </div>
         </section>
 
-        <section class="groups-section">
+        <section id="groups-section" class="groups-section">
           <div class="feed-heading">
             <div><p class="eyebrow">PRIVATE COLLABORATION</p><h2>Groups &amp; Teams</h2><p class="muted">Private spaces for members to connect and collaborate.</p></div>
             <button id="refresh-groups" class="secondary" type="button">Refresh</button>

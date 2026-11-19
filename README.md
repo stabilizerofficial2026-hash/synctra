@@ -34,3 +34,10 @@ This update brings the existing SyncTrA screens closer to the approved emerald/a
 Important: this is a visual refresh of the existing app, not a claim that all product features are complete. Payment checkout/webhook activation remains unconnected. Do not publish real plan prices or accept payments until a verified server-side payment integration is completed.
 
 Deploy by replacing the existing `index.html`, `styles.css`, `app.js`, and `README.md` in the same GitHub repository with these package files. The JavaScript is carried forward unchanged from Phase 9A.
+
+
+## Phase 9C — Reference-led workspace UI
+
+This update reshapes the existing authenticated dashboard toward the supplied SyncTrA reference: persistent desktop navigation, emerald hero area, creator profile card, studio feature tiles, feed, network, messages, notifications and groups sections. On narrow screens the navigation becomes a horizontally scrollable strip. Existing form IDs, Supabase calls and app.js are preserved.
+
+The visual reference contains illustrative media, sample counts, and paid prices. This implementation does not fabricate those values or imply that AI media generation/payment checkout is active. The current feed composer remains text-first; image/video/music generation and verified billing require separate implementation.
