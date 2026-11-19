@@ -513,6 +513,7 @@ $("refresh-feed").addEventListener("click", loadFeed);
 
 
 let activeGroupId = null;
+let groupMessageSending = false;
 let activeGroupName = null;
 async function loadGroups() {
   if (!currentUser) return;
@@ -633,11 +634,12 @@ $("group-join-form").addEventListener("submit",async e=>{
 $("refresh-groups").addEventListener("click",loadGroups);
 $("close-group-room").addEventListener("click",()=>{$("group-room").classList.add("hidden");activeGroupId=null;});
 $("group-message-form").addEventListener("submit",async e=>{
-  e.preventDefault();if(!activeGroupId||!currentUser)return;
+  e.preventDefault();if(!activeGroupId||!currentUser||groupMessageSending)return;
   const body=$("group-message-body").value.trim();if(!body)return;
-  const button=e.currentTarget.querySelector("button");button.disabled=true;
-  const {error}=await supabase.from("group_messages").insert({group_id:activeGroupId,sender_id:currentUser.id,body});
-  button.disabled=false;
+  const groupId=activeGroupId;
+  const button=e.currentTarget.querySelector("button");groupMessageSending=true;button.disabled=true;
+  const {error}=await supabase.from("group_messages").insert({group_id:groupId,sender_id:currentUser.id,body});
+  groupMessageSending=false;button.disabled=false;
   if(error)return message($("groups-message"),"Message not sent: "+error.message,true);
   $("group-message-body").value="";await loadGroupMessages();
 });
@@ -647,6 +649,8 @@ $("group-message-form").addEventListener("submit",async e=>{
 // Phase 11 — OPEN MINDS community rooms, 15-second server-enforced slow mode and procedural ambience.
 let activeCommunityRoom = null;
 let communityRealtimeChannel = null;
+let communityMessageLoadToken = 0;
+let communityMessageSending = false;
 let communityAudioContext = null;
 let communityAudioNodes = [];
 let communityAudioOn = false;
@@ -705,14 +709,22 @@ async function openCommunityRoom(room){
 
 async function loadCommunityMessages(){
   if(!activeCommunityRoom)return;
-  const host=$("community-chat-list");host.replaceChildren();
-  const {data:rows,error}=await supabase.from("community_messages").select("id,sender_id,body,created_at").eq("room_id",activeCommunityRoom.id).eq("moderation_status","published").order("created_at",{ascending:true}).limit(100);
+  const roomId=activeCommunityRoom.id;
+  const loadToken=++communityMessageLoadToken;
+  const host=$("community-chat-list");
+  const {data:rows,error}=await supabase.from("community_messages").select("id,sender_id,body,created_at").eq("room_id",roomId).eq("moderation_status","published").order("created_at",{ascending:true}).limit(100);
+  if(loadToken!==communityMessageLoadToken||activeCommunityRoom?.id!==roomId)return;
   if(error){message($("community-chat-feedback"),"Messages unavailable: "+error.message,true);return;}
   const ids=[...new Set((rows||[]).map(r=>r.sender_id))];
   const {data:profiles}=ids.length?await supabase.from("profiles").select("user_id,display_name").in("user_id",ids):{data:[]};
+  if(loadToken!==communityMessageLoadToken||activeCommunityRoom?.id!==roomId)return;
   const names=new Map((profiles||[]).map(x=>[x.user_id,x.display_name]));
+  host.replaceChildren();
   if(!rows?.length){const empty=document.createElement("p");empty.className="muted";empty.textContent="No messages yet. Start with a thoughtful question or idea.";host.append(empty);}
+  const renderedIds=new Set();
   for(const row of rows||[]){
+    if(renderedIds.has(row.id))continue;
+    renderedIds.add(row.id);
     const item=document.createElement("article");item.className="community-message";
     const head=document.createElement("div");head.className="community-message-head";
     const author=document.createElement("b");author.textContent=names.get(row.sender_id)||"SyncTrA member";
@@ -774,14 +786,16 @@ $("community-room-close").addEventListener("click",async()=>{
   if(communityAudioOn){stopCommunityAmbience();$("community-audio-status").textContent="Sound paused outside the room";}
 });
 $("community-message-form").addEventListener("submit",async e=>{
-  e.preventDefault();if(!activeCommunityRoom||!currentUser)return;
+  e.preventDefault();if(!activeCommunityRoom||!currentUser||communityMessageSending)return;
   const input=$("community-message-body"),body=input.value.trim();if(!body)return;
-  const button=e.currentTarget.querySelector("button");button.disabled=true;
-  const {error}=await supabase.rpc("send_community_message",{p_room_id:activeCommunityRoom.id,p_body:body});
-  button.disabled=false;
+  const roomId=activeCommunityRoom.id;
+  const button=e.currentTarget.querySelector("button");
+  communityMessageSending=true;button.disabled=true;input.disabled=true;
+  const {error}=await supabase.rpc("send_community_message",{p_room_id:roomId,p_body:body});
+  communityMessageSending=false;button.disabled=false;input.disabled=false;
   if(error){message($("community-chat-feedback"),error.message,true);return;}
   input.value="";message($("community-chat-feedback"),"Message sent. Slow mode allows one message every 15 seconds.");
-  await loadCommunityMessages();
+  // Realtime INSERT is the single source of refresh; do not issue a second fetch here.
 });
 
 // Phase 8C — private notifications, direct messaging, in-app sharing and follows.
@@ -1063,15 +1077,22 @@ const { data: { session } } = await supabase.auth.getSession();
 if (session?.user) await loadMember(session.user);
 
 // Compact mobile quick-access menu; all original feature destinations remain available.
+const closeQuickMenu = () => {
+  $("quick-menu")?.classList.remove("menu-open");
+  $("quick-menu-toggle")?.setAttribute("aria-expanded", "false");
+};
 $("quick-menu-toggle")?.addEventListener("click", () => {
   const menu = $("quick-menu");
   const open = menu.classList.toggle("menu-open");
   $("quick-menu-toggle").setAttribute("aria-expanded", String(open));
 });
-$("quick-menu")?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
-  $("quick-menu").classList.remove("menu-open");
-  $("quick-menu-toggle")?.setAttribute("aria-expanded", "false");
-}));
+$("quick-menu")?.querySelectorAll("a").forEach(link => link.addEventListener("click", closeQuickMenu));
+document.addEventListener("keydown", event => { if(event.key === "Escape") closeQuickMenu(); });
+document.addEventListener("click", event => {
+  if(!$("quick-menu")?.classList.contains("menu-open"))return;
+  if(event.target.closest("#quick-menu, #quick-menu-toggle"))return;
+  closeQuickMenu();
+});
 
 // Phase 9E: one-finger horizontal swipe switches between primary workspace windows.
 (() => {
