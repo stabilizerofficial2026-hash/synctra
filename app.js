@@ -215,6 +215,8 @@ async function loadMember(user) {
   $("edit-bio").value = profile.bio || "";
   $("edit-personality").value = profile.personality_type || "";
   $("edit-hobbies").value = profile.hobbies || "";
+  $("profile-form").classList.add("hidden");
+  $("profile-edit-open").classList.remove("hidden");
   $("welcome-screen").classList.add("hidden");
   authView.classList.add("hidden");
   dashboardView.classList.remove("hidden");
@@ -229,11 +231,35 @@ async function loadMember(user) {
   await loadFeed();
   await loadBlockedUsers();
   await loadGroups();
+  await loadCommunityRooms();
   await loadNotifications();
   await loadMessages();
   await loadNetwork();
   await loadModeratorQueue();
 }
+
+function resetProfileEditor() {
+  if (!currentProfile) return;
+  $("edit-display").value = currentProfile.display_name || "";
+  $("edit-bio").value = currentProfile.bio || "";
+  $("edit-personality").value = currentProfile.personality_type || "";
+  $("edit-hobbies").value = currentProfile.hobbies || "";
+}
+
+$("profile-edit-open").addEventListener("click", () => {
+  resetProfileEditor();
+  $("profile-form").classList.remove("hidden");
+  $("profile-edit-open").classList.add("hidden");
+  message(dashboardMessage, "");
+  $("edit-display").focus();
+});
+
+$("profile-edit-cancel").addEventListener("click", () => {
+  resetProfileEditor();
+  $("profile-form").classList.add("hidden");
+  $("profile-edit-open").classList.remove("hidden");
+  message(dashboardMessage, "");
+});
 
 $("profile-form").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -263,6 +289,8 @@ $("profile-form").addEventListener("submit", async (event) => {
   $("member-display").textContent = display_name;
   $("profile-name").textContent = display_name;
   $("avatar-letter").textContent = display_name.trim().charAt(0).toUpperCase();
+  $("profile-form").classList.add("hidden");
+  $("profile-edit-open").classList.remove("hidden");
   message(dashboardMessage, "Profile saved.");
 });
 
@@ -310,8 +338,16 @@ async function loadFeed() {
     const top = node("div", "post-top");
     const avatar = node("div", "post-avatar", (author?.display_name || "M").trim().charAt(0).toUpperCase());
     const identity = node("div", "post-identity");
-    identity.append(node("b", "", author?.display_name || "SyncTrA member"));
-    identity.append(node("small", "", "@" + (author?.username || "member")));
+    avatar.setAttribute("role", "button"); avatar.setAttribute("tabindex", "0"); avatar.setAttribute("aria-label", "View member profile");
+    avatar.addEventListener("click", () => openMemberProfile(post.author_id));
+    avatar.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") openMemberProfile(post.author_id); });
+    const authorName = node("button", "member-link", author?.display_name || "SyncTrA member");
+    authorName.type = "button";
+    authorName.addEventListener("click", () => openMemberProfile(post.author_id));
+    const authorHandle = node("button", "member-link member-handle", "@" + (author?.username || "member"));
+    authorHandle.type = "button";
+    authorHandle.addEventListener("click", () => openMemberProfile(post.author_id));
+    identity.append(authorName, authorHandle);
     top.append(avatar, identity, node("time", "post-time", formatDate(post.created_at)));
     const body = node("p", "post-body", post.body);
     const postReactions = reactionRows.filter(r => r.post_id === post.id);
@@ -324,7 +360,7 @@ async function loadFeed() {
     const commentToggle = node("button", "reaction-button", `Comment · ${postComments.length}`);
     commentToggle.type = "button";
     actions.append(like, commentToggle);
-    const share=node("button","reaction-button","Share inside SyncTrA");
+    const share=node("button","reaction-button","Share");
     share.type="button";
     share.addEventListener("click",async()=>{
       const username=window.prompt("Share this post privately with a SyncTrA member. Enter their username:");
@@ -608,8 +644,199 @@ $("group-message-form").addEventListener("submit",async e=>{
 
 
 
+// Phase 11 — OPEN MINDS community rooms, 15-second server-enforced slow mode and procedural ambience.
+let activeCommunityRoom = null;
+let communityRealtimeChannel = null;
+let communityAudioContext = null;
+let communityAudioNodes = [];
+let communityAudioOn = false;
+let communityAudioVolume = 0.12;
+const roomToneMap = {open:174.61,islam:196,christianity:220,buddhism:164.81,taoism:146.83,science:261.63,atheism:185,satanism:155.56,tech:207.65};
+
+async function loadCommunityRooms(){
+  const host=$("community-rooms"); if(!host || !currentUser)return;
+  host.replaceChildren();
+  const {data:rooms,error}=await supabase.from("community_rooms").select("id,slug,room_name,description,icon,soundscape,is_default").eq("is_active",true).order("is_default",{ascending:false}).order("room_name");
+  if(error){host.textContent="Open Minds rooms could not load: "+error.message;return;}
+  const {data:mine, error:memberError}=await supabase.from("community_room_members").select("room_id").eq("user_id",currentUser.id);
+  if(memberError){host.textContent="Your room memberships could not load.";return;}
+  let joined=new Set((mine||[]).map(x=>x.room_id));
+  const defaultRoom=(rooms||[]).find(r=>r.is_default);
+  if(defaultRoom&&!joined.has(defaultRoom.id)){
+    const {error:joinError}=await supabase.rpc("join_community_room",{p_room_id:defaultRoom.id});
+    if(!joinError)joined.add(defaultRoom.id);
+  }
+  const refreshed=await supabase.from("community_room_members").select("room_id").eq("user_id",currentUser.id);
+  joined=new Set((refreshed.data||[]).map(x=>x.room_id));
+  const roomIntro={islam:"Beliefs, culture, history and perspectives",christianity:"Faith, scripture, culture and perspectives",buddhism:"Mindfulness, philosophy and practice",taoism:"Balance, nature and the Tao",science:"Evidence, discovery and questions",atheism:"Reason, ethics and secular philosophy",satanism:"Traditions, philosophy and perspectives",tech:"Ethical cybersecurity and technology",open:"A shared space for curious minds"};
+  for(const room of rooms||[]){
+    const card=document.createElement("article");card.className="community-room-card";
+    const top=document.createElement("div");top.className="community-room-card-top";
+    const icon=document.createElement("span");icon.className="community-room-icon";icon.textContent=room.icon;
+    const title=document.createElement("h3");title.textContent=room.room_name;
+    top.append(icon,title);
+    const desc=document.createElement("p");desc.textContent=roomIntro[room.slug]||room.description;
+    const action=document.createElement("button");action.type="button";action.className=joined.has(room.id)?"secondary":"primary";
+    action.textContent=joined.has(room.id)?"Enter room":"Join room";
+    action.addEventListener("click",async()=>{
+      if(!joined.has(room.id)){
+        action.disabled=true;const {error:joinErr}=await supabase.rpc("join_community_room",{p_room_id:room.id});action.disabled=false;
+        if(joinErr)return message($("groups-message"),joinErr.message,true);
+      }
+      await openCommunityRoom(room);
+    });
+    card.append(top,desc,action);host.append(card);
+  }
+}
+
+async function openCommunityRoom(room){
+  activeCommunityRoom=room;
+  $("community-room-title").textContent=room.icon+"  "+room.room_name;
+  $("community-room-description").textContent=room.description;
+  $("community-room-panel").classList.remove("hidden");
+  await loadCommunityMessages();
+  if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
+  communityRealtimeChannel=supabase.channel("open-minds-"+room.id)
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"community_messages",filter:"room_id=eq."+room.id},()=>loadCommunityMessages())
+    .subscribe();
+  if(communityAudioOn)startCommunityAmbience(room.soundscape);
+  $("community-room-panel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+async function loadCommunityMessages(){
+  if(!activeCommunityRoom)return;
+  const host=$("community-chat-list");host.replaceChildren();
+  const {data:rows,error}=await supabase.from("community_messages").select("id,sender_id,body,created_at").eq("room_id",activeCommunityRoom.id).eq("moderation_status","published").order("created_at",{ascending:true}).limit(100);
+  if(error){message($("community-chat-feedback"),"Messages unavailable: "+error.message,true);return;}
+  const ids=[...new Set((rows||[]).map(r=>r.sender_id))];
+  const {data:profiles}=ids.length?await supabase.from("profiles").select("user_id,display_name").in("user_id",ids):{data:[]};
+  const names=new Map((profiles||[]).map(x=>[x.user_id,x.display_name]));
+  if(!rows?.length){const empty=document.createElement("p");empty.className="muted";empty.textContent="No messages yet. Start with a thoughtful question or idea.";host.append(empty);}
+  for(const row of rows||[]){
+    const item=document.createElement("article");item.className="community-message";
+    const head=document.createElement("div");head.className="community-message-head";
+    const author=document.createElement("b");author.textContent=names.get(row.sender_id)||"SyncTrA member";
+    const time=document.createElement("small");time.textContent=new Date(row.created_at).toLocaleString();head.append(author,time);
+    const body=document.createElement("p");body.textContent=row.body;item.append(head,body);
+    if(row.sender_id!==currentUser.id){const report=document.createElement("button");report.type="button";report.className="text-button community-report";report.textContent="Report message";report.addEventListener("click",async()=>{
+      const reason=window.prompt("Why are you reporting this message? (Spam, harassment, hate speech, threat, or other)");if(!reason?.trim())return;
+      const {error:reportError}=await supabase.from("content_reports").insert({reporter_id:currentUser.id,target_type:"community_message",target_id:row.id,reason:reason.trim().slice(0,500)});
+      message($("community-chat-feedback"),reportError?"Report could not be submitted: "+reportError.message:"Thank you. Your report has been submitted for review.",Boolean(reportError));
+    });item.append(report);}
+    host.append(item);
+  }
+  host.scrollTop=host.scrollHeight;
+}
+
+function stopCommunityAmbience(){
+  for(const n of communityAudioNodes){try{n.stop?.();n.disconnect?.();}catch{}}
+  communityAudioNodes=[];
+  if(communityAudioContext){communityAudioContext.close().catch(()=>{});communityAudioContext=null;}
+}
+function startCommunityAmbience(soundscape="ambient"){
+  stopCommunityAmbience();
+  const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+  if(!AudioContextClass){message($("community-chat-feedback"),"This browser does not support ambient audio.",true);return;}
+  communityAudioContext=new AudioContextClass();
+  const ctx=communityAudioContext;
+  const base=roomToneMap[soundscape]||174.61;
+  const master=ctx.createGain();master.gain.value=communityAudioVolume;master.connect(ctx.destination);communityAudioNodes.push(master);
+  [1,1.5,2].forEach((ratio,index)=>{
+    const osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.type="sine";osc.frequency.value=base*ratio;gain.gain.value=index===0?0.34:index===1?0.13:0.055;
+    osc.connect(gain);gain.connect(master);osc.start();communityAudioNodes.push(osc,gain);
+  });
+  ctx.resume().catch(()=>{});
+  $("community-audio-status").textContent="Soft generated ambient tones · "+(activeCommunityRoom?.room_name||"Open Minds");
+}
+
+$("community-audio-toggle").addEventListener("click",()=>{
+  communityAudioOn=!communityAudioOn;
+  $("community-audio-toggle").textContent=communityAudioOn?"♫ Sound on":"♫ Sound off";
+  $("community-audio-toggle").setAttribute("aria-pressed",String(communityAudioOn));
+  if(communityAudioOn){startCommunityAmbience(activeCommunityRoom?.soundscape||"open");$("community-audio-status").textContent="Ambient sound is playing";}
+  else{stopCommunityAmbience();$("community-audio-status").textContent="Ambient sound is off";}
+});
+$("community-audio-volume").addEventListener("input",e=>{communityAudioVolume=Number(e.target.value)/100;if(communityAudioOn&&communityAudioNodes[0])communityAudioNodes[0].gain.value=communityAudioVolume;});
+$("community-room-leave").addEventListener("click",async()=>{
+  if(!activeCommunityRoom)return;
+  const room=activeCommunityRoom;
+  const {error}=await supabase.rpc("leave_community_room",{p_room_id:room.id});
+  if(error){message($("community-chat-feedback"),error.message,true);return;}
+  $("community-room-panel").classList.add("hidden");activeCommunityRoom=null;
+  if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
+  if(communityAudioOn){stopCommunityAmbience();$("community-audio-status").textContent="Sound paused outside the room";}
+  message($("groups-message"),"You left "+room.room_name+".");await loadCommunityRooms();
+});
+$("community-room-close").addEventListener("click",async()=>{
+  $("community-room-panel").classList.add("hidden");activeCommunityRoom=null;
+  if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
+  if(communityAudioOn){stopCommunityAmbience();$("community-audio-status").textContent="Sound paused outside the room";}
+});
+$("community-message-form").addEventListener("submit",async e=>{
+  e.preventDefault();if(!activeCommunityRoom||!currentUser)return;
+  const input=$("community-message-body"),body=input.value.trim();if(!body)return;
+  const button=e.currentTarget.querySelector("button");button.disabled=true;
+  const {error}=await supabase.rpc("send_community_message",{p_room_id:activeCommunityRoom.id,p_body:body});
+  button.disabled=false;
+  if(error){message($("community-chat-feedback"),error.message,true);return;}
+  input.value="";message($("community-chat-feedback"),"Message sent. Slow mode allows one message every 15 seconds.");
+  await loadCommunityMessages();
+});
 
 // Phase 8C — private notifications, direct messaging, in-app sharing and follows.
+async function openMemberProfile(userId) {
+  if (!userId || userId === currentUser?.id) {
+    $("profile-card").scrollIntoView({behavior:"smooth",block:"start"});
+    return;
+  }
+  const panel = $("member-profile-view");
+  panel.classList.remove("hidden");
+  panel.scrollIntoView({behavior:"smooth",block:"start"});
+  message($("public-profile-status"), "Loading member profile…");
+  $("public-profile-posts").replaceChildren();
+  const {data: profile, error} = await supabase.from("profiles")
+    .select("user_id,username,display_name,bio,personality_type,hobbies")
+    .eq("user_id", userId).maybeSingle();
+  if (error || !profile) return message($("public-profile-status"), "This member profile is unavailable.", true);
+  $("public-profile-name").textContent = profile.display_name || "SyncTrA member";
+  $("public-profile-username").textContent = "@" + profile.username;
+  $("public-profile-bio").textContent = profile.bio?.trim() || "This member hasn't added a bio yet.";
+  $("public-profile-personality").textContent = profile.personality_type || "Not set";
+  $("public-profile-hobbies").textContent = profile.hobbies?.trim() || "Not set";
+  const {data: relation} = await supabase.from("follows").select("follower_id")
+    .eq("follower_id", currentUser.id).eq("followed_id", userId).maybeSingle();
+  const follow = $("public-profile-follow");
+  follow.textContent = relation ? "Following" : "Follow";
+  follow.onclick = async () => {
+    follow.disabled = true;
+    const result = relation
+      ? await supabase.from("follows").delete().eq("follower_id", currentUser.id).eq("followed_id", userId)
+      : await supabase.from("follows").insert({follower_id:currentUser.id,followed_id:userId});
+    follow.disabled = false;
+    if (result.error) return message($("public-profile-status"), result.error.message, true);
+    await loadNetwork(); await loadNotifications(); await openMemberProfile(userId);
+  };
+  $("public-profile-message").onclick = () => {
+    $("message-username").value = profile.username;
+    $("messages-panel").scrollIntoView({behavior:"smooth",block:"start"});
+    $("message-first-body").focus();
+  };
+  const {data: posts, error: postError} = await supabase.from("posts")
+    .select("id,body,created_at").eq("author_id", userId).eq("visibility","members")
+    .eq("status","published").is("group_id",null).order("created_at",{ascending:false}).limit(12);
+  const host = $("public-profile-posts");
+  if (postError) return message($("public-profile-status"), "Profile loaded, but posts could not be displayed.", true);
+  if (!posts?.length) host.append(node("p","muted","No public posts yet."));
+  for (const post of posts || []) {
+    const card = node("article","panel post-card");
+    card.append(node("p","post-body",post.body),node("small","post-time",formatDate(post.created_at)));
+    host.append(card);
+  }
+  message($("public-profile-status"), "Viewing public profile information. Private account details are not shown.");
+}
+$("close-public-profile")?.addEventListener("click", () => $("member-profile-view").classList.add("hidden"));
+
 async function profileForUsername(username) {
   const clean = username.trim().replace(/^@/,"");
   const {data,error}=await supabase.from("profiles")
@@ -834,6 +1061,17 @@ supabase.auth.onAuthStateChange((event) => {
 });
 const { data: { session } } = await supabase.auth.getSession();
 if (session?.user) await loadMember(session.user);
+
+// Compact mobile quick-access menu; all original feature destinations remain available.
+$("quick-menu-toggle")?.addEventListener("click", () => {
+  const menu = $("quick-menu");
+  const open = menu.classList.toggle("menu-open");
+  $("quick-menu-toggle").setAttribute("aria-expanded", String(open));
+});
+$("quick-menu")?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+  $("quick-menu").classList.remove("menu-open");
+  $("quick-menu-toggle")?.setAttribute("aria-expanded", "false");
+}));
 
 // Phase 9E: one-finger horizontal swipe switches between primary workspace windows.
 (() => {
