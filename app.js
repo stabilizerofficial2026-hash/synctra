@@ -503,20 +503,20 @@ async function loadGroupMessages(){
   }
 }
 $("group-create-form").addEventListener("submit",async e=>{
-  e.preventDefault();const name=$("new-group-name").value.trim(),description=$("new-group-description").value.trim();
+  e.preventDefault();const form=e.currentTarget;const name=$("new-group-name").value.trim(),description=$("new-group-description").value.trim();
   const btn=$("create-group-button");btn.disabled=true;
   const {data,error}=await supabase.rpc("synctra_create_group",{p_group_name:name,p_description:description});
   btn.disabled=false;
   if(error)return message($("groups-message"),error.message,true);
-  e.currentTarget.reset();message($("groups-message"),"Private group created. Invitation ID: "+data);
+  form.reset();message($("groups-message"),"Private group created. Invitation ID: "+data);
   await loadGroups();
 });
 $("group-join-form").addEventListener("submit",async e=>{
-  e.preventDefault();const id=$("group-invite-id").value.trim();
+  e.preventDefault();const form=e.currentTarget;const id=$("group-invite-id").value.trim();
   const {data,error}=await supabase.rpc("synctra_request_group_membership",{p_group_id:id});
   if(error)return message($("groups-message"),error.message,true);
   message($("groups-message"),data==="already_member"?"You are already a member.":"Join request sent. The group owner must approve it.");
-  e.currentTarget.reset();
+  form.reset();
 });
 $("refresh-groups").addEventListener("click",loadGroups);
 $("close-group-room").addEventListener("click",()=>{$("group-room").classList.add("hidden");activeGroupId=null;});
@@ -629,18 +629,18 @@ async function loadNetwork(){
   message($("network-message"),"Follow relationships are private to signed-in SyncTrA members.");
 }
 $("follow-form").addEventListener("submit",async e=>{
-  e.preventDefault();
+  e.preventDefault();const form=e.currentTarget;
   try{
     const profile=await profileForUsername($("follow-username").value);
     if(!profile)return message($("network-message"),"No active member found with that username.",true);
     if(profile.user_id===currentUser.id)return message($("network-message"),"You cannot follow your own account.",true);
     const {error}=await supabase.from("follows").insert({follower_id:currentUser.id,followed_id:profile.user_id});
     if(error)return message($("network-message"),error.code==="23505"?"You're already following this member.":error.message,true);
-    e.currentTarget.reset();await loadNetwork();await loadNotifications();
+    form.reset();await loadNetwork();await loadNotifications();
   }catch(err){message($("network-message"),err.message,true);}
 });
 $("new-message-form").addEventListener("submit",async e=>{
-  e.preventDefault();
+  e.preventDefault();const form=e.currentTarget;
   try{
     const profile=await profileForUsername($("message-username").value);
     if(!profile)return message($("messages-message"),"No active member found with that username.",true);
@@ -648,7 +648,7 @@ $("new-message-form").addEventListener("submit",async e=>{
     const body=$("message-first-body").value.trim();if(!body)return;
     const {error}=await supabase.from("direct_messages").insert({sender_id:currentUser.id,recipient_id:profile.user_id,body});
     if(error)return message($("messages-message"),error.message,true);
-    e.currentTarget.reset();await loadMessages();await loadNotifications();
+    form.reset();await loadMessages();await loadNotifications();
   }catch(err){message($("messages-message"),err.message,true);}
 });
 $("refresh-notifications").addEventListener("click",loadNotifications);
