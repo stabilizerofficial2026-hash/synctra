@@ -11,7 +11,7 @@
   <div class="shell">
     <header class="topbar">
       <a class="brand" href="#" aria-label="SyncTrA home"><span class="brand-mark">S</span><span>SyncTrA</span></a>
-      <span class="private-tag">PRIVATE MEMBERSHIP</span>
+      <div class="topbar-actions"><span id="member-display" class="visually-hidden">Creator</span><span class="private-tag">PRIVATE MEMBERSHIP</span><button id="logout-button" class="secondary topbar-logout" type="button">Log out</button></div>
     </header>
 
     <main>
@@ -81,14 +81,6 @@
       </section>
 
       <section id="dashboard-view" class="dashboard hidden">
-        <div class="dash-head">
-          <div>
-            <p class="eyebrow">MEMBER SPACE</p>
-            <h1>Welcome, <span id="member-display">Creator</span>.</h1>
-            <p class="muted">Your private SyncTrA dashboard.</p>
-          </div>
-          <button id="logout-button" class="secondary" type="button">Log out</button>
-        </div>
         <div class="mobile-quickbar"><button id="quick-menu-toggle" class="secondary menu-toggle" type="button" aria-expanded="false" aria-controls="quick-menu" aria-label="Open navigation menu"><span aria-hidden="true">☰</span><span>Menu</span></button><span class="quickbar-brand">SyncTrA <small>YOUR CREATIVE WORLD</small></span><a href="#notifications-panel" aria-label="Notifications">♧</a></div>
         <nav id="quick-menu" class="app-nav" aria-label="SyncTrA workspace navigation">
         <a class="app-nav-brand" href="#dashboard-view"><span class="nav-orb">▶</span><span>SyncTrA<small>CREATIVE SOCIAL PLATFORM</small></span></a>
@@ -102,9 +94,6 @@
         <a href="#about-section">✦ <span>About SyncTrA</span></a>
         <a href="#faq-section">? <span>FAQ &amp; Help</span></a>
       </nav>
-      <section class="member-hero" aria-label="SyncTrA creative community">
-        <div class="hero-art"><span class="hero-kicker">A PRIVATE CREATIVE COMMUNITY</span><h2>CREATE <i>•</i> SHARE <i>•</i> COLLABORATE <i>•</i> EARN</h2><p>Sync the area of your being. Express freely. Create your own world with harmony.</p></div>
-      </section>
       <section id="membership-gate" class="panel membership-gate hidden" aria-live="polite">
           <p class="eyebrow">PRIVATE MEMBERSHIP</p>
           <h2 id="gate-title">Your membership is not active yet</h2>
@@ -237,14 +226,14 @@
               <div><p class="eyebrow">SYNCTrA · OPEN MINDS</p><h2 id="open-minds-title">Different beliefs. One respectful space.</h2><p class="muted">Explore perspectives, exchange ideas and learn from one another. Disagreement is welcome; harassment is not.</p></div>
               <div class="slow-mode-pill">15s <small>SLOW MODE</small></div>
             </div>
+            <div id="community-rooms" class="community-rooms-grid" aria-live="polite"></div>
+            <section id="community-room-panel" class="panel community-room-panel hidden" role="dialog" aria-modal="true" aria-labelledby="community-room-title">
+              <div class="feed-heading"><div><p class="eyebrow">OPEN MINDS ROOM</p><h3 id="community-room-title">Room discussion</h3><p id="community-room-description" class="muted"></p></div><div class="group-card-actions"><button id="community-room-leave" class="secondary" type="button">Leave room</button><button id="community-room-close" class="secondary" type="button">Close</button></div></div>
             <div class="community-tools panel">
               <div><b>Room ambience</b><small id="community-audio-status">Ambient sound is off</small></div>
               <button id="community-audio-toggle" class="secondary" type="button" aria-pressed="false">♫ Sound off</button>
               <label class="community-volume">Volume <input id="community-audio-volume" type="range" min="0" max="30" value="12"></label>
             </div>
-            <div id="community-rooms" class="community-rooms-grid" aria-live="polite"></div>
-            <section id="community-room-panel" class="panel community-room-panel hidden">
-              <div class="feed-heading"><div><p class="eyebrow">OPEN MINDS ROOM</p><h3 id="community-room-title">Room discussion</h3><p id="community-room-description" class="muted"></p></div><div class="group-card-actions"><button id="community-room-leave" class="secondary" type="button">Leave room</button><button id="community-room-close" class="secondary" type="button">Close</button></div></div>
               <div class="community-chat-toolbar"><span id="community-member-count" class="muted"></span><span class="slow-mode-pill">One message / 15 seconds</span></div>
               <div id="community-chat-list" class="community-chat-list" aria-live="polite"></div>
               <form id="community-message-form" class="group-message-form">

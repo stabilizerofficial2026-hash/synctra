@@ -699,13 +699,16 @@ async function openCommunityRoom(room){
   $("community-room-title").textContent=room.icon+"  "+room.room_name;
   $("community-room-description").textContent=room.description;
   $("community-room-panel").classList.remove("hidden");
+  document.body.classList.add("open-minds-active");
+  $("quick-menu")?.classList.remove("menu-open");
+  $("quick-menu-toggle")?.setAttribute("aria-expanded","false");
   await loadCommunityMessages();
   if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
   communityRealtimeChannel=supabase.channel("open-minds-"+room.id)
     .on("postgres_changes",{event:"INSERT",schema:"public",table:"community_messages",filter:"room_id=eq."+room.id},()=>loadCommunityMessages())
     .subscribe();
   if(communityAudioOn)startCommunityAmbience(room.soundscape);
-  $("community-room-panel").scrollIntoView({behavior:"smooth",block:"start"});
+  $("community-room-panel").querySelector("#community-message-body")?.focus({preventScroll:true});
 }
 
 async function loadCommunityMessages(){
@@ -777,12 +780,14 @@ $("community-room-leave").addEventListener("click",async()=>{
   const {error}=await supabase.rpc("leave_community_room",{p_room_id:room.id});
   if(error){message($("community-chat-feedback"),error.message,true);return;}
   $("community-room-panel").classList.add("hidden");activeCommunityRoom=null;
+  document.body.classList.remove("open-minds-active");
   if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
   if(communityAudioOn){stopCommunityAmbience();$("community-audio-status").textContent="Sound paused outside the room";}
   message($("groups-message"),"You left "+room.room_name+".");await loadCommunityRooms();
 });
 $("community-room-close").addEventListener("click",async()=>{
   $("community-room-panel").classList.add("hidden");activeCommunityRoom=null;
+  document.body.classList.remove("open-minds-active");
   if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
   if(communityAudioOn){stopCommunityAmbience();$("community-audio-status").textContent="Sound paused outside the room";}
 });

@@ -540,3 +540,47 @@ footer{border-color:#174a32;color:#71927e}
 .room-judaism:before{background-image:url("assets/open-minds/judaism.webp")}
 .room-activists:before{background-image:url("assets/open-minds/activists.webp")}
 @media(max-width:430px){.community-room-card{min-height:205px;padding-top:122px;display:flex}.community-room-card p{grid-column:auto;min-height:0}.community-room-card button{grid-column:auto}.community-room-card:before{height:112px}}
+
+/* Phase 14 — Open Minds opens as a true edge-to-edge Messenger-style room. */
+body.open-minds-active{overflow:hidden!important;padding:0!important;height:100dvh;overscroll-behavior:none}
+body.open-minds-active .shell{max-width:none!important;width:100%;height:100dvh;margin:0;padding:0}
+body.open-minds-active .topbar,
+body.open-minds-active .mobile-quickbar,
+body.open-minds-active .mobile-bottom-nav,
+body.open-minds-active .app-nav{display:none!important}
+body.open-minds-active main{height:100dvh;margin:0;padding:0;overflow:hidden}
+body.open-minds-active #dashboard-view{height:100dvh;min-height:0;margin:0;padding:0;display:block;overflow:hidden}
+body.open-minds-active #member-content{height:100%;min-height:0;margin:0;padding:0;overflow:hidden}
+body.open-minds-active .groups-section,
+body.open-minds-active .open-minds-section{height:100%;min-height:0;margin:0;padding:0;border:0;border-radius:0;overflow:hidden}
+body.open-minds-active .open-minds-intro,
+body.open-minds-active #community-rooms,
+body.open-minds-active .community-tools:not(#community-room-panel .community-tools){display:none!important}
+body.open-minds-active .community-room-panel{position:fixed!important;inset:0!important;z-index:10000!important;width:100vw!important;height:100dvh!important;max-height:100dvh!important;margin:0!important;padding: max(12px,env(safe-area-inset-top)) 14px max(12px,env(safe-area-inset-bottom))!important;border:0!important;border-radius:0!important;display:flex!important;flex-direction:column!important;gap:8px!important;overflow:hidden!important;background:radial-gradient(ellipse at 10% 0%,#0d4930 0,transparent 48%),linear-gradient(180deg,#06150d,#020906 85%)!important;box-shadow:none!important}
+body.open-minds-active .community-room-panel .feed-heading{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0!important;padding:8px 0 12px;border-bottom:1px solid #28784b}
+body.open-minds-active .community-room-panel .feed-heading h3{font-size:clamp(19px,5vw,25px)!important}
+body.open-minds-active .community-room-panel .feed-heading .muted{display:none}
+body.open-minds-active .community-room-panel .group-card-actions{display:flex;gap:6px;flex-shrink:0}
+body.open-minds-active .community-room-panel .group-card-actions button{padding:9px 11px;font-size:11px}
+body.open-minds-active .community-room-panel .community-tools{flex:0 0 auto;display:flex!important;margin:0;padding:9px 11px;gap:8px;background:#071d12;border-color:#1d6942}
+body.open-minds-active .community-room-panel .community-tools>div{min-width:0}
+body.open-minds-active .community-room-panel .community-tools>div b{font-size:11px}
+body.open-minds-active .community-room-panel .community-tools>div small{font-size:9px}
+body.open-minds-active .community-room-panel .community-tools>button{padding:8px 10px;font-size:10px}
+body.open-minds-active .community-room-panel .community-volume{width:auto;justify-content:flex-end;font-size:10px}
+body.open-minds-active .community-room-panel .community-volume input{width:62px}
+body.open-minds-active .community-room-panel .community-chat-toolbar{flex:0 0 auto;padding:8px 0;}
+body.open-minds-active .community-room-panel .community-chat-list{flex:1 1 auto;min-height:0;max-height:none!important;overflow-y:auto!important;overscroll-behavior:contain;padding:8px 2px;}
+body.open-minds-active .community-room-panel .community-message{flex:0 0 auto}
+body.open-minds-active .community-room-panel .group-message-form{flex:0 0 auto;display:flex;gap:8px;margin:0;padding:8px 0 calc(4px + env(safe-area-inset-bottom));background:#020906}
+body.open-minds-active .community-room-panel .group-message-form input{min-width:0;flex:1;font-size:16px;padding:13px;border-radius:14px}
+body.open-minds-active .community-room-panel .group-message-form button{min-width:76px;margin:0}
+body.open-minds-active .community-room-panel #community-chat-feedback{flex:0 0 auto;min-height:0;margin:0;font-size:11px}
+@media(max-width:680px){
+  body.open-minds-active .community-room-panel{padding: max(8px,env(safe-area-inset-top)) 10px max(8px,env(safe-area-inset-bottom))!important}
+  body.open-minds-active .community-room-panel .feed-heading{align-items:center}
+  body.open-minds-active .community-room-panel .group-card-actions button{padding:8px 9px}
+  body.open-minds-active .community-room-panel .community-tools{flex-wrap:nowrap}
+  body.open-minds-active .community-room-panel .community-volume{display:none}
+}
+.topbar-actions{display:flex;align-items:center;gap:10px}.topbar-logout{padding:9px 13px;font-size:11px}
