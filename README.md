@@ -49,3 +49,18 @@ This update adds optional member-editable `hobbies` and `personality_type` field
 **Database step required:** before deploying the updated frontend, run `phase9D-profile-hobbies-personality.sql` once in the Supabase SQL Editor. The migration adds the two nullable columns and validates the allowed personality values and hobbies length. Existing profile data is not overwritten.
 
 Then deploy the updated `index.html`, `styles.css`, and `app.js` to the same GitHub repository. No existing post, messaging, membership, or social workflow is intentionally changed.
+
+
+## Welcome + Membership Showcase Refresh
+
+This update redesigns the public welcome screen with the approved SyncTrA introduction, feature highlights, and responsive Creator / Creator Plus / Creator Pro plan cards. It also enriches the existing membership-gate cards with the plan's credits, group capacity, soundtrack duration, storage allowance, and marketplace eligibility.
+
+The welcome-page plan rates displayed are ₱199 / ₱399 / ₱799 per month, matching the previously configured plan pricing. Plan cards do not initiate checkout. The membership gate still loads active plan records from Supabase and checkout remains disabled until a verified payment integration and webhook are deployed.
+
+No database migration is included or required for this visual update. Existing authentication, profile, messaging, Open Minds, moderation, and membership-gate logic is retained. AI media generation and marketplace functionality should not be advertised as operational until their respective integrations are completed.
+
+### Validation
+- `node --check app.js` passed.
+- HTML duplicate-ID check passed.
+- ZIP integrity check performed after packaging.
+- No live browser or production deployment test was performed.

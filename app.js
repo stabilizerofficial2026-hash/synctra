@@ -48,6 +48,9 @@ $("welcome-evolve").addEventListener("click", () => {
   showTab("signup");
   $("signup-username").focus();
 });
+document.querySelectorAll("[data-plan-cta]").forEach((button) => {
+  button.addEventListener("click", () => $("welcome-evolve").click());
+});
 $("back-to-welcome").addEventListener("click", () => {
   authView.classList.add("hidden");
   $("welcome-screen").classList.remove("hidden");
@@ -156,7 +159,17 @@ async function renderMembershipGate(status, subscription = null) {
     card.append(node("p", "eyebrow", plan.id.replaceAll("_", " ").toUpperCase()));
     card.append(node("h3", "", plan.name));
     card.append(node("strong", "plan-price", plan.monthly_price_minor > 0 ? `${plan.currency} ${(plan.monthly_price_minor / 100).toFixed(2)} / month` : "Price to be announced"));
-    card.append(node("small", "", `${plan.monthly_credits} monthly credits · ${plan.profile_music_seconds}s profile soundtrack`));
+    const storageByPlan = { creator: "512 MiB storage", creator_plus: "2 GiB storage", creator_pro: "10 GiB storage" };
+    const details = [
+      `${Number(plan.monthly_credits).toLocaleString()} monthly credits`,
+      `Groups up to ${Number(plan.group_member_limit).toLocaleString()} members`,
+      storageByPlan[plan.id] || "Storage allocation shown in account details",
+      `${plan.profile_music_seconds}s profile soundtrack`
+    ];
+    if (plan.marketplace_selling) details.push("Marketplace selling access");
+    const featureList = node("ul", "plan-feature-list");
+    details.forEach((detail) => featureList.append(node("li", "", detail)));
+    card.append(featureList);
     const action = node("button", "secondary", "Checkout coming soon");
     action.type = "button";
     action.disabled = true;
