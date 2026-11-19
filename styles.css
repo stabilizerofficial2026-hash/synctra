@@ -222,3 +222,33 @@ button{ -webkit-tap-highlight-color:transparent }
 .profile-card .form{margin-top:16px}
 .profile-card .form textarea{min-height:88px;resize:vertical}
 .profile-card .avatar{margin-bottom:18px}
+
+
+/* Phase 8C — private social suite */
+.social-nav{display:flex;flex-wrap:wrap;gap:9px;margin:28px 0 14px}
+.social-nav a{color:#b9e9ce;text-decoration:none;padding:10px 14px;border:1px solid #b7f5d21b;border-radius:999px;background:#0b1510;font-size:13px}
+.social-nav a:hover{border-color:#34d39988;background:#10251a}
+.nav-count{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;margin-left:4px;border-radius:99px;background:#10b981;color:#03130c;font-size:11px;font-weight:800}
+.social-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.social-panel{min-width:0}
+.social-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+.social-panel-head h3{margin:3px 0;font-family:"Space Grotesk",sans-serif;font-size:23px}
+.social-list{display:grid;gap:9px;max-height:360px;overflow:auto}
+.social-row{display:flex;flex-direction:column;gap:6px;padding:13px;border:1px solid #b7f5d219;border-radius:13px;background:#08110c}
+.social-row.unread{border-color:#34d39977;background:linear-gradient(120deg,#10301e,#09110c)}
+.social-row small,.network-person small{color:#8eaa98}
+.social-row button{align-self:flex-start}
+.social-row p{margin:2px 0;color:#c8dfd0;overflow-wrap:anywhere}
+.inline-reply{display:flex;gap:8px;margin-top:5px}
+.inline-reply input{min-width:0;flex:1}
+.network-stats{display:flex;gap:14px;margin-bottom:18px}
+.network-stats>div{flex:1;padding:15px;border:1px solid #b7f5d21b;border-radius:14px;background:#08110c}
+.network-stats b{display:block;font-size:25px;color:#6ee7b7}
+.network-stats small{color:#9cc6b2}
+.network-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.network-columns h4{margin:0 0 9px;color:#d8eee0}
+.network-person{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #b7f5d212;font-size:13px}
+.network-person span{overflow-wrap:anywhere;color:#cce5d5}
+.network-panel{grid-column:1/-1}
+@media(max-width:760px){.social-grid{grid-template-columns:1fr}.network-panel{grid-column:auto}}
+@media(max-width:430px){.network-columns{grid-template-columns:1fr}.social-nav a{font-size:12px;padding:9px 11px}.inline-reply{flex-direction:column}}

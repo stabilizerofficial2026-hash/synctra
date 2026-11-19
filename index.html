@@ -154,6 +154,40 @@
         </section>
 
 
+
+        <nav class="social-nav" aria-label="Your private social space">
+          <a href="#social-hub">My Network</a><a href="#notifications-panel">Notifications <span id="notification-count" class="nav-count">0</span></a>
+          <a href="#messages-panel">Messages</a><a href="#network-panel">Followers &amp; Following</a>
+        </nav>
+        <section id="social-hub" class="social-hub">
+          <div class="feed-heading"><div><p class="eyebrow">YOUR PRIVATE NETWORK</p><h2>Stay connected</h2><p class="muted">Everything stays inside SyncTrA. No external social sharing links.</p></div></div>
+          <div class="social-grid">
+            <article id="notifications-panel" class="panel social-panel">
+              <div class="social-panel-head"><div><p class="eyebrow">ACTIVITY</p><h3>Notifications</h3></div><button id="refresh-notifications" class="secondary" type="button">Refresh</button></div>
+              <div id="notifications-list" class="social-list"></div><p id="notifications-message" class="message" role="status"></p>
+            </article>
+            <article id="messages-panel" class="panel social-panel">
+              <div class="social-panel-head"><div><p class="eyebrow">PRIVATE CONVERSATIONS</p><h3>Messages</h3></div><button id="refresh-messages" class="secondary" type="button">Refresh</button></div>
+              <form id="new-message-form" class="form compact">
+                <label>Send a private message to a member username<input id="message-username" maxlength="24" required placeholder="username"></label>
+                <label>Message<textarea id="message-first-body" rows="2" maxlength="4000" required placeholder="Write a private message…"></textarea></label>
+                <button class="primary" type="submit">Start conversation</button>
+              </form>
+              <div id="messages-list" class="social-list"></div><p id="messages-message" class="message" role="status"></p>
+            </article>
+            <article id="network-panel" class="panel social-panel network-panel">
+              <div class="social-panel-head"><div><p class="eyebrow">CREATOR CONNECTIONS</p><h3>Followers &amp; Following</h3></div><button id="refresh-network" class="secondary" type="button">Refresh</button></div>
+              <div class="network-stats"><div><b id="followers-count">0</b><small>Followers</small></div><div><b id="following-count">0</b><small>Following</small></div></div>
+              <div class="network-columns"><div><h4>Followers</h4><div id="followers-list" class="social-list"></div></div><div><h4>Following</h4><div id="following-list" class="social-list"></div></div></div>
+              <form id="follow-form" class="form compact">
+                <label>Find a member by username<input id="follow-username" maxlength="24" required placeholder="creator_username"></label>
+                <button class="secondary" type="submit">Follow member</button>
+              </form>
+              <p id="network-message" class="message" role="status"></p>
+            </article>
+          </div>
+        </section>
+
         <section class="groups-section">
           <div class="feed-heading">
             <div><p class="eyebrow">PRIVATE COLLABORATION</p><h2>Groups &amp; Teams</h2><p class="muted">Private spaces for members to connect and collaborate.</p></div>

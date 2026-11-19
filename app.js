@@ -160,6 +160,9 @@ async function loadMember(user) {
   await loadFeed();
   await loadBlockedUsers();
   await loadGroups();
+  await loadNotifications();
+  await loadMessages();
+  await loadNetwork();
   await loadModeratorQueue();
 }
 
@@ -245,6 +248,22 @@ async function loadFeed() {
     const commentToggle = node("button", "reaction-button", `Comment · ${postComments.length}`);
     commentToggle.type = "button";
     actions.append(like, commentToggle);
+    const share=node("button","reaction-button","Share inside SyncTrA");
+    share.type="button";
+    share.addEventListener("click",async()=>{
+      const username=window.prompt("Share this post privately with a SyncTrA member. Enter their username:");
+      if(username===null)return;
+      try{
+        const recipient=await profileForUsername(username);
+        if(!recipient)return message(feedMessage,"No active member found with that username.",true);
+        if(recipient.user_id===currentUser.id)return message(feedMessage,"Choose another member to share this post with.",true);
+        const {error}=await supabase.from("post_shares").insert({post_id:post.id,shared_by:currentUser.id,recipient_id:recipient.user_id});
+        if(error)return message(feedMessage,error.code==="23505"?"You've already shared this post with that member.":error.message,true);
+        message(feedMessage,`Post shared privately with @${recipient.username}.`);
+        await loadNotifications();
+      }catch(err){message(feedMessage,err.message,true);}
+    });
+    actions.append(share);
     if (post.author_id !== currentUser.id) {
       const report = node("button", "reaction-button safety-action", "Report");
       report.type = "button";
@@ -511,6 +530,130 @@ $("group-message-form").addEventListener("submit",async e=>{
   $("group-message-body").value="";await loadGroupMessages();
 });
 
+
+
+
+// Phase 8C — private notifications, direct messaging, in-app sharing and follows.
+async function profileForUsername(username) {
+  const clean = username.trim().replace(/^@/,"");
+  const {data,error}=await supabase.from("profiles")
+    .select("user_id,username,display_name").eq("username",clean).maybeSingle();
+  if(error) throw error;
+  return data;
+}
+async function loadNotifications(){
+  if(!currentUser)return;
+  const host=$("notifications-list");host.replaceChildren();
+  const {data,error}=await supabase.from("notifications")
+    .select("id,notification_type,reference_id,read_at,created_at")
+    .eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(40);
+  if(error)return message($("notifications-message"),"Notifications unavailable: "+error.message,true);
+  const unread=(data||[]).filter(n=>!n.read_at).length;
+  $("notification-count").textContent=unread>99?"99+":String(unread);
+  if(!data?.length){message($("notifications-message"),"You're all caught up. New activity will appear here.");return;}
+  const labels={new_follower:"Started following you",direct_message:"Sent you a private message",post_shared:"Shared a post with you",post_reaction:"Reacted to your post",post_comment:"Commented on your post"};
+  for(const n of data){
+    const row=node("div",n.read_at?"social-row":"social-row unread");
+    const title=node("b","",labels[n.notification_type]||"New SyncTrA activity");
+    const meta=node("small","",formatDate(n.created_at));
+    const mark=node("button","text-button",n.read_at?"Read":"Mark read");mark.type="button";
+    mark.addEventListener("click",async()=>{
+      const {error:updateError}=await supabase.from("notifications").update({read_at:new Date().toISOString()}).eq("id",n.id).eq("user_id",currentUser.id);
+      if(updateError)return message($("notifications-message"),updateError.message,true);
+      await loadNotifications();
+    });
+    row.append(title,meta,mark);host.append(row);
+  }
+  message($("notifications-message"),`${data.length} recent notification${data.length===1?"":"s"} · ${unread} unread.`);
+}
+async function loadMessages(){
+  if(!currentUser)return;
+  const host=$("messages-list");host.replaceChildren();
+  const {data:rows,error}=await supabase.from("direct_messages")
+    .select("id,sender_id,recipient_id,body,read_at,created_at")
+    .or(`sender_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`)
+    .order("created_at",{ascending:false}).limit(80);
+  if(error)return message($("messages-message"),"Messages unavailable: "+error.message,true);
+  if(!rows?.length){message($("messages-message"),"Your private inbox is empty. Start a conversation using a member username.");return;}
+  const ids=[...new Set(rows.map(r=>r.sender_id===currentUser.id?r.recipient_id:r.sender_id))];
+  const {data:profiles}=await supabase.from("profiles").select("user_id,username,display_name").in("user_id",ids);
+  const pmap=new Map((profiles||[]).map(p=>[p.user_id,p]));
+  const latest=new Map();
+  for(const r of rows){const other=r.sender_id===currentUser.id?r.recipient_id:r.sender_id;if(!latest.has(other))latest.set(other,r);}
+  for(const [other,last] of latest){
+    const p=pmap.get(other);if(!p)continue;
+    const row=node("div","social-row message-thread");
+    row.append(node("b","",`${p.display_name} (@${p.username})`),node("p","",last.body),node("small","",formatDate(last.created_at)));
+    const form=node("form","inline-reply");
+    const input=node("input","comment-input");input.maxLength=4000;input.required=true;input.placeholder="Reply privately…";
+    const send=node("button","secondary","Send");send.type="submit";form.append(input,send);
+    form.addEventListener("submit",async e=>{
+      e.preventDefault();send.disabled=true;
+      const {error:sendError}=await supabase.from("direct_messages").insert({sender_id:currentUser.id,recipient_id:other,body:input.value.trim()});
+      send.disabled=false;
+      if(sendError)return message($("messages-message"),"Message not sent: "+sendError.message,true);
+      await loadMessages();await loadNotifications();
+    });
+    row.append(form);host.append(row);
+    const unreadIncoming=rows.filter(r=>r.sender_id===other&&r.recipient_id===currentUser.id&&!r.read_at).map(r=>r.id);
+    if(unreadIncoming.length) await supabase.from("direct_messages").update({read_at:new Date().toISOString()}).in("id",unreadIncoming);
+  }
+  message($("messages-message"),"Private messages are visible only to their sender and recipient.");
+}
+async function loadNetwork(){
+  if(!currentUser)return;
+  const [{data:followers,error:e1},{data:following,error:e2}]=await Promise.all([
+    supabase.from("follows").select("follower_id,created_at").eq("followed_id",currentUser.id).order("created_at",{ascending:false}),
+    supabase.from("follows").select("followed_id,created_at").eq("follower_id",currentUser.id).order("created_at",{ascending:false})
+  ]);
+  if(e1||e2)return message($("network-message"),(e1||e2).message,true);
+  $("followers-count").textContent=(followers||[]).length;
+  $("following-count").textContent=(following||[]).length;
+  const ids=[...(followers||[]).map(x=>x.follower_id),...(following||[]).map(x=>x.followed_id)];
+  const {data:profiles}=ids.length?await supabase.from("profiles").select("user_id,username,display_name").in("user_id",[...new Set(ids)]):{data:[]};
+  const pmap=new Map((profiles||[]).map(p=>[p.user_id,p]));
+  const fill=(id,rows,key,allowUnfollow)=>{
+    const host=$(id);host.replaceChildren();
+    if(!rows?.length){host.append(node("small","muted","No members yet."));return;}
+    for(const r of rows){const p=pmap.get(r[key]);if(!p)continue;
+      const line=node("div","network-person");line.append(node("span","",`${p.display_name} · @${p.username}`));
+      if(allowUnfollow){const b=node("button","text-button","Unfollow");b.type="button";b.addEventListener("click",async()=>{
+        const {error}=await supabase.from("follows").delete().eq("follower_id",currentUser.id).eq("followed_id",p.user_id);
+        if(error)return message($("network-message"),error.message,true);await loadNetwork();
+      });line.append(b);}
+      host.append(line);
+    }
+  };
+  fill("followers-list",followers,"follower_id",false);
+  fill("following-list",following,"followed_id",true);
+  message($("network-message"),"Follow relationships are private to signed-in SyncTrA members.");
+}
+$("follow-form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  try{
+    const profile=await profileForUsername($("follow-username").value);
+    if(!profile)return message($("network-message"),"No active member found with that username.",true);
+    if(profile.user_id===currentUser.id)return message($("network-message"),"You cannot follow your own account.",true);
+    const {error}=await supabase.from("follows").insert({follower_id:currentUser.id,followed_id:profile.user_id});
+    if(error)return message($("network-message"),error.code==="23505"?"You're already following this member.":error.message,true);
+    e.currentTarget.reset();await loadNetwork();await loadNotifications();
+  }catch(err){message($("network-message"),err.message,true);}
+});
+$("new-message-form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  try{
+    const profile=await profileForUsername($("message-username").value);
+    if(!profile)return message($("messages-message"),"No active member found with that username.",true);
+    if(profile.user_id===currentUser.id)return message($("messages-message"),"You cannot message yourself.",true);
+    const body=$("message-first-body").value.trim();if(!body)return;
+    const {error}=await supabase.from("direct_messages").insert({sender_id:currentUser.id,recipient_id:profile.user_id,body});
+    if(error)return message($("messages-message"),error.message,true);
+    e.currentTarget.reset();await loadMessages();await loadNotifications();
+  }catch(err){message($("messages-message"),err.message,true);}
+});
+$("refresh-notifications").addEventListener("click",loadNotifications);
+$("refresh-messages").addEventListener("click",loadMessages);
+$("refresh-network").addEventListener("click",loadNetwork);
 
 
 // Phase 6 Moderator Center. Moderator authorization is enforced by Supabase RPCs.
