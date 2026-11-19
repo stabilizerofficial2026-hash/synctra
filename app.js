@@ -172,7 +172,7 @@ async function loadMember(user) {
   message(dashboardMessage, "");
   const { data: profile, error } = await supabase
     .from("profiles")
-    .select("user_id, username, display_name, bio, age_verified_at, account_status")
+    .select("user_id, username, display_name, bio, personality_type, hobbies, age_verified_at, account_status")
     .eq("user_id", user.id).single();
 
   if (error) {
@@ -207,10 +207,14 @@ async function loadMember(user) {
   $("profile-name").textContent = profile.display_name || "Member";
   $("profile-username").textContent = "@" + profile.username;
   $("profile-bio").textContent = profile.bio?.trim() || "Add a little introduction to your creative world.";
+  $("profile-personality").textContent = profile.personality_type || "Not set";
+  $("profile-hobbies").textContent = profile.hobbies?.trim() || "Not set";
   $("profile-email").textContent = user.email || "";
   $("avatar-letter").textContent = (profile.display_name || "S").trim().charAt(0).toUpperCase();
   $("edit-display").value = profile.display_name || "";
   $("edit-bio").value = profile.bio || "";
+  $("edit-personality").value = profile.personality_type || "";
+  $("edit-hobbies").value = profile.hobbies || "";
   $("welcome-screen").classList.add("hidden");
   authView.classList.add("hidden");
   dashboardView.classList.remove("hidden");
@@ -236,19 +240,26 @@ $("profile-form").addEventListener("submit", async (event) => {
   if (!currentUser || !currentProfile) return;
   const display_name = $("edit-display").value.trim();
   const bio = $("edit-bio").value.trim();
-  if (!display_name || display_name.length > 60 || bio.length > 300)
-    return message(dashboardMessage, "Please check the display name and bio length.", true);
+  const personality_type = $("edit-personality").value;
+  const hobbies = $("edit-hobbies").value.trim();
+  const allowedPersonalities = ["", "Sanguine", "Choleric", "Melancholic", "Phlegmatic", "Mixed"];
+  if (!display_name || display_name.length > 60 || bio.length > 300 || hobbies.length > 180 || !allowedPersonalities.includes(personality_type))
+    return message(dashboardMessage, "Please check your profile details and character limits.", true);
   const { data: savedProfile, error } = await supabase
     .from("profiles")
-    .update({ display_name, bio })
+    .update({ display_name, bio, personality_type: personality_type || null, hobbies: hobbies || null })
     .eq("user_id", currentUser.id)
-    .select("user_id, display_name, bio")
+    .select("user_id, display_name, bio, personality_type, hobbies")
     .single();
   if (error) return message(dashboardMessage, "Profile could not be saved: " + error.message, true);
   if (!savedProfile) return message(dashboardMessage, "No profile row was updated. Please sign out and sign in again.", true);
   currentProfile.display_name = savedProfile.display_name;
   currentProfile.bio = savedProfile.bio || "";
+  currentProfile.personality_type = savedProfile.personality_type || null;
+  currentProfile.hobbies = savedProfile.hobbies || null;
   $("profile-bio").textContent = savedProfile.bio?.trim() || "Add a little introduction to your creative world.";
+  $("profile-personality").textContent = savedProfile.personality_type || "Not set";
+  $("profile-hobbies").textContent = savedProfile.hobbies?.trim() || "Not set";
   $("member-display").textContent = display_name;
   $("profile-name").textContent = display_name;
   $("avatar-letter").textContent = display_name.trim().charAt(0).toUpperCase();
@@ -823,3 +834,56 @@ supabase.auth.onAuthStateChange((event) => {
 });
 const { data: { session } } = await supabase.auth.getSession();
 if (session?.user) await loadMember(session.user);
+
+// Phase 9E: one-finger horizontal swipe switches between primary workspace windows.
+(() => {
+  const nav = document.querySelector('.app-nav');
+  const dashboard = document.querySelector('#dashboard-view');
+  if (!nav || !dashboard) return;
+  const links = [...nav.querySelectorAll('a[href^="#"]')]
+    .filter(a => !a.classList.contains('app-nav-brand'));
+  const targets = links.map(a => document.querySelector(a.getAttribute('href')));
+  let startX = 0, startY = 0, startAt = 0;
+  const minDistance = 65;
+  const blocked = 'input,textarea,select,button,a,[contenteditable="true"],.app-nav,.social-nav,.feed-list,.group-messages,.message-list';
+
+  const activate = index => {
+    const safeIndex = Math.max(0, Math.min(links.length - 1, index));
+    const link = links[safeIndex];
+    const target = targets[safeIndex];
+    if (!link || !target) return;
+    links.forEach(a => {
+      a.classList.toggle('is-current', a === link);
+      if (a === link) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    target.scrollIntoView({behavior:'smooth', block:'start'});
+  };
+
+  links.forEach((link, i) => link.addEventListener('click', () => {
+    links.forEach(a => {
+      a.classList.toggle('is-current', a === link);
+      if (a === link) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }));
+
+  dashboard.addEventListener('touchstart', event => {
+    if (event.touches.length !== 1 || event.target.closest(blocked)) return;
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+    startAt = Date.now();
+  }, {passive:true});
+
+  dashboard.addEventListener('touchend', event => {
+    if (!startAt || event.changedTouches.length !== 1) return;
+    const dx = event.changedTouches[0].clientX - startX;
+    const dy = event.changedTouches[0].clientY - startY;
+    const elapsed = Date.now() - startAt;
+    startAt = 0;
+    // Ignore vertical page scrolling and slow drags; never hijack form/media interactions.
+    if (Math.abs(dx) < minDistance || Math.abs(dx) < Math.abs(dy) * 1.25 || elapsed > 700) return;
+    const current = Math.max(0, links.findIndex(a => a.classList.contains('is-current')));
+    activate(current + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+})();

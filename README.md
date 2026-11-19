@@ -41,3 +41,11 @@ Deploy by replacing the existing `index.html`, `styles.css`, `app.js`, and `READ
 This update reshapes the existing authenticated dashboard toward the supplied SyncTrA reference: persistent desktop navigation, emerald hero area, creator profile card, studio feature tiles, feed, network, messages, notifications and groups sections. On narrow screens the navigation becomes a horizontally scrollable strip. Existing form IDs, Supabase calls and app.js are preserved.
 
 The visual reference contains illustrative media, sample counts, and paid prices. This implementation does not fabricate those values or imply that AI media generation/payment checkout is active. The current feed composer remains text-first; image/video/music generation and verified billing require separate implementation.
+
+## Phase 9D — Hobbies and personality profile fields
+
+This update adds optional member-editable `hobbies` and `personality_type` fields to the profile card and profile editor. The personality selector includes Sanguine, Choleric, Melancholic, Phlegmatic, and Mixed. These are presented as self-described temperament labels, not as clinical or diagnostic categories.
+
+**Database step required:** before deploying the updated frontend, run `phase9D-profile-hobbies-personality.sql` once in the Supabase SQL Editor. The migration adds the two nullable columns and validates the allowed personality values and hobbies length. Existing profile data is not overwritten.
+
+Then deploy the updated `index.html`, `styles.css`, and `app.js` to the same GitHub repository. No existing post, messaging, membership, or social workflow is intentionally changed.

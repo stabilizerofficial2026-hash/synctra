@@ -89,6 +89,7 @@
           </div>
           <button id="logout-button" class="secondary" type="button">Log out</button>
         </div>
+        <p id="swipe-navigation-hint">Swipe left or right to switch workspace sections</p>
         <nav class="app-nav" aria-label="SyncTrA workspace navigation">
         <a class="app-nav-brand" href="#dashboard-view"><span class="nav-orb">▶</span><span>SyncTrA<small>CREATIVE SOCIAL PLATFORM</small></span></a>
         <a href="#feed-section">⌂ <span>Home Feed</span></a>
@@ -118,11 +119,24 @@
             <h2 id="profile-name">Member</h2>
             <p class="muted" id="profile-username">@username</p>
             <p id="profile-bio" class="profile-bio muted">Add a little introduction to your creative world.</p>
+            <div class="profile-traits"><p><strong>Personality</strong> <span id="profile-personality">Not set</span></p><p><strong>Hobbies</strong> <span id="profile-hobbies">Not set</span></p></div>
             <p id="profile-email" class="small"></p>
             <div class="status-line"><span class="status-dot"></span><span>Account created</span></div>
             <form id="profile-form" class="form compact">
               <label>Display name<input id="edit-display" maxlength="60" required></label>
               <label>Bio<textarea id="edit-bio" maxlength="300" rows="3" placeholder="A little about your creative world"></textarea></label>
+              <label>Personality type
+                <select id="edit-personality">
+                  <option value="">Choose your temperament (optional)</option>
+                  <option value="Sanguine">Sanguine — outgoing, enthusiastic, sociable</option>
+                  <option value="Choleric">Choleric — decisive, driven, assertive</option>
+                  <option value="Melancholic">Melancholic — thoughtful, analytical, detail-oriented</option>
+                  <option value="Phlegmatic">Phlegmatic — calm, steady, supportive</option>
+                  <option value="Mixed">A mix / not sure</option>
+                </select>
+              </label>
+              <label>Hobbies <input id="edit-hobbies" maxlength="180" placeholder="e.g. music, gaming, hiking, drawing"></label>
+              <small class="field-hint">Choose what feels right. Personality types are self-described, not a psychological diagnosis.</small>
               <button class="primary" type="submit">Save profile</button>
             </form>
           </article>

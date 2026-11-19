@@ -427,3 +427,30 @@ footer{border-color:#174a32;color:#71927e}
 @media(max-width:1000px){.dashboard{grid-template-columns:175px minmax(0,1fr);gap:14px}.dash-grid{grid-template-columns:1fr}.profile-card{display:grid;grid-template-columns:85px 1fr;column-gap:15px;align-items:center}.profile-card .avatar{grid-row:1 / span 4}.profile-card .eyebrow,.profile-card h2,.profile-card .muted,.profile-card .profile-bio,.profile-card .small,.profile-card .status-line,.profile-card form{grid-column:2}.social-grid{grid-template-columns:1fr}}
 @media(max-width:680px){.shell{padding:0 12px}.topbar{height:65px;padding:0 2px}.dashboard{display:flex;flex-direction:column;gap:13px;padding-top:12px}.dash-head{order:0;width:100%;padding:4px 2px 10px}.app-nav{order:1;position:static;min-height:0;width:100%;display:flex;flex-direction:row;overflow-x:auto;gap:5px;padding:8px;border-radius:14px;scrollbar-width:none}.app-nav::-webkit-scrollbar{display:none}.app-nav a{white-space:nowrap;padding:10px;font-size:11px}.app-nav a.app-nav-brand{display:none}.member-hero{order:2;width:100%;margin:0}.hero-art{min-height:160px;padding:23px 13px}.hero-art h2{font-size:19px}.hero-art p{font-size:11px}.membership-gate{order:3;width:100%}#member-content{order:4;width:100%}.dash-grid{display:flex;flex-direction:column}.profile-card{display:block}.profile-card .avatar{margin-bottom:12px}.feed-section,.social-nav,.social-hub,.groups-section,#moderator-panel{width:100%}.social-nav{overflow-x:auto;flex-wrap:nowrap}.social-nav a{white-space:nowrap}.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dash-head h1{font-size:25px}.dash-head .muted{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.app-nav a{transition:none}}
+
+
+/* Profile identity: hobbies and self-described temperament */
+.profile-traits{display:grid;gap:7px;margin:12px 0;padding:12px 14px;border:1px solid #1b754766;border-radius:14px;background:linear-gradient(145deg,#071b12,#030d08)}
+.profile-traits p{margin:0;display:flex;flex-wrap:wrap;gap:8px;color:#b8d8c4;font-size:.92rem}
+.profile-traits strong{color:#78efaa;min-width:92px}
+.form select{width:100%;padding:12px 13px;border-radius:12px;border:1px solid #1c5738;background:#020d08;color:#effff5;font:inherit}
+.form select:focus{outline:0;border-color:#39e69a;box-shadow:0 0 0 3px #39e69a20}
+.field-hint{color:#9ab9a7;line-height:1.5}
+
+/* Phase 9E — square creator identity and swipe navigation */
+.avatar,.post-avatar,.profile-card .avatar{
+  border-radius:9px !important;
+  overflow:hidden;
+}
+.profile-card .avatar{width:82px;height:82px;object-fit:cover}
+.post-avatar{border-radius:8px !important}
+.app-nav a.is-current{
+  background:linear-gradient(100deg,#0d4225,#092416);
+  color:#caffdc;border:1px solid #39e69a88;
+  box-shadow:inset 3px 0 #39e69a,0 0 18px #20d77a20;
+}
+#swipe-navigation-hint{display:none}
+@media(max-width:680px){
+  #swipe-navigation-hint{display:block;text-align:center;color:#78b991;font-size:10px;letter-spacing:.35px;padding:2px 0 5px}
+  .avatar,.profile-card .avatar{border-radius:9px !important}
+}
