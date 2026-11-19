@@ -123,6 +123,50 @@ $("forgot-password").addEventListener("click", async () => {
   message(authMessage, error ? error.message : "If the email exists, a password reset link will be sent.", Boolean(error));
 });
 
+async function renderMembershipGate(status, subscription = null) {
+  $("member-content").classList.add("hidden");
+  $("membership-gate").classList.remove("hidden");
+  const title = $("gate-title");
+  const description = $("gate-description");
+  if (status === "pending") {
+    title.textContent = "Payment verification pending";
+    description.textContent = "We have a membership record, but it is not active yet. SyncTrA will unlock your private space only after payment is verified by the payment provider.";
+  } else if (["expired", "cancelled", "past_due", "suspended"].includes(status)) {
+    title.textContent = "Your membership needs renewal";
+    description.textContent = "Your subscription is not currently active. Renew through secure checkout when it becomes available to restore member access.";
+  } else {
+    title.textContent = "Welcome to SyncTrA — membership required";
+    description.textContent = "Choose a membership tier to join the private creator community. Access is granted only after the payment provider verifies your payment.";
+  }
+  if (subscription?.current_period_end) {
+    const expiry = new Date(subscription.current_period_end);
+    if (!Number.isNaN(expiry.getTime())) description.textContent += ` Current period ends: ${expiry.toLocaleDateString()}.`;
+  }
+  const host = $("membership-plans");
+  host.replaceChildren();
+  const { data: plans, error } = await supabase.from("subscription_plans")
+    .select("id,name,monthly_price_minor,currency,monthly_credits,profile_music_seconds,group_member_limit,marketplace_selling")
+    .eq("active", true).order("monthly_price_minor", { ascending: true });
+  if (error) {
+    message($("membership-gate-message"), "Membership options could not be loaded. Please try again later.", true);
+    return;
+  }
+  for (const plan of plans || []) {
+    const card = node("article", "plan-card");
+    card.append(node("p", "eyebrow", plan.id.replaceAll("_", " ").toUpperCase()));
+    card.append(node("h3", "", plan.name));
+    card.append(node("strong", "plan-price", plan.monthly_price_minor > 0 ? `${plan.currency} ${(plan.monthly_price_minor / 100).toFixed(2)} / month` : "Price to be announced"));
+    card.append(node("small", "", `${plan.monthly_credits} monthly credits · ${plan.profile_music_seconds}s profile soundtrack`));
+    const action = node("button", "secondary", "Checkout coming soon");
+    action.type = "button";
+    action.disabled = true;
+    action.setAttribute("aria-disabled", "true");
+    card.append(action);
+    host.append(card);
+  }
+  message($("membership-gate-message"), "Payment processing is not connected yet. No plan selection can activate an account.");
+}
+
 async function loadMember(user) {
   currentUser = user;
   message(dashboardMessage, "");
@@ -145,6 +189,19 @@ async function loadMember(user) {
     return message(authMessage, "This account is not currently eligible for member access.", true);
   }
 
+  const { data: subscriptions, error: subscriptionError } = await supabase
+    .from("subscriptions")
+    .select("id,status,plan_id,current_period_start,current_period_end,created_at")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false }).limit(1);
+  if (subscriptionError) {
+    await supabase.auth.signOut();
+    currentUser = null;
+    return message(authMessage, "Membership status could not be verified. Please try again.", true);
+  }
+  const subscription = subscriptions?.[0] || null;
+  const isPaidActive = subscription?.status === "active" && subscription.current_period_end && new Date(subscription.current_period_end).getTime() > Date.now();
+
   currentProfile = profile;
   $("member-display").textContent = profile.display_name || "Creator";
   $("profile-name").textContent = profile.display_name || "Member";
@@ -157,6 +214,14 @@ async function loadMember(user) {
   $("welcome-screen").classList.add("hidden");
   authView.classList.add("hidden");
   dashboardView.classList.remove("hidden");
+
+  if (!isPaidActive) {
+    await renderMembershipGate(subscription?.status || "none", subscription);
+    return;
+  }
+  $("membership-gate").classList.add("hidden");
+  $("member-content").classList.remove("hidden");
+  $("membership-status").textContent = `Active · ${subscription.plan_id.replaceAll("_", " ")}`;
   await loadFeed();
   await loadBlockedUsers();
   await loadGroups();

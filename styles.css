@@ -260,3 +260,16 @@ button{ -webkit-tap-highlight-color:transparent }
 .message-entry.message-incoming{align-self:flex-start}
 .message-entry p{margin:2px 0;white-space:pre-wrap}
 .message-entry small{font-size:11px;color:#8eaa98}
+
+/* Phase 9: paid-membership access screen */
+.membership-gate{margin:18px 0 30px;padding:clamp(22px,4vw,38px);background:radial-gradient(circle at 90% 0,#10b98120,transparent 42%),linear-gradient(145deg,#10241c,#0a1210);border-color:#34d39938}
+.membership-gate h2{font:600 clamp(25px,4vw,34px) "Space Grotesk";margin:8px 0 10px}
+.membership-plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;margin:22px 0}
+.plan-card{display:grid;align-content:start;gap:9px;padding:19px;border:1px solid #34d39932;border-radius:16px;background:#07130e}
+.plan-card h3{margin:0;font:600 19px "Space Grotesk"}
+.plan-price{font-size:16px;color:#6ee7b7}
+.plan-card small{min-height:38px}
+.plan-card button{margin-top:8px}
+.plan-card button:disabled{opacity:.55;cursor:not-allowed}
+.member-content{display:block}
+@media(max-width:520px){.membership-gate{padding:20px}.membership-plans{grid-template-columns:1fr}}

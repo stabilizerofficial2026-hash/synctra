@@ -89,6 +89,15 @@
           </div>
           <button id="logout-button" class="secondary" type="button">Log out</button>
         </div>
+        <section id="membership-gate" class="panel membership-gate hidden" aria-live="polite">
+          <p class="eyebrow">PRIVATE MEMBERSHIP</p>
+          <h2 id="gate-title">Your membership is not active yet</h2>
+          <p id="gate-description" class="muted">Choose a SyncTrA plan to continue. Private community access is reserved for members with a verified, active subscription.</p>
+          <div id="membership-plans" class="membership-plans"></div>
+          <p id="membership-gate-message" class="message" role="status"></p>
+          <p class="tiny">Secure checkout is being connected. No payment has been taken, and selecting a plan here does not activate access.</p>
+        </section>
+        <div id="member-content" class="member-content">
         <div class="dash-grid">
           <article class="panel profile-card">
             <div class="avatar" id="avatar-letter">S</div>
@@ -233,6 +242,7 @@
         </section>
 
         <div id="dashboard-message" class="message" role="status" aria-live="polite"></div>
+        </div>
       </section>
     </main>
     <footer>© SyncTrA · Harmony of creativity · Private members-only community</footer>
