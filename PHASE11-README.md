@@ -73,3 +73,8 @@ No database migration is required for Phase 12. Do not rerun the Phase 11 SQL mi
 
 ### Important scope note
 This is a navigation and usability update, not a new media backend. Image/video uploads, a separate Creations gallery, and public-versus-private post publishing still need their own storage, visibility policies and UI implementation before they can be advertised as available. Existing Open Minds room names, descriptions, membership behavior and 15-second slow mode are not changed by this update.
+
+## Phase 13 — additional rooms and individual artwork
+- Added Hinduism, Judaism and Activists as active Open Minds rooms.
+- All 12 rooms now have individual artwork headers derived from the approved 12-room reference image.
+- Existing room functions and database policies remain unchanged; the Phase 13 room seed was applied separately.

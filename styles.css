@@ -518,3 +518,25 @@ footer{border-color:#174a32;color:#71927e}
   .app-nav{position:sticky;top:90px;max-height:calc(100vh - 110px);overflow-y:auto}
   .mobile-bottom-nav{display:none}
 }
+
+
+/* Phase 13 — individual cinematic Open Minds room artwork, cropped from the approved 12-room reference. */
+.community-room-card{position:relative;isolation:isolate;overflow:hidden;min-height:220px;padding-top:126px;background:linear-gradient(145deg,#10271f,#071510)}
+.community-room-card:before{content:"";position:absolute;z-index:-1;inset:0 0 auto;height:116px;background-position:center 42%;background-size:cover;background-repeat:no-repeat;opacity:.92;mask-image:linear-gradient(#000 58%,transparent 100%)}
+.community-room-card:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(180deg,transparent 0,#071510 48%,#071510 100%);pointer-events:none}
+.community-room-card-top,.community-room-card p,.community-room-card button{position:relative;z-index:1}
+.community-room-card-top{gap:9px}.community-room-icon{background:#06170fc9;border:1px solid #4de9a44d;box-shadow:0 0 18px #19d98c25}
+.community-room-card button{margin-top:auto}
+.room-open-discussion:before{background-image:url("assets/open-minds/open-discussion.webp")}
+.room-islam:before{background-image:url("assets/open-minds/islam.webp")}
+.room-christianity:before{background-image:url("assets/open-minds/christianity.webp")}
+.room-buddhism:before{background-image:url("assets/open-minds/buddhism.webp")}
+.room-taoism:before{background-image:url("assets/open-minds/taoism.webp")}
+.room-science:before{background-image:url("assets/open-minds/science.webp")}
+.room-atheism:before{background-image:url("assets/open-minds/atheism.webp")}
+.room-satanism:before{background-image:url("assets/open-minds/satanism.webp")}
+.room-hacker-community:before{background-image:url("assets/open-minds/hacker-community.webp")}
+.room-hinduism:before{background-image:url("assets/open-minds/hinduism.webp")}
+.room-judaism:before{background-image:url("assets/open-minds/judaism.webp")}
+.room-activists:before{background-image:url("assets/open-minds/activists.webp")}
+@media(max-width:430px){.community-room-card{min-height:205px;padding-top:122px;display:flex}.community-room-card p{grid-column:auto;min-height:0}.community-room-card button{grid-column:auto}.community-room-card:before{height:112px}}

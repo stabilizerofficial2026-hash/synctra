@@ -655,7 +655,7 @@ let communityAudioContext = null;
 let communityAudioNodes = [];
 let communityAudioOn = false;
 let communityAudioVolume = 0.12;
-const roomToneMap = {open:174.61,islam:196,christianity:220,buddhism:164.81,taoism:146.83,science:261.63,atheism:185,satanism:155.56,tech:207.65};
+const roomToneMap = {open:174.61,islam:196,christianity:220,buddhism:164.81,taoism:146.83,science:261.63,atheism:185,satanism:155.56,tech:207.65,hinduism:233.08,judaism:246.94,activists:130.81};
 
 async function loadCommunityRooms(){
   const host=$("community-rooms"); if(!host || !currentUser)return;
@@ -672,9 +672,9 @@ async function loadCommunityRooms(){
   }
   const refreshed=await supabase.from("community_room_members").select("room_id").eq("user_id",currentUser.id);
   joined=new Set((refreshed.data||[]).map(x=>x.room_id));
-  const roomIntro={islam:"Beliefs, culture, history and perspectives",christianity:"Faith, scripture, culture and perspectives",buddhism:"Mindfulness, philosophy and practice",taoism:"Balance, nature and the Tao",science:"Evidence, discovery and questions",atheism:"Reason, ethics and secular philosophy",satanism:"Traditions, philosophy and perspectives",tech:"Ethical cybersecurity and technology",open:"A shared space for curious minds"};
+  const roomIntro={islam:"Beliefs, culture, history and perspectives",christianity:"Faith, scripture, culture and perspectives",buddhism:"Mindfulness, philosophy and practice",taoism:"Balance, nature and the Tao",science:"Evidence, discovery and questions",atheism:"Reason, ethics and secular philosophy",satanism:"Traditions, philosophy and perspectives",tech:"Ethical cybersecurity and technology",hinduism:"Hindu philosophy, scriptures, culture and traditions",judaism:"Jewish faith, history, teachings and traditions",activists:"Human rights, equality and positive social action",open:"A shared space for curious minds"};
   for(const room of rooms||[]){
-    const card=document.createElement("article");card.className="community-room-card";
+    const card=document.createElement("article");card.className="community-room-card room-"+room.slug;
     const top=document.createElement("div");top.className="community-room-card-top";
     const icon=document.createElement("span");icon.className="community-room-icon";icon.textContent=room.icon;
     const title=document.createElement("h3");title.textContent=room.room_name;
@@ -695,6 +695,7 @@ async function loadCommunityRooms(){
 
 async function openCommunityRoom(room){
   activeCommunityRoom=room;
+  $("community-room-panel").dataset.roomSlug=room.slug;
   $("community-room-title").textContent=room.icon+"  "+room.room_name;
   $("community-room-description").textContent=room.description;
   $("community-room-panel").classList.remove("hidden");
