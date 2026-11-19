@@ -593,3 +593,41 @@ body.community-room-open{overflow:hidden!important}
  .dash-head{align-items:center;justify-content:space-between}
  #logout-button{min-width:88px;min-height:40px;padding:8px 12px;font-size:12px}
 }
+
+
+/* Phase 15 — accurate artwork mapping, unified room action palette, refined composer */
+.community-room-card:before{background-image:var(--room-artwork)!important}
+.community-room-card .room-enter-button,
+.room-enter-button{
+ width:100%;min-height:46px!important;display:flex;align-items:center;justify-content:center;
+ border:1px solid #43e99a!important;border-radius:13px!important;
+ color:#032016!important;font-weight:750!important;letter-spacing:.01em;
+ background:linear-gradient(105deg,#10bd75 0%,#37e89b 55%,#73f4bd 100%)!important;
+ box-shadow:0 7px 22px #11c87932,inset 0 1px 0 #ffffff55!important;
+ transition:filter .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+.community-room-card .room-enter-button:active{transform:scale(.985);filter:brightness(.94)}
+.community-room-card .room-enter-button:focus-visible{outline:3px solid #b5ffda!important;outline-offset:3px}
+.community-room-card{border:1px solid #286c50;background:linear-gradient(145deg,#0a241a,#06130f);box-shadow:0 8px 24px #0005}
+.community-room-card h3{color:#eafff2}
+.community-room-card p{color:#c0d8cc}
+#community-message-body{
+ border:1.5px solid #328d68!important;
+ outline:none!important;
+ box-shadow:inset 0 1px 4px #0008,0 0 0 1px #0a3b2a55!important;
+ transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+#community-message-body::placeholder{color:#9ab9aa;opacity:1}
+#community-message-body:focus{
+ border-color:#55f0a7!important;
+ background:#071f18!important;
+ box-shadow:0 0 0 3px #35dc8a26,0 0 18px #35dc8a20,inset 0 1px 4px #0008!important;
+}
+#community-message-body:disabled{opacity:.72;cursor:wait}
+#community-message-form button:focus-visible{outline:3px solid #b5ffda;outline-offset:3px}
+.community-room-panel .group-card-actions button{border-radius:12px!important}
+.community-room-panel .group-card-actions #community-room-close{border-color:#4ed99a;color:#caffdf}
+.community-room-panel .group-card-actions #community-room-leave{border-color:#a75d67;color:#ffd7dc}
+.community-room-panel .community-chat-list{scrollbar-width:thin;scrollbar-color:#287a55 #07140f}
+.community-room-panel .community-chat-list::-webkit-scrollbar{width:5px}
+.community-room-panel .community-chat-list::-webkit-scrollbar-thumb{background:#287a55;border-radius:8px}

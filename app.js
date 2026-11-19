@@ -674,19 +674,23 @@ async function loadCommunityRooms(){
   joined=new Set((refreshed.data||[]).map(x=>x.room_id));
   const roomIntro={islam:"Beliefs, culture, history and perspectives",christianity:"Faith, scripture, culture and perspectives",buddhism:"Mindfulness, philosophy and practice",taoism:"Balance, nature and the Tao",science:"Evidence, discovery and questions",atheism:"Reason, ethics and secular philosophy",satanism:"Traditions, philosophy and perspectives",tech:"Ethical cybersecurity and technology",hinduism:"Hindu philosophy, scriptures, culture and traditions",judaism:"Jewish faith, history, teachings and traditions",activists:"Human rights, equality and positive social action",open:"A shared space for curious minds"};
   for(const room of rooms||[]){
-    const card=document.createElement("article");card.className="community-room-card room-"+room.slug;
+    const card=document.createElement("article");card.className="community-room-card";
+    const artworkSlug=({open:"open-discussion",tech:"hacker-community"})[room.slug]||room.slug;
+    card.style.setProperty("--room-artwork", `url("assets/open-minds/${artworkSlug}.webp")`);
+    card.dataset.roomSlug=room.slug;
     const top=document.createElement("div");top.className="community-room-card-top";
     const icon=document.createElement("span");icon.className="community-room-icon";icon.textContent=room.icon;
     const title=document.createElement("h3");title.textContent=room.room_name;
     top.append(icon,title);
     const desc=document.createElement("p");desc.textContent=roomIntro[room.slug]||room.description;
-    const action=document.createElement("button");action.type="button";action.className=joined.has(room.id)?"secondary":"primary";
+    const action=document.createElement("button");action.type="button";action.className="room-enter-button";
     action.textContent="Enter room";
     action.addEventListener("click",async()=>{
       if(!joined.has(room.id)){
         action.disabled=true;const {error:joinErr}=await supabase.rpc("join_community_room",{p_room_id:room.id});action.disabled=false;
         if(joinErr)return message($("groups-message"),joinErr.message,true);
       }
+      message($("groups-message"),"");
       await openCommunityRoom(room);
     });
     card.append(top,desc,action);host.append(card);
@@ -696,7 +700,8 @@ async function loadCommunityRooms(){
 async function openCommunityRoom(room){
   activeCommunityRoom=room;
   $("community-room-panel").dataset.roomSlug=room.slug;
-  $("community-room-panel").style.setProperty("--room-background", `url("assets/open-minds/${room.slug === "tech" ? "hacker-community" : room.slug}.webp")`);
+  const artworkSlug=({open:"open-discussion",tech:"hacker-community"})[room.slug]||room.slug;
+  $("community-room-panel").style.setProperty("--room-background", `url("assets/open-minds/${artworkSlug}.webp")`);
   document.body.classList.add("community-room-open");
   $("community-room-title").textContent=room.icon+"  "+room.room_name;
   $("community-room-description").textContent=room.description;
