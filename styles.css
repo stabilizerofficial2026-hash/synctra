@@ -631,3 +631,59 @@ body.community-room-open{overflow:hidden!important}
 .community-room-panel .community-chat-list{scrollbar-width:thin;scrollbar-color:#287a55 #07140f}
 .community-room-panel .community-chat-list::-webkit-scrollbar{width:5px}
 .community-room-panel .community-chat-list::-webkit-scrollbar-thumb{background:#287a55;border-radius:8px}
+
+
+/* Phase 16 — prevent Android textarea drag-resizing and oversized composers */
+#post-form #post-body{
+ box-sizing:border-box!important;
+ display:block!important;
+ width:100%!important;
+ height:88px!important;
+ min-height:88px!important;
+ max-height:88px!important;
+ padding:12px 14px!important;
+ line-height:1.45!important;
+ resize:none!important;
+ overflow-y:auto!important;
+ overflow-x:hidden!important;
+ overscroll-behavior:contain;
+ -webkit-appearance:none;
+ appearance:none;
+ touch-action:pan-y;
+}
+#post-form #post-body:focus{
+ border-color:#42e69a!important;
+ box-shadow:0 0 0 3px #26d98b22!important;
+}
+#profile-form #edit-bio{
+ box-sizing:border-box!important;
+ height:78px!important;
+ min-height:78px!important;
+ max-height:78px!important;
+ resize:none!important;
+ overflow-y:auto!important;
+}
+#community-message-form #community-message-body{
+ box-sizing:border-box!important;
+ display:block!important;
+ height:44px!important;
+ min-height:44px!important;
+ max-height:44px!important;
+ padding:0 12px!important;
+ font-size:14px!important;
+ line-height:42px!important;
+ resize:none!important;
+ overflow:hidden!important;
+}
+#community-message-form button{
+ height:44px!important;
+ min-height:44px!important;
+ padding:0 15px!important;
+ font-size:13px!important;
+}
+#community-message-form{align-items:center!important;gap:8px!important}
+@media(max-width:600px){
+ #post-form #post-body{height:82px!important;min-height:82px!important;max-height:82px!important}
+ #community-message-form #community-message-body{height:42px!important;min-height:42px!important;max-height:42px!important;line-height:40px!important}
+ #community-message-form button{height:42px!important;min-height:42px!important}
+}
