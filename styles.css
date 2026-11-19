@@ -43,3 +43,164 @@
 .danger-button{border:1px solid #8d5360;background:#351e2a;color:#ffd7df;border-radius:10px;padding:10px 13px;font:600 12px "DM Sans";cursor:pointer}
 .danger-button:disabled{opacity:.5;cursor:wait}
 @media(max-width:420px){.welcome-content{padding:42px 18px}.welcome-actions{grid-template-columns:1fr}.welcome-choice{min-height:68px}.welcome-screen{border-radius:20px}}
+
+
+/* =========================================================
+   SyncTrA Phase 8A — Premium Emerald / Ambient Glass Skin
+   Presentation-only layer. Existing IDs and app behavior stay intact.
+   ========================================================= */
+:root{
+  color-scheme:dark;
+  --bg:#050807;--panel:#0a100e;--panel2:#0d1713;--line:#20352c;
+  --text:#f0fdf4;--muted:#9cc6b2;--teal:#10b981;--teal2:#6ee7b7;
+  --emerald:#34d399;--gold:#cca35e;--danger:#ff9caa;
+}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(ellipse at 12% 5%,#123d2c66 0,transparent 34%),
+    radial-gradient(ellipse at 92% 38%,#0d3a3b55 0,transparent 30%),
+    radial-gradient(ellipse at 50% 100%,#142a2066 0,transparent 42%),
+    #050807;
+  color:var(--text);letter-spacing:.005em
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.17;
+  background-image:linear-gradient(#ffffff05 1px,transparent 1px),linear-gradient(90deg,#ffffff05 1px,transparent 1px);
+  background-size:54px 54px;mask-image:linear-gradient(to bottom,#000,transparent 80%)
+}
+.shell{max-width:1240px;padding:0 28px}
+.topbar{height:86px;border-bottom-color:#b5f5d20f;backdrop-filter:blur(16px)}
+.brand{font-size:23px;letter-spacing:-1px;gap:12px}
+.brand-mark{
+  width:39px;height:39px;border-radius:14px;
+  background:linear-gradient(145deg,#6ee7b7,#0c8056 65%,#174c3b);
+  color:#03130c;box-shadow:0 0 28px #10b98135,inset 0 1px #ffffff8a;
+  font-size:21px
+}
+.private-tag{border-color:#cca35e55;color:#e7c98e;background:#cca35e0b;letter-spacing:1.6px}
+main{padding:42px 0 82px}
+.eyebrow{color:#6ee7b7;letter-spacing:2.1px;font-size:10px}
+.panel{
+  background:linear-gradient(145deg,#101a15ed,#09100df5);
+  border:1px solid #b7f5d219;border-radius:24px;padding:28px;
+  box-shadow:0 22px 70px #0008, inset 0 1px #ffffff08;
+  backdrop-filter:blur(18px)
+}
+.panel h2,.form h2{font-family:"Space Grotesk",sans-serif;letter-spacing:-.55px}
+.muted{color:#9cc6b2}
+.intro h1,.dash-head h1{font-family:"Space Grotesk",sans-serif;letter-spacing:-3px}
+.intro h1 span,.dash-head h1 span{color:#6ee7b7}
+.intro-copy{color:#b6d0c1;line-height:1.8}
+.values div{color:#e1f3e8}
+.values b{color:#cca35e}
+.fine-print,.tiny,small{color:#88aa98}
+.auth-layout{gap:clamp(34px,6vw,82px)}
+.auth-panel{border-color:#cca35e30}
+.tabs{background:#060b08;border-color:#294136;border-radius:14px}
+.tab{border-radius:10px}
+.tab.active{background:linear-gradient(120deg,#123d2c,#10261c);color:#a7f3d0;box-shadow:inset 0 0 0 1px #34d39925}
+.form label{color:#d9eee0}
+.form input,.form textarea,.comment-input,.group-message-form input,.moderation-note{
+  background:#050b08;border:1px solid #294136;color:#f0fdf4;border-radius:12px;
+  transition:border-color .2s,box-shadow .2s,background .2s
+}
+.form input::placeholder,.form textarea::placeholder,.comment-input::placeholder{color:#628071}
+.form input:focus,.form textarea:focus,.comment-input:focus,.group-message-form input:focus,.moderation-note:focus{
+  border-color:#34d399;box-shadow:0 0 0 3px #10b98120;background:#07110c;outline:none
+}
+.primary,.secondary,.danger-button{transition:transform .2s,filter .2s,box-shadow .2s}
+.primary{
+  background:linear-gradient(115deg,#10b981,#6ee7b7);color:#032016;
+  box-shadow:0 8px 25px #10b98124,inset 0 1px #ffffff80
+}
+.primary:hover,.secondary:hover,.danger-button:hover{transform:translateY(-1px);filter:brightness(1.07)}
+.primary:active,.secondary:active{transform:translateY(0)}
+.secondary{background:linear-gradient(145deg,#14271e,#0c1711);border:1px solid #41634f;color:#dff8e8}
+.text-button{color:#6ee7b7}
+.message{color:#a7f3d0}
+.dashboard{padding-top:18px}
+.dash-head{padding:8px 2px 22px;border-bottom:1px solid #b7f5d212}
+.dash-head h1{font-size:clamp(35px,5vw,51px)}
+.avatar,.post-avatar{
+  background:linear-gradient(145deg,#6ee7b7,#0b8055 70%,#174b37);color:#04150d;
+  box-shadow:0 0 30px #10b98125,inset 0 1px #ffffff8a
+}
+.status-dot{background:#34d399;box-shadow:0 0 12px #34d39999}
+.feature{
+  background:linear-gradient(145deg,#0e1a13,#080e0b);border:1px solid #b7f5d21b;
+  border-radius:17px;transition:transform .22s,border-color .22s,background .22s
+}
+.feature:hover{transform:translateY(-3px);border-color:#34d39955;background:linear-gradient(145deg,#12251a,#09130d)}
+.feature span{color:#6ee7b7}
+.membership{background:radial-gradient(circle at 90% 0,#cca35e18,transparent 45%),linear-gradient(120deg,#102018,#0a100d)}
+.status-pill{border-color:#cca35e66;color:#e7c98e;background:#cca35e0c}
+.feed-section,.groups-section{margin-top:42px}
+.feed-heading{margin:30px 0 18px}
+.feed-heading h2{font-size:clamp(24px,3vw,30px);letter-spacing:-.8px}
+.composer,.group-create-panel,.group-join-panel{border-color:#b7f5d21c}
+.composer-footer small{color:#88aa98}
+.post-card,.group-card,.moderation-card{background:linear-gradient(145deg,#101a15,#09100d);border:1px solid #b7f5d21b;border-radius:20px;box-shadow:0 15px 45px #0005}
+.post-avatar{border-radius:14px}
+.post-body,.moderation-reason{color:#d9eee0}
+.post-actions{border-top-color:#b7f5d21a}
+.reaction-button{color:#9cc6b2}
+.reaction-button.liked{color:#6ee7b7;background:#10b98118}
+.comments-box{border-top-color:#b7f5d21a}
+.comment-line{color:#c6dfcf}
+.group-message{background:#08110c;border-color:#294136}
+.group-card h3,.safety-panel h3,.moderation-card h3{font-family:"Space Grotesk"}
+.pending-row{border-top-color:#b7f5d21a}
+.status-line{color:#9cc6b2}
+.safety-panel{border-color:#cca35e25}
+.danger-button{background:#28171b;border-color:#70404a;color:#ffd7df}
+.welcome-screen{
+  min-height:calc(100svh - 126px);border:1px solid #cca35e35;border-radius:32px;
+  background:
+    radial-gradient(ellipse at 50% 48%,#17452f88 0%,transparent 42%),
+    radial-gradient(ellipse at 12% 85%,#0c3c2d77 0%,transparent 34%),
+    radial-gradient(ellipse at 88% 12%,#153e3b66 0%,transparent 35%),
+    linear-gradient(145deg,#080f0b,#050807 65%,#09130e);
+  box-shadow:0 30px 100px #0008,inset 0 1px #ffffff0a
+}
+.welcome-content{width:min(100% - 36px,620px);padding:70px 22px 58px}
+.welcome-symbol{
+  width:84px;height:84px;border:1px solid #cca35e75;border-radius:27px;
+  background:linear-gradient(145deg,#173d2b,#0a1710);
+  box-shadow:0 0 65px #10b98130,0 0 0 8px #10b98108,inset 0 1px #ffffff1a
+}
+.welcome-symbol span{color:#e5c98e;text-shadow:0 0 25px #cca35e77}
+.welcome-content h1{font-size:clamp(38px,8vw,64px);letter-spacing:-2.4px}
+.welcome-content h1 span{background:linear-gradient(100deg,#6ee7b7 5%,#d5f5df 55%,#d9bb7b);-webkit-background-clip:text;background-clip:text}
+.welcome-mantra{color:#a7f3d0}
+.welcome-copy{color:#b2cdbb;line-height:1.9}
+.welcome-choice{min-height:82px;border-radius:17px}
+.welcome-choice.primary{box-shadow:0 12px 32px #10b9812c}
+.welcome-choice.secondary{border-color:#cca35e70;color:#f0dfb9;background:linear-gradient(145deg,#302717,#17150f)}
+.welcome-orbit{border-color:#cca35e15;box-shadow:0 0 110px #10b9810c,inset 0 0 100px #10b9810a}
+.orbit-two{border-color:#6ee7b715}
+.welcome-bottom-glow{background:#10b98124}
+.welcome-footnote{color:#a18e68;letter-spacing:1px}
+.back-welcome{color:#6ee7b7}
+footer{border-top-color:#b7f5d212;color:#789987;letter-spacing:.4px;padding:26px 0 34px}
+:focus-visible{outline:2px solid #6ee7b7;outline-offset:3px}
+button{ -webkit-tap-highlight-color:transparent }
+@media(max-width:800px){
+  .shell{padding:0 18px}.topbar{height:74px}.panel{padding:23px}
+  .auth-layout{gap:30px}.dash-grid{gap:16px}
+}
+@media(max-width:520px){
+  .shell{padding:0 13px}main{padding:25px 0 58px}
+  .topbar{height:68px}.brand{font-size:21px}.brand-mark{width:35px;height:35px}
+  .panel{padding:19px;border-radius:19px}
+  .welcome-screen{min-height:calc(100svh - 105px);border-radius:23px}
+  .welcome-content{padding:48px 13px 42px}
+  .welcome-actions{gap:10px}.welcome-choice{min-height:70px}
+  .dash-head{gap:12px}.dash-head h1{letter-spacing:-1.8px}
+  .feed-heading{gap:12px}.feed-heading h2{font-size:24px}
+  .group-message-form{align-items:stretch}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
