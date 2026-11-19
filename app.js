@@ -576,29 +576,52 @@ async function loadMessages(){
   if(error)return message($("messages-message"),"Messages unavailable: "+error.message,true);
   if(!rows?.length){message($("messages-message"),"Your private inbox is empty. Start a conversation using a member username.");return;}
   const ids=[...new Set(rows.map(r=>r.sender_id===currentUser.id?r.recipient_id:r.sender_id))];
-  const {data:profiles}=await supabase.from("profiles").select("user_id,username,display_name").in("user_id",ids);
+  const {data:profiles,error:profileError}=await supabase.from("profiles").select("user_id,username,display_name").in("user_id",ids);
+  if(profileError)return message($("messages-message"),"Could not load conversation members: "+profileError.message,true);
   const pmap=new Map((profiles||[]).map(p=>[p.user_id,p]));
-  const latest=new Map();
-  for(const r of rows){const other=r.sender_id===currentUser.id?r.recipient_id:r.sender_id;if(!latest.has(other))latest.set(other,r);}
-  for(const [other,last] of latest){
+  const conversations=new Map();
+  for(const r of rows){
+    const other=r.sender_id===currentUser.id?r.recipient_id:r.sender_id;
+    if(!conversations.has(other))conversations.set(other,[]);
+    conversations.get(other).push(r);
+  }
+  // Keep conversations ordered by most recent activity, but show every fetched
+  // message inside each conversation from oldest to newest.
+  const unreadIncoming=[];
+  for(const [other,messages] of conversations){
     const p=pmap.get(other);if(!p)continue;
-    const row=node("div","social-row message-thread");
-    row.append(node("b","",`${p.display_name} (@${p.username})`),node("p","",last.body),node("small","",formatDate(last.created_at)));
+    messages.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+    const thread=node("section","social-row message-thread");
+    thread.append(node("b","",`${p.display_name} (@${p.username})`));
+    const history=node("div","message-history");
+    for(const r of messages){
+      const mine=r.sender_id===currentUser.id;
+      const entry=node("div",mine?"message-entry message-own":"message-entry message-incoming");
+      entry.append(node("small","",mine?"You":p.display_name));
+      entry.append(node("p","",r.body));
+      entry.append(node("small","",formatDate(r.created_at)));
+      history.append(entry);
+      if(!mine&&!r.read_at)unreadIncoming.push(r.id);
+    }
+    thread.append(history);
     const form=node("form","inline-reply");
     const input=node("input","comment-input");input.maxLength=4000;input.required=true;input.placeholder="Reply privately…";
     const send=node("button","secondary","Send");send.type="submit";form.append(input,send);
     form.addEventListener("submit",async e=>{
-      e.preventDefault();send.disabled=true;
-      const {error:sendError}=await supabase.from("direct_messages").insert({sender_id:currentUser.id,recipient_id:other,body:input.value.trim()});
+      e.preventDefault();const body=input.value.trim();if(!body)return;
+      send.disabled=true;
+      const {error:sendError}=await supabase.from("direct_messages").insert({sender_id:currentUser.id,recipient_id:other,body});
       send.disabled=false;
       if(sendError)return message($("messages-message"),"Message not sent: "+sendError.message,true);
       await loadMessages();await loadNotifications();
     });
-    row.append(form);host.append(row);
-    const unreadIncoming=rows.filter(r=>r.sender_id===other&&r.recipient_id===currentUser.id&&!r.read_at).map(r=>r.id);
-    if(unreadIncoming.length) await supabase.from("direct_messages").update({read_at:new Date().toISOString()}).in("id",unreadIncoming);
+    thread.append(form);host.append(thread);
   }
-  message($("messages-message"),"Private messages are visible only to their sender and recipient.");
+  if(unreadIncoming.length){
+    const {error:readError}=await supabase.from("direct_messages").update({read_at:new Date().toISOString()}).in("id",unreadIncoming);
+    if(readError)message($("messages-message"),"Messages loaded, but read status could not be updated: "+readError.message,true);
+  }
+  message($("messages-message"),"Conversation history is preserved and displayed (up to the 80 most recent inbox messages). Messages are visible only to their sender and recipient.");
 }
 async function loadNetwork(){
   if(!currentUser)return;
