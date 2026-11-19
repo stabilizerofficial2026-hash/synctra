@@ -220,6 +220,7 @@ async function loadMember(user) {
   $("welcome-screen").classList.add("hidden");
   authView.classList.add("hidden");
   dashboardView.classList.remove("hidden");
+  document.body.classList.add("member-mode");
 
   if (!isPaidActive) {
     await renderMembershipGate(subscription?.status || "none", subscription);
@@ -1062,6 +1063,7 @@ $("logout-button").addEventListener("click", async () => {
   if (error) return message(dashboardMessage, error.message, true);
   currentUser = null; currentProfile = null;
   dashboardView.classList.add("hidden");
+  document.body.classList.remove("member-mode");
   authView.classList.remove("hidden");
   $("login-form").reset();
   showTab("login");
@@ -1070,6 +1072,7 @@ supabase.auth.onAuthStateChange((event) => {
   if (event === "SIGNED_OUT") {
     currentUser = null; currentProfile = null;
     dashboardView.classList.add("hidden");
+    document.body.classList.remove("member-mode");
     authView.classList.remove("hidden");
   }
 });

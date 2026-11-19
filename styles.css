@@ -495,3 +495,23 @@ footer{border-color:#174a32;color:#71927e}
   .info-points{grid-template-columns:1fr}
   .profile-actions{flex-direction:column}
 }
+
+/* Fixed mobile app frame: only the active workspace content scrolls. */
+@media(max-width:680px){
+  body.member-mode{height:100svh;min-height:100svh;overflow:hidden;padding:0;background:#020906}
+  body.member-mode .shell{height:100svh;min-height:100svh;max-width:none;padding:0}
+  body.member-mode .topbar{position:fixed;z-index:110;top:0;left:0;right:0;height:65px;padding:0 14px;background:#020a07f5;border-bottom:1px solid #1b7046;backdrop-filter:blur(18px)}
+  body.member-mode main{height:100svh;margin:0;padding:65px 0 0;overflow:hidden}
+  body.member-mode #dashboard-view{position:fixed;z-index:10;top:65px;left:0;right:0;bottom:calc(70px + env(safe-area-inset-bottom));height:auto;max-width:1160px;margin:0 auto;padding:0 12px 18px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  body.member-mode #dashboard-view::-webkit-scrollbar{display:none}
+  body.member-mode .dash-head{flex:0 0 auto;position:sticky;top:0;z-index:5;margin:0 -12px;padding:10px 12px 8px;background:linear-gradient(180deg,#06140df7,#06140deb);backdrop-filter:blur(14px)}
+  body.member-mode .dash-head h1{font-size:21px;margin:3px 0}
+  body.member-mode .dash-head .eyebrow,body.member-mode .dash-head .muted{display:none}
+  body.member-mode .dash-head #logout-button{padding:9px 12px;font-size:11px}
+  body.member-mode .mobile-quickbar{position:sticky;top:55px;z-index:6;flex:0 0 auto;margin:0 -12px;padding:7px 12px;background:#06140df2;backdrop-filter:blur(14px)}
+  body.member-mode .app-nav{position:fixed;top:74px;bottom:calc(78px + env(safe-area-inset-bottom));left:10px;z-index:130}
+  body.member-mode .member-hero,body.member-mode .membership-gate,body.member-mode #member-content{flex:0 0 auto;width:100%;min-width:0}
+  body.member-mode .mobile-bottom-nav{position:fixed;z-index:120;bottom:0;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+  body.member-mode footer{display:none}
+  body.member-mode #dashboard-view .message{overflow-wrap:anywhere}
+}
