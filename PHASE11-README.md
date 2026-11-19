@@ -56,3 +56,20 @@ The Phase 11 database migrations have already been applied and verified on the c
 
 ## Scope and deployment notes
 This is a frontend update. It does not change the Supabase schema or require rerunning Phase 11 SQL. The package is not deployed automatically; publish the updated frontend files to the existing GitHub/Cloudflare Pages project. Test public-profile visibility, follow/message actions, and mobile navigation with two active member accounts before public launch.
+
+
+## Phase 12 — navigation and mobile workspace refinement
+
+This frontend update keeps the existing SyncTrA features and Open Minds rooms (including all belief, philosophy, science and technology discussion spaces) intact. It changes navigation only:
+
+- Mobile navigation uses a fixed five-item bottom bar: Stream, Garden, Create, Chat and You.
+- The three-line Menu opens a compact top-side drawer for the other areas, including Explore & Network, Notifications, Creations, Membership, About and Help.
+- Selecting a workspace focuses that view and collapses the other long page sections, so members do not have to scroll through the whole app to find a feature.
+- Horizontal swipe switches between the five main destinations; vertical scrolling remains available inside the selected workspace and chat lists.
+- Desktop retains the left-side navigation.
+- The post action label remains simply **Share**. Its existing member-to-member share behavior is preserved.
+
+No database migration is required for Phase 12. Do not rerun the Phase 11 SQL migration; it has already been applied to the live project.
+
+### Important scope note
+This is a navigation and usability update, not a new media backend. Image/video uploads, a separate Creations gallery, and public-versus-private post publishing still need their own storage, visibility policies and UI implementation before they can be advertised as available. Existing Open Minds room names, descriptions, membership behavior and 15-second slow mode are not changed by this update.

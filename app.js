@@ -220,7 +220,6 @@ async function loadMember(user) {
   $("welcome-screen").classList.add("hidden");
   authView.classList.add("hidden");
   dashboardView.classList.remove("hidden");
-  document.body.classList.add("member-mode");
 
   if (!isPaidActive) {
     await renderMembershipGate(subscription?.status || "none", subscription);
@@ -364,7 +363,7 @@ async function loadFeed() {
     const share=node("button","reaction-button","Share");
     share.type="button";
     share.addEventListener("click",async()=>{
-      const username=window.prompt("Share this post privately with a SyncTrA member. Enter their username:");
+      const username=window.prompt("Share this post. Enter the member username:");
       if(username===null)return;
       try{
         const recipient=await profileForUsername(username);
@@ -372,7 +371,7 @@ async function loadFeed() {
         if(recipient.user_id===currentUser.id)return message(feedMessage,"Choose another member to share this post with.",true);
         const {error}=await supabase.from("post_shares").insert({post_id:post.id,shared_by:currentUser.id,recipient_id:recipient.user_id});
         if(error)return message(feedMessage,error.code==="23505"?"You've already shared this post with that member.":error.message,true);
-        message(feedMessage,`Post shared privately with @${recipient.username}.`);
+        message(feedMessage,`Post shared with @${recipient.username}.`);
         await loadNotifications();
       }catch(err){message(feedMessage,err.message,true);}
     });
@@ -1063,7 +1062,6 @@ $("logout-button").addEventListener("click", async () => {
   if (error) return message(dashboardMessage, error.message, true);
   currentUser = null; currentProfile = null;
   dashboardView.classList.add("hidden");
-  document.body.classList.remove("member-mode");
   authView.classList.remove("hidden");
   $("login-form").reset();
   showTab("login");
@@ -1072,7 +1070,6 @@ supabase.auth.onAuthStateChange((event) => {
   if (event === "SIGNED_OUT") {
     currentUser = null; currentProfile = null;
     dashboardView.classList.add("hidden");
-    document.body.classList.remove("member-mode");
     authView.classList.remove("hidden");
   }
 });
@@ -1097,98 +1094,82 @@ document.addEventListener("click", event => {
   closeQuickMenu();
 });
 
-// Phase 9E: one-finger horizontal swipe switches between primary workspace windows.
+// Phase 12 — compact app-style workspace navigation.
+// Keep the existing features and belief/philosophy rooms intact, but show one
+// workspace at a time so members do not need to scroll through every section.
 (() => {
-  const nav = document.querySelector('.app-nav');
-  const dashboard = document.querySelector('#dashboard-view');
-  if (!nav || !dashboard) return;
-  const links = [...nav.querySelectorAll('a[href^="#"]')]
-    .filter(a => !a.classList.contains('app-nav-brand'));
-  const targets = links.map(a => document.querySelector(a.getAttribute('href')));
-  let startX = 0, startY = 0, startAt = 0;
-  const minDistance = 65;
-  const blocked = 'input,textarea,select,button,a,[contenteditable="true"],.app-nav,.social-nav,.feed-list,.group-messages,.message-list';
+  const dashboard = $("dashboard-view");
+  const memberContent = $("member-content");
+  const drawer = $("quick-menu");
+  const drawerLinks = [...(drawer?.querySelectorAll('a[href^="#"]') || [])]
+    .filter(a => !a.classList.contains("app-nav-brand"));
+  const bottomLinks = [...document.querySelectorAll(".mobile-bottom-nav a[href^='#']")];
+  const allLinks = [...drawerLinks, ...bottomLinks];
+  let activeTarget = "feed-section";
 
-  const activate = index => {
-    const safeIndex = Math.max(0, Math.min(links.length - 1, index));
-    const link = links[safeIndex];
-    const target = targets[safeIndex];
-    if (!link || !target) return;
-    links.forEach(a => {
-      a.classList.toggle('is-current', a === link);
-      if (a === link) a.setAttribute('aria-current', 'page');
-      else a.removeAttribute('aria-current');
+  function focusWorkspace(targetId, sourceLink = null, scroll = true) {
+    const target = $(targetId);
+    if (!target || !memberContent || !memberContent.contains(target)) return;
+    // Reveal the selected path and collapse its sibling panels at every level.
+    let branch = target;
+    while (branch && branch !== memberContent) {
+      const parent = branch.parentElement;
+      if (!parent) break;
+      for (const sibling of parent.children) {
+        if (sibling === branch) continue;
+        sibling.classList.add("workspace-collapsed");
+      }
+      branch.classList.remove("workspace-collapsed");
+      branch = parent;
+    }
+    activeTarget = targetId;
+    allLinks.forEach(link => {
+      const active = link.getAttribute("href") === "#" + targetId ||
+        (link.dataset.workspace === "stream" && targetId === "feed-section") ||
+        (link.dataset.workspace === "garden" && targetId === "groups-section") ||
+        (link.dataset.workspace === "create" && targetId === "creative-space") ||
+        (link.dataset.workspace === "chat" && targetId === "messages-panel") ||
+        (link.dataset.workspace === "you" && targetId === "profile-card");
+      link.classList.toggle("is-current", active);
+      if (active) link.setAttribute("aria-current", "page"); else link.removeAttribute("aria-current");
     });
-    target.scrollIntoView({behavior:'smooth', block:'start'});
-  };
+    if (sourceLink && drawer?.contains(sourceLink)) closeQuickMenu();
+    if (scroll) window.scrollTo({top: 0, behavior: "smooth"});
+  }
 
-  links.forEach((link, i) => link.addEventListener('click', () => {
-    links.forEach(a => {
-      a.classList.toggle('is-current', a === link);
-      if (a === link) a.setAttribute('aria-current', 'page');
-      else a.removeAttribute('aria-current');
-    });
+  allLinks.forEach(link => link.addEventListener("click", event => {
+    const targetId = link.getAttribute("href")?.slice(1);
+    if (!targetId || !$(targetId) || !memberContent.contains($(targetId))) return;
+    event.preventDefault();
+    focusWorkspace(targetId, link);
   }));
 
-  dashboard.addEventListener('touchstart', event => {
-    if (event.touches.length !== 1 || event.target.closest(blocked)) return;
-    startX = event.touches[0].clientX;
-    startY = event.touches[0].clientY;
-    startAt = Date.now();
-  }, {passive:true});
-
-  dashboard.addEventListener('touchend', event => {
-    if (!startAt || event.changedTouches.length !== 1) return;
-    const dx = event.changedTouches[0].clientX - startX;
-    const dy = event.changedTouches[0].clientY - startY;
-    const elapsed = Date.now() - startAt;
-    startAt = 0;
-    // Ignore vertical page scrolling and slow drags; never hijack form/media interactions.
-    if (Math.abs(dx) < minDistance || Math.abs(dx) < Math.abs(dy) * 1.25 || elapsed > 700) return;
-    const current = Math.max(0, links.findIndex(a => a.classList.contains('is-current')));
-    activate(current + (dx < 0 ? 1 : -1));
-  }, {passive:true});
-})();
-
-// Mobile app-style navigation: show one workspace at a time instead of a long stacked page.
-(() => {
-  const dashboard = document.querySelector('#dashboard-view');
-  const content = document.querySelector('#member-content');
-  if (!dashboard || !content) return;
-  const routeMap = new Map([
-    ['feed-section','stream'],['groups-section','garden'],['post-form','create'],
-    ['messages-panel','chat'],['social-hub','chat'],['profile-card','you'],
-    ['network-panel','explore'],['notifications-panel','notifications'],
-    ['membership-status','membership'],['creative-space','studio'],
-    ['moderator-panel','moderator'],['about-section','about'],['faq-section','faq'],
-    ['member-profile-view','member-profile']
-  ]);
-  const setView = (view) => {
-    dashboard.dataset.activeView = view;
-    content.scrollTop = 0;
-    const nav = document.querySelector('.app-nav');
-    nav?.querySelectorAll('a[href^="#"]').forEach(a => {
-      const id = a.getAttribute('href').slice(1);
-      const active = routeMap.get(id) === view;
-      a.classList.toggle('is-current', active);
-      if(active) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
-    });
-    document.querySelector('.app-nav')?.classList.remove('menu-open');
-    document.querySelector('#quick-menu-toggle')?.setAttribute('aria-expanded','false');
-  };
-  const onNavClick = (event) => {
-    const link = event.target.closest('a[href^="#"]');
-    if (!link || !dashboard.contains(link)) return;
-    const id = link.getAttribute('href').slice(1);
-    const view = routeMap.get(id);
-    if (!view) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    setView(view);
-    if (view === 'create') {
-      requestAnimationFrame(() => document.querySelector('#post-body')?.focus({preventScroll:true}));
+  // Open on the Stream view after login; preserve the rest of the app in the drawer.
+  const observer = new MutationObserver(() => {
+    if (!dashboard.classList.contains("hidden") && !dashboard.dataset.workspaceReady) {
+      dashboard.dataset.workspaceReady = "true";
+      focusWorkspace("feed-section", null, false);
     }
-  };
-  dashboard.addEventListener('click', onNavClick, true);
-  setView('stream');
+    if (dashboard.classList.contains("hidden")) delete dashboard.dataset.workspaceReady;
+  });
+  observer.observe(dashboard, {attributes:true, attributeFilter:["class"]});
+
+  // Swipe horizontally between the five primary mobile destinations only.
+  const primary = ["feed-section", "groups-section", "creative-space", "messages-panel", "profile-card"];
+  let sx=0, sy=0, started=0;
+  const ignored = 'input,textarea,select,button,a,[contenteditable="true"],.app-nav,.feed-list,.community-chat-list,.group-chat-list';
+  dashboard.addEventListener("touchstart", event => {
+    if (event.touches.length !== 1 || event.target.closest(ignored)) return;
+    sx=event.touches[0].clientX; sy=event.touches[0].clientY; started=Date.now();
+  }, {passive:true});
+  dashboard.addEventListener("touchend", event => {
+    if (!started || event.changedTouches.length !== 1) return;
+    const dx=event.changedTouches[0].clientX-sx, dy=event.changedTouches[0].clientY-sy;
+    const elapsed=Date.now()-started; started=0;
+    if (Math.abs(dx)<75 || Math.abs(dx)<Math.abs(dy)*1.3 || elapsed>700) return;
+    const index=primary.indexOf(activeTarget);
+    if(index<0)return;
+    const next=Math.max(0,Math.min(primary.length-1,index+(dx<0?1:-1)));
+    focusWorkspace(primary[next]);
+  }, {passive:true});
 })();

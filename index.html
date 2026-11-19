@@ -89,15 +89,15 @@
           </div>
           <button id="logout-button" class="secondary" type="button">Log out</button>
         </div>
-        <div class="mobile-quickbar"><button id="quick-menu-toggle" class="secondary" type="button" aria-expanded="false" aria-controls="quick-menu">☰ Menu</button><span>Find your space</span><a href="#notifications-panel" aria-label="Notifications">♧</a></div>
+        <div class="mobile-quickbar"><button id="quick-menu-toggle" class="secondary menu-toggle" type="button" aria-expanded="false" aria-controls="quick-menu" aria-label="Open navigation menu"><span aria-hidden="true">☰</span><span>Menu</span></button><span class="quickbar-brand">SyncTrA <small>YOUR CREATIVE WORLD</small></span><a href="#notifications-panel" aria-label="Notifications">♧</a></div>
         <nav id="quick-menu" class="app-nav" aria-label="SyncTrA workspace navigation">
         <a class="app-nav-brand" href="#dashboard-view"><span class="nav-orb">▶</span><span>SyncTrA<small>CREATIVE SOCIAL PLATFORM</small></span></a>
         <a href="#feed-section">⌂ <span>Home Feed</span></a>
         <a href="#social-hub">⌕ <span>Explore & Network</span></a>
         <a href="#messages-panel">▤ <span>Messages</span></a>
         <a href="#notifications-panel">♧ <span>Notifications</span></a>
-        <a href="#groups-section">♧ <span>Groups</span></a>
-        <a href="#creative-space">✧ <span>Creative Studio</span></a>
+        <a href="#groups-section">♧ <span>Garden &amp; Open Minds</span></a>
+        <a href="#creative-space">▣ <span>Creations</span></a>
         <a href="#membership-status">♛ <span>Membership</span></a>
         <a href="#about-section">✦ <span>About SyncTrA</span></a>
         <a href="#faq-section">? <span>FAQ &amp; Help</span></a>
@@ -315,7 +315,7 @@
           <h3>Public posts</h3><div id="public-profile-posts" class="feed-list"></div><p id="public-profile-status" class="message" role="status"></p>
         </section>
         <nav class="mobile-bottom-nav" aria-label="Main navigation">
-          <a href="#feed-section"><span>⌂</span><small>Stream</small></a><a href="#groups-section"><span>♧</span><small>Garden</small></a><a class="create-shortcut" href="#post-form"><span>＋</span><small>Create</small></a><a href="#messages-panel"><span>▢</span><small>Chat</small></a><a href="#profile-card"><span>♙</span><small>You</small></a>
+          <a href="#feed-section" data-workspace="stream"><span>⌂</span><small>Stream</small></a><a href="#groups-section" data-workspace="garden"><span>♧</span><small>Garden</small></a><a class="create-shortcut" href="#creative-space" data-workspace="create"><span>＋</span><small>Create</small></a><a href="#messages-panel" data-workspace="chat"><span>▢</span><small>Chat</small></a><a href="#profile-card" data-workspace="you"><span>♙</span><small>You</small></a>
         </nav>
         <div id="dashboard-message" class="message" role="status" aria-live="polite"></div>
         </div>

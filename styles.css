@@ -477,10 +477,10 @@ footer{border-color:#174a32;color:#71927e}
 .info-section details{border-top:1px solid #1d6942;padding:14px 2px;color:#dff5e7}.info-section summary{cursor:pointer;font-weight:650}.info-section details p{color:#a9c8b5;line-height:1.65;margin:10px 0 0;font-size:13px}
 .member-profile-view{margin:22px 0;border-color:#2c9c615e;scroll-margin-top:85px}.profile-actions{display:flex;gap:10px;margin:16px 0}.profile-actions button{flex:1}
 @media(max-width:680px){
-  .mobile-quickbar{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:4px 0 9px}
-  .mobile-quickbar span{font-size:11px;color:#86b99a;letter-spacing:.4px}
-  .mobile-quickbar a{width:38px;height:38px;display:grid;place-items:center;border:1px solid #1b7046;border-radius:12px;color:#9af0bf;text-decoration:none}
-  .app-nav{display:none!important;order:1;position:fixed;z-index:120;top:78px;left:12px;bottom:88px;min-height:0;width:min(82vw,320px);flex-direction:column;overflow-y:auto;overscroll-behavior:contain;padding:14px;border-radius:18px;border:1px solid #2b9b65;background:linear-gradient(180deg,#071b11f8,#020906fa);box-shadow:0 22px 70px #000c}
+  .mobile-quickbar{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:7px 9px;position:sticky;top:65px;z-index:75;background:#030b07f5;border:1px solid #1b70464d;border-radius:0 0 14px 14px;backdrop-filter:blur(16px);box-shadow:0 8px 22px #0005}
+  .mobile-quickbar .quickbar-brand{display:flex;flex-direction:column;align-items:center;font:700 15px "Space Grotesk";color:#baffd2;letter-spacing:.4px}.mobile-quickbar .quickbar-brand small{font:600 7px "DM Sans";letter-spacing:1.5px;color:#7eaa8d;margin-top:1px}
+  .mobile-quickbar a{width:38px;height:38px;display:grid;place-items:center;border:1px solid #1b7046;border-radius:12px;color:#9af0bf;text-decoration:none}.mobile-quickbar .menu-toggle{display:flex;align-items:center;gap:7px;min-height:38px;padding:7px 11px;border-radius:11px;font-size:12px}.mobile-quickbar .menu-toggle span:first-child{font-size:20px;line-height:1}
+  .app-nav{display:none!important;order:1;position:fixed;z-index:120;top:132px;left:12px;bottom:88px;min-height:0;width:min(82vw,320px);flex-direction:column;overflow-y:auto;overscroll-behavior:contain;padding:14px;border-radius:18px;border:1px solid #2b9b65;background:linear-gradient(180deg,#071b11f8,#020906fa);box-shadow:0 22px 70px #000c}
   .app-nav.menu-open{display:flex!important}
   .app-nav.menu-open::before{content:"";position:fixed;z-index:-1;inset:0;background:#0009;backdrop-filter:blur(2px)}
   .app-nav a{white-space:normal;padding:13px;font-size:14px;border-radius:12px}
@@ -491,86 +491,30 @@ footer{border-color:#174a32;color:#71927e}
   .mobile-bottom-nav a span{font-size:22px;line-height:1.1}.mobile-bottom-nav a small{font-size:9px;color:inherit}
   .mobile-bottom-nav a:focus,.mobile-bottom-nav a:hover{color:#6ee7b7}
   .mobile-bottom-nav .create-shortcut span{display:grid;place-items:center;width:45px;height:42px;margin-top:-17px;border:1px solid #39e69a88;border-radius:15px;background:linear-gradient(145deg,#0c5834,#062417);color:#d8ffe7;font-size:27px;box-shadow:0 0 24px #20d77a30}
-  body{padding-bottom:78px}
+  body{padding-bottom:82px}.dashboard{scroll-margin-top:135px}
   .info-points{grid-template-columns:1fr}
   .profile-actions{flex-direction:column}
 }
 
-/* Fixed mobile app frame: only the active workspace content scrolls. */
-@media(max-width:680px){
-  body.member-mode{height:100svh;min-height:100svh;overflow:hidden;padding:0;background:#020906}
-  body.member-mode .shell{height:100svh;min-height:100svh;max-width:none;padding:0}
-  body.member-mode .topbar{position:fixed;z-index:110;top:0;left:0;right:0;height:65px;padding:0 14px;background:#020a07f5;border-bottom:1px solid #1b7046;backdrop-filter:blur(18px)}
-  body.member-mode main{height:100svh;margin:0;padding:65px 0 0;overflow:hidden}
-  body.member-mode #dashboard-view{position:fixed;z-index:10;top:65px;left:0;right:0;bottom:calc(70px + env(safe-area-inset-bottom));height:auto;max-width:1160px;margin:0 auto;padding:0 12px 18px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  body.member-mode #dashboard-view::-webkit-scrollbar{display:none}
-  body.member-mode .dash-head{flex:0 0 auto;position:sticky;top:0;z-index:5;margin:0 -12px;padding:10px 12px 8px;background:linear-gradient(180deg,#06140df7,#06140deb);backdrop-filter:blur(14px)}
-  body.member-mode .dash-head h1{font-size:21px;margin:3px 0}
-  body.member-mode .dash-head .eyebrow,body.member-mode .dash-head .muted{display:none}
-  body.member-mode .dash-head #logout-button{padding:9px 12px;font-size:11px}
-  body.member-mode .mobile-quickbar{position:sticky;top:55px;z-index:6;flex:0 0 auto;margin:0 -12px;padding:7px 12px;background:#06140df2;backdrop-filter:blur(14px)}
-  body.member-mode .app-nav{position:fixed;top:74px;bottom:calc(78px + env(safe-area-inset-bottom));left:10px;z-index:130}
-  body.member-mode .member-hero,body.member-mode .membership-gate,body.member-mode #member-content{flex:0 0 auto;width:100%;min-width:0}
-  body.member-mode .mobile-bottom-nav{position:fixed;z-index:120;bottom:0;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
-  body.member-mode footer{display:none}
-  body.member-mode #dashboard-view .message{overflow-wrap:anywhere}
-}
 
-/* Mobile single-screen navigation: one selected workspace at a time. */
+/* Phase 12 — app-like navigation: fixed quick destinations, compact drawer, focused views. */
+.workspace-collapsed{display:none!important}
+.app-nav a.is-current,.mobile-bottom-nav a.is-current{color:#aaffd0;background:#0b3a22;border-color:#39e69a66}
+.mobile-bottom-nav a.is-current small{color:#aaffd0}
 @media(max-width:680px){
-  body.member-mode #dashboard-view{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
-  body.member-mode .dash-head,body.member-mode .mobile-quickbar{position:relative;top:auto;flex:0 0 auto}
-  body.member-mode #member-content{display:block;flex:1 1 auto;min-height:0;width:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:18px;scrollbar-width:none}
-  body.member-mode #member-content::-webkit-scrollbar{display:none}
-  body.member-mode #member-content>.dash-grid,
-  body.member-mode #member-content>#feed-section,
-  body.member-mode #member-content>#social-hub,
-  body.member-mode #member-content>#groups-section,
-  body.member-mode #member-content>#moderator-panel,
-  body.member-mode #member-content>#about-section,
-  body.member-mode #member-content>#faq-section,
-  body.member-mode #member-content>#member-profile-view{display:none}
-  body.member-mode #dashboard-view[data-active-view="stream"] #member-content>#feed-section,
-  body.member-mode #dashboard-view[data-active-view="garden"] #member-content>#groups-section,
-  body.member-mode #dashboard-view[data-active-view="chat"] #member-content>#social-hub,
-  body.member-mode #dashboard-view[data-active-view="you"] #member-content>.dash-grid,
-  body.member-mode #dashboard-view[data-active-view="create"] #member-content>#feed-section,
-  body.member-mode #dashboard-view[data-active-view="explore"] #member-content>#social-hub,
-  body.member-mode #dashboard-view[data-active-view="notifications"] #member-content>#social-hub,
-  body.member-mode #dashboard-view[data-active-view="membership"] #member-content>.dash-grid,
-  body.member-mode #dashboard-view[data-active-view="studio"] #member-content>.dash-grid,
-  body.member-mode #dashboard-view[data-active-view="moderator"] #member-content>#moderator-panel,
-  body.member-mode #dashboard-view[data-active-view="about"] #member-content>#about-section,
-  body.member-mode #dashboard-view[data-active-view="faq"] #member-content>#faq-section,
-  body.member-mode #dashboard-view[data-active-view="member-profile"] #member-content>#member-profile-view{display:block}
-  body.member-mode #dashboard-view[data-active-view="you"] #member-content>.dash-grid{display:block}
-  body.member-mode #dashboard-view[data-active-view="you"] #member-content .dash-content,
-  body.member-mode #dashboard-view[data-active-view="membership"] #member-content #profile-card,
-  body.member-mode #dashboard-view[data-active-view="membership"] #member-content #creative-space,
-  body.member-mode #dashboard-view[data-active-view="studio"] #member-content #profile-card,
-  body.member-mode #dashboard-view[data-active-view="studio"] #member-content .membership{display:none!important}
-  body.member-mode #dashboard-view[data-active-view="chat"] #member-content #notifications-panel,
-  body.member-mode #dashboard-view[data-active-view="chat"] #member-content #network-panel,
-  body.member-mode #dashboard-view[data-active-view="explore"] #member-content #notifications-panel,
-  body.member-mode #dashboard-view[data-active-view="explore"] #member-content #messages-panel,
-  body.member-mode #dashboard-view[data-active-view="notifications"] #member-content #messages-panel,
-  body.member-mode #dashboard-view[data-active-view="notifications"] #member-content #network-panel{display:none!important}
-  body.member-mode #dashboard-view[data-active-view="create"] #member-content #feed-section>.feed-heading,
-  body.member-mode #dashboard-view[data-active-view="create"] #member-content #feed-section>.safety-panel,
-  body.member-mode #dashboard-view[data-active-view="create"] #member-content #feed-section>.feed-list{display:none!important}
-  body.member-mode #dashboard-view[data-active-view="create"] #member-content #feed-section>.composer{display:block!important}
-  body.member-mode #dashboard-view[data-active-view="studio"] #member-content #creative-space{display:block!important}
-  body.member-mode #dashboard-view[data-active-view="membership"] #member-content .membership{display:block!important}
-  body.member-mode #dashboard-view[data-active-view="you"] #member-content #profile-card{display:block!important}
-  body.member-mode #dashboard-view[data-active-view="stream"] .mobile-bottom-nav a[href="#feed-section"],
-  body.member-mode #dashboard-view[data-active-view="garden"] .mobile-bottom-nav a[href="#groups-section"],
-  body.member-mode #dashboard-view[data-active-view="create"] .mobile-bottom-nav a[href="#post-form"],
-  body.member-mode #dashboard-view[data-active-view="chat"] .mobile-bottom-nav a[href="#messages-panel"],
-  body.member-mode #dashboard-view[data-active-view="you"] .mobile-bottom-nav a[href="#profile-card"]{color:#6ee7b7}
+  .mobile-quickbar{top:65px;z-index:95;border-radius:0 0 14px 14px}
+  .app-nav{top:126px;left:10px;bottom:calc(78px + env(safe-area-inset-bottom));width:min(84vw,330px);max-height:none;overflow-y:auto;overscroll-behavior:contain}
+  .app-nav.menu-open{display:flex!important}
+  .mobile-bottom-nav{z-index:100;grid-template-columns:repeat(5,minmax(0,1fr));padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
+  .mobile-bottom-nav a{min-width:0;min-height:50px;border-radius:13px}
+  .mobile-bottom-nav a span{font-size:22px}
+  .mobile-bottom-nav a small{font-size:10px}
+  .member-hero{display:none}
+  .dash-head{margin-bottom:4px}
+  #member-content{min-height:calc(100svh - 205px)}
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 }
-@media(max-width:680px){
-  body.member-mode #dashboard-view>.member-hero,
-  body.member-mode #dashboard-view>.membership-gate,
-  body.member-mode #member-content>.social-nav{display:none!important}
-  body.member-mode #dashboard-view[data-active-view="membership"]>.membership-gate{display:block!important}
+@media(min-width:681px){
+  .app-nav{position:sticky;top:90px;max-height:calc(100vh - 110px);overflow-y:auto}
+  .mobile-bottom-nav{display:none}
 }
