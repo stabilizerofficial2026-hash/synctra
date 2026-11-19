@@ -25,3 +25,12 @@ This phase does NOT connect a payment gateway and does NOT charge anyone. Plan p
 - HTML duplicate IDs and JavaScript element references checked.
 - Supabase migration calls returned success.
 - No live browser end-to-end test was performed.
+
+
+## Phase 9B — Emerald visual refresh
+
+This update brings the existing SyncTrA screens closer to the approved emerald/ambient-glass concept. It is a CSS-only presentation layer and intentionally preserves the existing HTML IDs, JavaScript, Supabase calls, forms, membership gate, and social features.
+
+Important: this is a visual refresh of the existing app, not a claim that all product features are complete. Payment checkout/webhook activation remains unconnected. Do not publish real plan prices or accept payments until a verified server-side payment integration is completed.
+
+Deploy by replacing the existing `index.html`, `styles.css`, `app.js`, and `README.md` in the same GitHub repository with these package files. The JavaScript is carried forward unchanged from Phase 9A.

@@ -273,3 +273,103 @@ button{ -webkit-tap-highlight-color:transparent }
 .plan-card button:disabled{opacity:.55;cursor:not-allowed}
 .member-content{display:block}
 @media(max-width:520px){.membership-gate{padding:20px}.membership-plans{grid-template-columns:1fr}}
+
+
+/* Phase 9B — Emerald ambient interface refresh.
+   Presentation-only overrides: preserves existing IDs, forms, data flow and JS behavior. */
+:root{
+  --bg:#020b08;--panel:#06150f;--panel2:#0a2117;--line:#174a32;
+  --text:#effff5;--muted:#9ab9a7;--teal:#39e69a;--teal2:#a5ffd1;
+  --danger:#ff9caa;
+}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(ellipse at 12% 8%,#0b4c2a55 0,transparent 34%),
+    radial-gradient(ellipse at 90% 72%,#064c3a44 0,transparent 34%),
+    linear-gradient(145deg,#010604,#04130c 55%,#020906);
+}
+.shell{max-width:1440px}
+.topbar{
+  position:sticky;top:0;z-index:30;padding:0 18px;
+  background:#020b08eF;backdrop-filter:blur(18px);
+  border-bottom:1px solid #39e69a35;
+}
+.brand{font-size:25px;color:#caffdf;text-shadow:0 0 22px #39e69a44}
+.brand-mark{
+  border-radius:50%;width:40px;height:40px;
+  background:radial-gradient(circle at 35% 30%,#baffd7,#13b96e 65%,#07502d);
+  box-shadow:0 0 22px #20d77a88;color:#02180b
+}
+.private-tag{border-color:#39e69a66;color:#a5ffd1;background:#0a2b1b}
+.panel{
+  background:linear-gradient(145deg,#071b12f5,#041009f5);
+  border:1px solid #1b7547a0;border-radius:18px;
+  box-shadow:0 12px 38px #0008,0 0 24px #0b9d4b12,inset 0 1px #baffd20a;
+}
+.panel h2,.panel h3{color:#edfff4}
+.eyebrow{color:#58f0a5}
+.muted,.fine-print,.tiny,small{color:#9ab9a7}
+.primary{
+  background:linear-gradient(105deg,#08b965,#70f5ad);
+  color:#02170b;box-shadow:0 0 18px #20d77a3d;
+}
+.secondary{
+  background:linear-gradient(135deg,#0b2b1b,#07170e);
+  border:1px solid #28784a;color:#dfffea;
+}
+.text-button{color:#8df6b8}
+.form input,.form textarea,.comment-input,.group-message-form input{
+  background:#020d08;border-color:#1c5738;color:#effff5;
+}
+.form input:focus,.form textarea:focus{border-color:#39e69a;box-shadow:0 0 0 3px #39e69a20}
+.tabs{background:#020b07;border-color:#174a32}
+.tab.active{background:#0c3b23;color:#a5ffd1}
+.avatar,.post-avatar{
+  background:radial-gradient(circle at 30% 20%,#baffd7,#17bd70 60%,#07502d);
+  color:#02180b;box-shadow:0 0 17px #39e69a33;
+}
+.profile-bio,.feature,.social-row,.network-stats>div,.group-message{
+  background:linear-gradient(145deg,#071b11,#030c07);
+  border-color:#1b5737;color:#dfffea;
+}
+.social-nav a{background:#06160d;border-color:#1b6840;color:#baffd4}
+.social-nav a:hover{background:#0b2d1a;border-color:#39e69a}
+.nav-count{background:#28d77d;color:#02180b}
+.post-card{background:linear-gradient(145deg,#071b12,#030d08)}
+.post-body{color:#e4f9eb}
+.post-actions{border-color:#174a32}
+.reaction-button.liked{color:#65f2a6;background:#0b3b22}
+.membership-gate{
+  background:radial-gradient(circle at 90% 0,#12b76a2b,transparent 42%),
+  linear-gradient(145deg,#0a2918,#030c07);
+  border-color:#39e69a77;box-shadow:0 0 38px #0b9d4b19;
+}
+.plan-card{background:linear-gradient(145deg,#061a10,#020a06);border-color:#25834e}
+.plan-price{color:#76f5ad}
+.status-pill{color:#a5ffd1;border-color:#39e69a77;background:#0b2a19}
+.status-dot{background:#39e69a;box-shadow:0 0 10px #39e69a}
+.welcome-screen{
+  border-color:#1b7547;background:
+  radial-gradient(ellipse at 50% 42%,#0b482a 0%,#082417 42%,#020b07 80%);
+  box-shadow:inset 0 0 80px #0d8d4a20,0 18px 60px #0008;
+}
+.welcome-symbol{border-color:#39e69a88;background:linear-gradient(145deg,#125b35,#06190e);box-shadow:0 0 55px #39e69a35}
+.welcome-symbol span{color:#a5ffd1;text-shadow:0 0 25px #39e69a}
+.welcome-content h1 span{background:linear-gradient(100deg,#39e69a,#c2ffdc);-webkit-background-clip:text;background-clip:text}
+.welcome-mantra{color:#83f6b2}
+.welcome-bottom-glow{background:#16c66c35}
+.welcome-orbit{border-color:#39e69a20}
+footer{border-color:#174a32;color:#71927e}
+@media(max-width:760px){
+  .topbar{padding:0 4px}
+  .shell{padding:0 12px}
+  .panel{border-radius:16px}
+  .social-nav{overflow-x:auto;flex-wrap:nowrap;padding-bottom:5px}
+  .social-nav a{white-space:nowrap}
+}
+@media(prefers-reduced-motion:no-preference){
+  .primary,.secondary,.panel,.social-nav a{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+  .primary:hover,.secondary:hover{transform:translateY(-1px)}
+  .panel:hover{border-color:#39e69a66}
+}
