@@ -204,3 +204,21 @@ button{ -webkit-tap-highlight-color:transparent }
   html{scroll-behavior:auto}
   *,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
 }
+
+
+/* Phase 8B — member identity and biography presentation */
+.profile-bio{
+  margin:12px 0 18px;
+  padding:13px 14px;
+  min-height:48px;
+  border:1px solid #b7f5d21b;
+  border-radius:13px;
+  background:linear-gradient(145deg,#0d1a13,#08100c);
+  color:#c4ddce;
+  line-height:1.65;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.profile-card .form{margin-top:16px}
+.profile-card .form textarea{min-height:88px;resize:vertical}
+.profile-card .avatar{margin-bottom:18px}

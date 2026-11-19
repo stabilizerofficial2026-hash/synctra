@@ -1,25 +1,28 @@
-# SyncTrA Phase 8A — Premium Visual Redesign
+# SyncTrA Phase 8B — Premium Member Identity & Bio Fix
 
-A presentation-only redesign of the supplied SyncTrA Phase 7A project.
+Built on top of the Phase 8A premium emerald / ambient-glass redesign.
 
-## What changed
-- Premium midnight, emerald and ambient-glass visual identity.
-- Preserves the existing welcome screen, EXPRESS / EVOLVE actions, authentication forms, dashboard, feed, groups, Moderator Center and element IDs.
-- Improves hierarchy, responsive spacing, mobile touch targets, focus visibility, form states, cards, buttons and reduced-motion behavior.
-- `app.js` is unchanged. No new JavaScript behavior or database operations are introduced.
+## What this phase fixes
+- Shows the member's saved bio on the identity card, not only inside the edit field.
+- Loads the saved bio from Supabase when the member signs in.
+- Saves the display name and bio, then reads back the updated database row.
+- Displays a clear error if Supabase rejects the update or no profile row was updated.
+- Refreshing the page should retain the bio if the database update succeeds.
 
-## What did not change
-- Supabase configuration, schema, RLS, authentication, group deletion, moderation RPCs or subscription logic.
-- AI generation, generated-media workflows, marketplace payments and profile soundtrack remain inactive until implemented.
-- No secrets or service-role keys are added.
+## Backend requirement
+The signed-in member needs an RLS UPDATE policy on `public.profiles` restricted to their own row (`user_id = auth.uid()`). This package does not weaken RLS. If you receive an RLS error, send the exact error text so the policy can be checked safely. Never expose a service-role key.
+
+## Preserved
+- Phase 8A visual redesign.
+- Existing authentication, feed, groups, group management, Moderator Center, and Supabase setup.
+- No schema changes or external media uploads.
+- AI generation, marketplace payments and profile soundtrack remain planned, not active.
 
 ## Deploy
-1. Extract this ZIP.
-2. Replace only the root `styles.css` in your SyncTrA GitHub repository.
-3. Keep your existing `index.html` and `app.js` unchanged.
-4. Commit to the branch connected to Cloudflare Pages.
-5. Wait for deployment, then refresh the site on Android Chrome.
-6. Test EXPRESS, EVOLVE, login, signup, dashboard, feed, groups, group rooms and Moderator Center.
+1. Back up the current repository / note its current commit.
+2. Extract this ZIP.
+3. Replace the four root files in GitHub: `index.html`, `styles.css`, `app.js`, and `README.md`.
+4. Commit and wait for Cloudflare Pages deployment.
+5. Sign in, edit your bio, press Save profile, refresh the page, and verify the bio is still visible.
 
-## Rollback
-Restore the previous `styles.css` from GitHub history and redeploy. This phase does not change the backend or application logic.
+Rollback: restore the previous versions of those four files from GitHub history and redeploy.

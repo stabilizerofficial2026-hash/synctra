@@ -149,6 +149,7 @@ async function loadMember(user) {
   $("member-display").textContent = profile.display_name || "Creator";
   $("profile-name").textContent = profile.display_name || "Member";
   $("profile-username").textContent = "@" + profile.username;
+  $("profile-bio").textContent = profile.bio?.trim() || "Add a little introduction to your creative world.";
   $("profile-email").textContent = user.email || "";
   $("avatar-letter").textContent = (profile.display_name || "S").trim().charAt(0).toUpperCase();
   $("edit-display").value = profile.display_name || "";
@@ -169,10 +170,17 @@ $("profile-form").addEventListener("submit", async (event) => {
   const bio = $("edit-bio").value.trim();
   if (!display_name || display_name.length > 60 || bio.length > 300)
     return message(dashboardMessage, "Please check the display name and bio length.", true);
-  const { error } = await supabase.from("profiles").update({ display_name, bio }).eq("user_id", currentUser.id);
-  if (error) return message(dashboardMessage, error.message, true);
-  currentProfile.display_name = display_name;
-  currentProfile.bio = bio;
+  const { data: savedProfile, error } = await supabase
+    .from("profiles")
+    .update({ display_name, bio })
+    .eq("user_id", currentUser.id)
+    .select("user_id, display_name, bio")
+    .single();
+  if (error) return message(dashboardMessage, "Profile could not be saved: " + error.message, true);
+  if (!savedProfile) return message(dashboardMessage, "No profile row was updated. Please sign out and sign in again.", true);
+  currentProfile.display_name = savedProfile.display_name;
+  currentProfile.bio = savedProfile.bio || "";
+  $("profile-bio").textContent = savedProfile.bio?.trim() || "Add a little introduction to your creative world.";
   $("member-display").textContent = display_name;
   $("profile-name").textContent = display_name;
   $("avatar-letter").textContent = display_name.trim().charAt(0).toUpperCase();
