@@ -515,3 +515,62 @@ footer{border-color:#174a32;color:#71927e}
   body.member-mode footer{display:none}
   body.member-mode #dashboard-view .message{overflow-wrap:anywhere}
 }
+
+/* Mobile single-screen navigation: one selected workspace at a time. */
+@media(max-width:680px){
+  body.member-mode #dashboard-view{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+  body.member-mode .dash-head,body.member-mode .mobile-quickbar{position:relative;top:auto;flex:0 0 auto}
+  body.member-mode #member-content{display:block;flex:1 1 auto;min-height:0;width:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:18px;scrollbar-width:none}
+  body.member-mode #member-content::-webkit-scrollbar{display:none}
+  body.member-mode #member-content>.dash-grid,
+  body.member-mode #member-content>#feed-section,
+  body.member-mode #member-content>#social-hub,
+  body.member-mode #member-content>#groups-section,
+  body.member-mode #member-content>#moderator-panel,
+  body.member-mode #member-content>#about-section,
+  body.member-mode #member-content>#faq-section,
+  body.member-mode #member-content>#member-profile-view{display:none}
+  body.member-mode #dashboard-view[data-active-view="stream"] #member-content>#feed-section,
+  body.member-mode #dashboard-view[data-active-view="garden"] #member-content>#groups-section,
+  body.member-mode #dashboard-view[data-active-view="chat"] #member-content>#social-hub,
+  body.member-mode #dashboard-view[data-active-view="you"] #member-content>.dash-grid,
+  body.member-mode #dashboard-view[data-active-view="create"] #member-content>#feed-section,
+  body.member-mode #dashboard-view[data-active-view="explore"] #member-content>#social-hub,
+  body.member-mode #dashboard-view[data-active-view="notifications"] #member-content>#social-hub,
+  body.member-mode #dashboard-view[data-active-view="membership"] #member-content>.dash-grid,
+  body.member-mode #dashboard-view[data-active-view="studio"] #member-content>.dash-grid,
+  body.member-mode #dashboard-view[data-active-view="moderator"] #member-content>#moderator-panel,
+  body.member-mode #dashboard-view[data-active-view="about"] #member-content>#about-section,
+  body.member-mode #dashboard-view[data-active-view="faq"] #member-content>#faq-section,
+  body.member-mode #dashboard-view[data-active-view="member-profile"] #member-content>#member-profile-view{display:block}
+  body.member-mode #dashboard-view[data-active-view="you"] #member-content>.dash-grid{display:block}
+  body.member-mode #dashboard-view[data-active-view="you"] #member-content .dash-content,
+  body.member-mode #dashboard-view[data-active-view="membership"] #member-content #profile-card,
+  body.member-mode #dashboard-view[data-active-view="membership"] #member-content #creative-space,
+  body.member-mode #dashboard-view[data-active-view="studio"] #member-content #profile-card,
+  body.member-mode #dashboard-view[data-active-view="studio"] #member-content .membership{display:none!important}
+  body.member-mode #dashboard-view[data-active-view="chat"] #member-content #notifications-panel,
+  body.member-mode #dashboard-view[data-active-view="chat"] #member-content #network-panel,
+  body.member-mode #dashboard-view[data-active-view="explore"] #member-content #notifications-panel,
+  body.member-mode #dashboard-view[data-active-view="explore"] #member-content #messages-panel,
+  body.member-mode #dashboard-view[data-active-view="notifications"] #member-content #messages-panel,
+  body.member-mode #dashboard-view[data-active-view="notifications"] #member-content #network-panel{display:none!important}
+  body.member-mode #dashboard-view[data-active-view="create"] #member-content #feed-section>.feed-heading,
+  body.member-mode #dashboard-view[data-active-view="create"] #member-content #feed-section>.safety-panel,
+  body.member-mode #dashboard-view[data-active-view="create"] #member-content #feed-section>.feed-list{display:none!important}
+  body.member-mode #dashboard-view[data-active-view="create"] #member-content #feed-section>.composer{display:block!important}
+  body.member-mode #dashboard-view[data-active-view="studio"] #member-content #creative-space{display:block!important}
+  body.member-mode #dashboard-view[data-active-view="membership"] #member-content .membership{display:block!important}
+  body.member-mode #dashboard-view[data-active-view="you"] #member-content #profile-card{display:block!important}
+  body.member-mode #dashboard-view[data-active-view="stream"] .mobile-bottom-nav a[href="#feed-section"],
+  body.member-mode #dashboard-view[data-active-view="garden"] .mobile-bottom-nav a[href="#groups-section"],
+  body.member-mode #dashboard-view[data-active-view="create"] .mobile-bottom-nav a[href="#post-form"],
+  body.member-mode #dashboard-view[data-active-view="chat"] .mobile-bottom-nav a[href="#messages-panel"],
+  body.member-mode #dashboard-view[data-active-view="you"] .mobile-bottom-nav a[href="#profile-card"]{color:#6ee7b7}
+}
+@media(max-width:680px){
+  body.member-mode #dashboard-view>.member-hero,
+  body.member-mode #dashboard-view>.membership-gate,
+  body.member-mode #member-content>.social-nav{display:none!important}
+  body.member-mode #dashboard-view[data-active-view="membership"]>.membership-gate{display:block!important}
+}

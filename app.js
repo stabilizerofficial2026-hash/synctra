@@ -1149,3 +1149,46 @@ document.addEventListener("click", event => {
     activate(current + (dx < 0 ? 1 : -1));
   }, {passive:true});
 })();
+
+// Mobile app-style navigation: show one workspace at a time instead of a long stacked page.
+(() => {
+  const dashboard = document.querySelector('#dashboard-view');
+  const content = document.querySelector('#member-content');
+  if (!dashboard || !content) return;
+  const routeMap = new Map([
+    ['feed-section','stream'],['groups-section','garden'],['post-form','create'],
+    ['messages-panel','chat'],['social-hub','chat'],['profile-card','you'],
+    ['network-panel','explore'],['notifications-panel','notifications'],
+    ['membership-status','membership'],['creative-space','studio'],
+    ['moderator-panel','moderator'],['about-section','about'],['faq-section','faq'],
+    ['member-profile-view','member-profile']
+  ]);
+  const setView = (view) => {
+    dashboard.dataset.activeView = view;
+    content.scrollTop = 0;
+    const nav = document.querySelector('.app-nav');
+    nav?.querySelectorAll('a[href^="#"]').forEach(a => {
+      const id = a.getAttribute('href').slice(1);
+      const active = routeMap.get(id) === view;
+      a.classList.toggle('is-current', active);
+      if(active) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
+    });
+    document.querySelector('.app-nav')?.classList.remove('menu-open');
+    document.querySelector('#quick-menu-toggle')?.setAttribute('aria-expanded','false');
+  };
+  const onNavClick = (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || !dashboard.contains(link)) return;
+    const id = link.getAttribute('href').slice(1);
+    const view = routeMap.get(id);
+    if (!view) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    setView(view);
+    if (view === 'create') {
+      requestAnimationFrame(() => document.querySelector('#post-body')?.focus({preventScroll:true}));
+    }
+  };
+  dashboard.addEventListener('click', onNavClick, true);
+  setView('stream');
+})();
