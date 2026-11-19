@@ -795,3 +795,16 @@ body.community-room-open{overflow:hidden!important}
  #community-message-body,#group-message-body,.inline-reply .comment-input{height:44px!important;min-height:44px!important;max-height:44px!important;padding:0 12px!important;font-size:14px!important}
  #community-message-form button,#group-message-form button,.inline-reply button{height:44px;min-width:60px;padding:0 12px}
 }
+
+/* Phase 19 — member appeals and moderator appeal review */
+.safety-divider{height:1px;background:var(--line);margin:22px 0}
+.my-reports-list{display:grid;gap:12px;margin-top:12px}
+.member-report-card{padding:16px;border-radius:15px}
+.member-report-card h4,.moderation-card h4{font:600 15px "Space Grotesk";margin:0 0 8px;text-transform:capitalize}
+.member-report-card .moderation-label{margin:12px 0}
+.member-report-card .secondary{margin-top:10px}
+.appeal-status{display:inline-flex;border:1px solid #59d6c555;background:#59d6c510;color:var(--teal2);border-radius:20px;padding:6px 10px;font-size:12px}
+.moderation-subtitle{font:600 18px "Space Grotesk";margin:20px 0 10px}
+.moderation-card h4{margin-bottom:10px}
+.moderation-card .group-card-actions .primary{margin-top:0}
+@media(max-width:520px){.member-report-card{padding:14px}.moderation-card{padding:16px}.moderation-card .group-card-actions>*{flex:1}}

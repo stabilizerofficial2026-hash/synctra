@@ -189,6 +189,11 @@
             <p class="muted">Members you block will no longer appear in your community feed. Blocking is private; the other member is not notified.</p>
             <div id="blocked-list" class="blocked-list"></div>
             <div id="blocked-message" class="message" role="status" aria-live="polite"></div>
+            <div class="safety-divider"></div>
+            <h3>My reports &amp; appeals</h3>
+            <p class="muted">Review the status of reports you submitted. If a report was actioned or dismissed, you may request one appeal.</p>
+            <div id="my-reports-list" class="my-reports-list"></div>
+            <div id="my-reports-message" class="message" role="status" aria-live="polite"></div>
           </article>
         </section>
 
@@ -290,7 +295,12 @@
             <button id="moderator-refresh" class="secondary" type="button">Refresh reports</button>
           </div>
           <div id="moderator-message" class="message" role="status" aria-live="polite"></div>
+          <h3 class="moderation-subtitle">Content reports</h3>
           <div id="moderator-queue" class="moderator-queue"></div>
+          <div class="safety-divider"></div>
+          <h3 class="moderation-subtitle">Appeal review</h3>
+          <p class="muted">Review member appeals separately from the original report. Final decisions are written to the audit log.</p>
+          <div id="moderator-appeals" class="moderator-queue"></div>
         </section>
 
         <section id="about-section" class="info-section panel">

@@ -230,6 +230,7 @@ async function loadMember(user) {
   $("membership-status").textContent = `Active · ${subscription.plan_id.replaceAll("_", " ")}`;
   await loadFeed();
   await loadBlockedUsers();
+  await loadMyReports();
   await loadGroups();
   await loadCommunityRooms();
   await loadNotifications();
@@ -1022,6 +1023,7 @@ async function loadModeratorQueue() {
   }
   panel.classList.remove("hidden");
   status.textContent = `${data.length} report(s) waiting for review.`;
+  await loadModeratorAppeals();
   if (!data.length) {
     host.append(node("p", "muted", "No reports are waiting for review."));
     return;
@@ -1065,6 +1067,109 @@ async function loadModeratorQueue() {
     host.append(card);
   }
 }
+
+async function loadMyReports() {
+  const host = $("my-reports-list");
+  const status = $("my-reports-message");
+  if (!currentUser || !host || !status) return;
+  host.replaceChildren();
+  const { data: reports, error } = await supabase.from("content_reports")
+    .select("id,target_type,reason,report_status,created_at")
+    .eq("reporter_id", currentUser.id)
+    .order("created_at", { ascending: false }).limit(30);
+  if (error) return message(status, "Your reports could not be loaded: " + error.message, true);
+  if (!reports?.length) return message(status, "You have not submitted any reports.");
+
+  const reportIds = reports.map(r => r.id);
+  const { data: appeals, error: appealError } = await supabase.from("moderation_appeals")
+    .select("id,report_id,appeal_reason,appeal_status,moderator_note,created_at")
+    .eq("appellant_id", currentUser.id).in("report_id", reportIds);
+  if (appealError) return message(status, "Appeal status could not be loaded: " + appealError.message, true);
+  const appealMap = new Map((appeals || []).map(a => [a.report_id, a]));
+
+  for (const report of reports) {
+    const card = node("article", "panel member-report-card");
+    const heading = node("h4", "", `${report.target_type.replaceAll("_", " ")} · ${report.report_status}`);
+    const reason = node("p", "moderation-reason", report.reason);
+    const meta = node("small", "", `Submitted ${formatDate(report.created_at)}`);
+    card.append(heading, reason, meta);
+    const appeal = appealMap.get(report.id);
+    if (appeal) {
+      const appealStatus = node("p", "appeal-status", `Appeal: ${appeal.appeal_status}`);
+      card.append(appealStatus);
+      if (appeal.moderator_note) card.append(node("p", "muted", `Moderator response: ${appeal.moderator_note}`));
+      card.append(node("small", "", `Appeal submitted ${formatDate(appeal.created_at)}`));
+    } else if (["actioned", "dismissed"].includes(report.report_status)) {
+      const label = node("label", "moderation-label", "Request an appeal (10–2,000 characters)");
+      const field = node("textarea", "moderation-note");
+      field.rows = 3; field.maxLength = 2000;
+      field.placeholder = "Explain why you believe the decision should be reviewed…";
+      const submit = node("button", "secondary", "Submit appeal");
+      submit.type = "button";
+      submit.addEventListener("click", async () => {
+        const text = field.value.trim();
+        if (text.length < 10) return message(status, "Please provide at least 10 characters explaining your appeal.", true);
+        submit.disabled = true;
+        const { error: saveError } = await supabase.from("moderation_appeals").insert({
+          report_id: report.id, appellant_id: currentUser.id, appeal_reason: text
+        });
+        submit.disabled = false;
+        if (saveError) return message(status, saveError.code === "23505" ? "An appeal already exists for this report." : "Appeal could not be submitted: " + saveError.message, true);
+        message(status, "Your appeal has been submitted for moderator review.");
+        await loadMyReports();
+      });
+      label.append(field); card.append(label, submit);
+    }
+    host.append(card);
+  }
+  message(status, `${reports.length} report(s) shown.`);
+}
+
+async function loadModeratorAppeals() {
+  const host = $("moderator-appeals");
+  const status = $("moderator-message");
+  if (!host || !status) return;
+  host.replaceChildren();
+  const { data, error } = await supabase.rpc("synctra_appeal_queue");
+  if (error) {
+    host.append(node("p", "muted", "Appeal queue unavailable: " + error.message));
+    return;
+  }
+  if (!data?.length) {
+    host.append(node("p", "muted", "No appeals are waiting for review."));
+    return;
+  }
+  for (const appeal of data) {
+    const card = node("article", "panel moderation-card");
+    card.append(node("h4", "", `Appeal · ${appeal.appeal_status}`));
+    card.append(node("p", "moderation-reason", appeal.appeal_reason));
+    card.append(node("small", "", `${appeal.appellant_name} (@${appeal.appellant_username || "member"}) · ${appeal.target_type} · ${formatDate(appeal.appeal_created_at)}`));
+    card.append(node("p", "muted", `Original report: ${appeal.report_reason}`));
+    const label = node("label", "moderation-label", "Moderator decision note");
+    const note = node("textarea", "moderation-note"); note.rows = 3; note.maxLength = 2000;
+    note.placeholder = "Explain the appeal decision…"; label.append(note);
+    const actions = node("div", "group-card-actions");
+    for (const [caption, nextStatus] of [["Mark reviewing", "reviewing"], ["Accept appeal", "accepted"], ["Reject appeal", "rejected"]]) {
+      const button = node("button", nextStatus === "accepted" ? "primary" : "secondary", caption);
+      button.type = "button";
+      button.addEventListener("click", async () => {
+        const explanation = note.value.trim();
+        if (nextStatus !== "reviewing" && explanation.length < 5) return message(status, "Add at least 5 characters explaining the final decision.", true);
+        button.disabled = true;
+        const { error: saveError } = await supabase.rpc("synctra_review_appeal", {
+          p_appeal_id: appeal.appeal_id, p_status: nextStatus, p_note: explanation
+        });
+        button.disabled = false;
+        if (saveError) return message(status, "Appeal decision could not be saved: " + saveError.message, true);
+        message(status, "Appeal decision saved to the audit log.");
+        await loadModeratorQueue();
+      });
+      actions.append(button);
+    }
+    card.append(label, actions); host.append(card);
+  }
+}
+
 $("moderator-refresh")?.addEventListener("click", loadModeratorQueue);
 
 $("logout-button").addEventListener("click", async () => {
