@@ -1231,3 +1231,61 @@ button,a{touch-action:manipulation}
 }
 .group-room .room-side-nav > .room-side-button:not(.is-active){background:#06150e!important;color:#d8f5e4!important}
 .group-room .room-side-nav > .room-side-button{border:1px solid #36e98b33!important}
+
+/* Phase 28 — Open Minds room: messenger layout on phones (sidebar beside conversation, like the reference),
+   compact room cards, and theme song toggle. Desktop layout unchanged. */
+[hidden]{display:none!important}
+@media (max-width:759px){
+  .community-room-panel:not(.hidden){grid-template-columns:96px minmax(0,1fr)!important;gap:8px!important;padding:10px!important;align-items:stretch}
+  .community-room-panel .room-side{display:flex!important;flex-direction:column;align-items:center;gap:8px;padding:10px 6px;border-radius:16px;text-align:center;grid-template-areas:none!important;min-width:0}
+  .community-room-panel .room-side *{grid-area:auto!important}
+  .community-room-panel .room-icon{width:58px;height:58px;font-size:24px;margin:0 auto}
+  .community-room-panel .room-side .eyebrow,.community-room-panel .room-side .room-desc,.community-room-panel .room-side .slow-mode-pill{display:none}
+  .community-room-panel .room-side-nav{display:grid;grid-template-columns:1fr;gap:6px;width:100%}
+  .community-room-panel .room-side-item{font-size:11px;line-height:1.25;min-height:0;padding:7px 4px;text-align:center;white-space:normal;overflow-wrap:anywhere;display:flex;align-items:center;justify-content:center}
+  .community-room-panel #community-member-count{font-size:11px}
+  .community-room-panel .room-side-actions{width:100%}
+  .community-room-panel .room-side-actions .secondary{width:100%;font-size:11px;padding:7px 4px;min-height:0}
+  .community-room-panel .room-main{min-width:0;gap:8px}
+  .community-room-panel .room-header{gap:6px}
+  .community-room-panel .room-header-label{font-size:11px}
+  .community-room-panel .room-close{padding:6px 10px!important;font-size:12px}
+  .community-room-panel .room-banner{padding:10px 8px!important;border-radius:14px}
+  .community-room-panel .room-banner strong{font-size:16px!important}
+  .community-room-panel .room-banner span{font-size:10px;line-height:1.35;display:block}
+  .community-room-panel .community-chat-list{gap:8px;padding:2px}
+  .community-room-panel .community-message{grid-template-columns:30px minmax(0,1fr);gap:6px;max-width:94%}
+  .community-room-panel .community-message.chat-bubble-own{grid-template-columns:minmax(0,1fr) 30px}
+  .community-room-panel .community-message-avatar{width:30px;height:30px;border-radius:10px;font-size:12px}
+  .community-room-panel .community-message-bubble{padding:7px 9px;border-radius:14px}
+  .community-room-panel .community-message-head{gap:2px 6px}
+  .community-room-panel .community-message-head b{font-size:12px}
+  .community-room-panel .community-message-head small{font-size:9px}
+  .community-room-panel .community-message-bubble p{font-size:13px}
+  .community-room-panel .room-composer{padding:3px 3px 3px 10px;gap:6px}
+  .community-room-panel .room-composer input{font-size:13px;padding:8px 0!important;min-width:0}
+  .community-room-panel .room-send{width:38px;height:38px;font-size:14px!important}
+}
+/* Room list: compact cards */
+.community-rooms-grid{gap:8px}
+.community-room-card{min-height:0!important;padding:0!important;background:none!important;border-radius:14px!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;overflow:hidden;isolation:isolate;position:relative}
+.community-room-card::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(3,20,12,.94),rgba(3,20,12,.72)),var(--room-artwork) center/cover no-repeat}
+.community-room-card .community-room-card-top{padding:10px 0 0 12px;min-width:0;display:flex;align-items:center;gap:8px}
+.community-room-card .community-room-card-top h3{margin:0;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.community-room-card > p:not(.community-room-card-top){grid-column:1;margin:0 0 10px 12px;font-size:12px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.community-room-card .room-enter-button{grid-column:2;grid-row:1 / span 2;margin:10px 10px 10px 0;padding:8px 12px;font-size:12px;min-height:0;white-space:nowrap}
+@media (max-width:759px){
+  .community-room-panel .room-side-nav{grid-auto-flow:row!important;grid-template-columns:minmax(0,1fr)!important;grid-area:auto!important}
+}
+.community-room-panel .room-side-nav > .room-side-item{background:#06150e;border:1px solid #36e98b44;border-radius:14px;color:#d8f5e4}
+.community-room-panel .room-side-nav > .room-side-item.is-active{background:linear-gradient(100deg,#0f4a2c,#0a2a1a);border-color:var(--accent,#39f59a)}
+.community-room-panel .room-side-nav > .room-side-button:not(.is-active){cursor:pointer}
+/* Quick actions in the profile card: the label keeps one line; icon buttons stay square. */
+.profile-quick-actions{grid-template-columns:minmax(0,1fr) 46px 46px 46px!important}
+.profile-quick-actions .profile-edit-open{white-space:nowrap;font-size:14px;padding:12px 8px!important}
+.profile-quick-actions .profile-icon-btn{width:46px;height:46px;padding:0!important;font-size:16px}
+.profile-quick-actions{width:100%;box-sizing:border-box;gap:8px!important;grid-template-columns:minmax(0,1fr) repeat(3,minmax(0,44px))!important}
+.profile-quick-actions > *{min-width:0;width:100%;box-sizing:border-box}
+.profile-quick-actions .profile-icon-btn{height:44px;padding:0!important}
+.profile-card .profile-quick-actions{width:auto!important;margin-left:22px!important;margin-right:22px!important}
+.profile-quick-actions #logout-button{min-width:0!important;width:100%;flex:none;white-space:normal;padding:0!important;font-size:16px}
