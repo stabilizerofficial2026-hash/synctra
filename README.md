@@ -121,3 +121,16 @@ Not included: the reference's left group sidebar, member role badges (Creator / 
 - Phone: the sidebar stacks into a compact card above the conversation.
 - Controls and behaviour are unchanged: send, report message, leave, close, slow mode feedback.
 - Not included: the reference's Members / Group Info / Notifications / Theme sidebar items (no backing features yet), role badges, and online dots.
+
+## Phase 26 — Per-room themes for Open Minds
+- Each Open Minds room now has its own accent colour (set in CSS from `data-room-slug`): Taoism, Buddhism, Islam, Christianity, Hinduism, Satanism, Atheism, Science, Activists, Hacker, Open Discussion.
+- The room's existing artwork (`assets/open-minds/*.webp`) is used for the sidebar and banner.
+- Not yet included: a LGBTQ+ room (needs a `community_rooms` record and artwork), the screenshots' logo images, and the sidebar items Members / Group Info / Notifications / Theme.
+
+## Phase 27 — Group chat messenger
+- Group room uses the messenger layout: sidebar (group name, description, Chats, Members count, Notifications, Close group) and main column (banner, avatar bubbles, round composer).
+- The banner and sidebar show the real group name and description. Previously the banner always said "SyncTrA Creators".
+- Notifications opens the notifications panel.
+- Phone sidebar uses a plain flex column; the group section spans the full width on desktop when a room is open.
+- `phase27-lgbtq-community-room.sql` adds the LGBTQ+ Open Minds room. Run it once in Supabase after checking the table columns. Room artwork (`assets/open-minds/lgbtq.webp`) is not included.
+- Not included: group logos and banner artwork from the screenshots, online dots, role badges (NO.12 etc.), and a Theme switch.

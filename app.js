@@ -728,6 +728,14 @@ async function reviewGroupRequest(groupId,userId,approve){
 async function openGroup(group){
   activeGroupId=group.id;activeGroupName=group.group_name;
   $("group-room-title").textContent=group.group_name;
+  $("group-banner-title").textContent=group.group_name;
+  $("group-banner-desc").textContent=group.description||"Create • Share • Collaborate • Support";
+  $("group-side-name").textContent=group.group_name;
+  $("group-side-initial").textContent=(group.group_name||"G").trim().charAt(0).toUpperCase();
+  $("group-side-desc").textContent=group.description||"";
+  $("group-side-members").textContent="Members loading…";
+  const {data:memberRows}=await supabase.from("group_members").select("user_id").eq("group_id",group.id).eq("membership_status","active");
+  $("group-side-members").textContent="Members ("+(memberRows?.length||0)+")";
   $("group-room").classList.remove("hidden");
   await loadGroupMessages();
   $("group-room").scrollIntoView({behavior:"smooth",block:"start"});
@@ -745,10 +753,15 @@ async function loadGroupMessages(){
   if(!rows?.length){const empty=document.createElement("p");empty.className="muted";empty.textContent="No messages yet. Start the conversation."; $("group-chat-list").append(empty);}
   for(const row of rows||[]){
     const item=document.createElement("div");item.className="group-message "+(row.sender_id===currentUser.id?"chat-bubble-own":"chat-bubble-incoming");
-    const author=document.createElement("b");author.textContent=map.get(row.sender_id)||"Member";
-    const body=document.createElement("p");body.textContent=row.body;
+    const name=map.get(row.sender_id)||"Member";
+    const avatar=document.createElement("div");avatar.className="group-message-avatar";avatar.setAttribute("aria-hidden","true");avatar.textContent=name.trim().charAt(0).toUpperCase();
+    const bubble=document.createElement("div");bubble.className="group-message-bubble";
+    const head=document.createElement("div");head.className="group-message-head";
+    const author=document.createElement("b");author.textContent=name;
     const time=document.createElement("small");time.textContent=new Date(row.created_at).toLocaleString();
-    item.append(author,body,time);$("group-chat-list").append(item);
+    head.append(author,time);
+    const body=document.createElement("p");body.textContent=row.body;
+    bubble.append(head,body);item.append(avatar,bubble);$("group-chat-list").append(item);
   }
 }
 $("group-create-form").addEventListener("submit",async e=>{
@@ -1145,6 +1158,7 @@ $("new-message-form").addEventListener("submit",async e=>{
 $("refresh-notifications").addEventListener("click",loadNotifications);
 $("refresh-messages").addEventListener("click",loadMessages);
 $("refresh-network").addEventListener("click",loadNetwork);
+$("group-side-notifications")?.addEventListener("click",()=>{$("notifications-panel")?.scrollIntoView({behavior:"smooth",block:"start"});});
 $("profile-settings")?.addEventListener("click",()=>$("profile-edit-open")?.click());
 $("profile-logout")?.addEventListener("click",()=>$("logout-button")?.click());
 

@@ -1129,3 +1129,105 @@ button,a{touch-action:manipulation}
 }
 .community-room-panel:not(.hidden) .room-main{height:auto}
 .community-chat-list .community-message{background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+
+/* Phase 26 — per-room themes for the Open Minds messenger.
+   Each room keeps its own artwork (assets/open-minds) and accent colour, set from data-room-slug. */
+.community-room-panel{--accent:#39f59a;--accent-soft:#39f59a4d;--accent-deep:#16c96e;--accent-glow:#39f59a33}
+.community-room-panel[data-room-slug="taoism"]{--accent:#39f59a;--accent-soft:#39f59a4d;--accent-deep:#16c96e;--accent-glow:#39f59a33}
+.community-room-panel[data-room-slug="buddhism"]{--accent:#8dff9e;--accent-soft:#8dff9e4d;--accent-deep:#2fbf5a;--accent-glow:#8dff9e33}
+.community-room-panel[data-room-slug="islam"]{--accent:#5ef59a;--accent-soft:#e6c65a55;--accent-deep:#1faa64;--accent-glow:#e6c65a2e}
+.community-room-panel[data-room-slug="christianity"]{--accent:#ffd24a;--accent-soft:#ffd24a4d;--accent-deep:#e0a80f;--accent-glow:#ffd24a33}
+.community-room-panel[data-room-slug="hinduism"]{--accent:#ff9a2e;--accent-soft:#ff9a2e4d;--accent-deep:#e06b10;--accent-glow:#ff9a2e33}
+.community-room-panel[data-room-slug="satanism"]{--accent:#ff3d3d;--accent-soft:#ff3d3d4d;--accent-deep:#b81818;--accent-glow:#ff3d3d33}
+.community-room-panel[data-room-slug="atheism"]{--accent:#4fb3ff;--accent-soft:#4fb3ff4d;--accent-deep:#1d78d6;--accent-glow:#4fb3ff33}
+.community-room-panel[data-room-slug="science"]{--accent:#39f59a;--accent-soft:#39f59a4d;--accent-deep:#16c96e;--accent-glow:#39f59a33}
+.community-room-panel[data-room-slug="activists"]{--accent:#6dff6d;--accent-soft:#6dff6d4d;--accent-deep:#2db82d;--accent-glow:#6dff6d33}
+.community-room-panel[data-room-slug="hacker-community"]{--accent:#39ff62;--accent-soft:#39ff624d;--accent-deep:#14b83a;--accent-glow:#39ff6233}
+.community-room-panel[data-room-slug="open"],.community-room-panel[data-room-slug="open-discussion"]{--accent:#7dff5c;--accent-soft:#7dff5c4d;--accent-deep:#34b81c;--accent-glow:#7dff5c33}
+
+/* Artwork and accent applied to the messenger pieces */
+.community-room-panel .room-side{background:linear-gradient(180deg,rgba(3,20,12,.35),rgba(3,20,12,.9)),var(--room-background) center/cover no-repeat;border-color:var(--accent-soft)}
+.community-room-panel .room-side-item.is-active{border-color:var(--accent);background:linear-gradient(100deg,var(--accent-deep),rgba(3,20,12,.6));box-shadow:0 0 22px var(--accent-glow);color:#eefbf3}
+.community-room-panel .room-icon{border-color:var(--accent);box-shadow:0 0 28px var(--accent-glow);background:radial-gradient(circle at 50% 35%,var(--accent-soft),#04140c 70%)}
+.community-room-panel .room-banner{background:linear-gradient(180deg,rgba(3,12,8,.2),rgba(3,12,8,.85)),var(--room-background) center/cover no-repeat;border-color:var(--accent);box-shadow:0 0 36px var(--accent-glow)}
+.community-room-panel .room-banner strong{color:#fff;text-shadow:0 0 18px var(--accent-glow)}
+.community-room-panel .room-banner span{color:var(--accent)}
+.community-room-panel .room-composer{border-color:var(--accent-soft)}
+.community-room-panel .room-send{background:linear-gradient(135deg,var(--accent),var(--accent-deep))!important;color:#03210e!important;box-shadow:0 0 22px var(--accent-glow)}
+.community-room-panel .community-message-avatar{background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#03100a}
+.community-room-panel .community-message-bubble{border-color:var(--accent-soft)}
+.community-room-panel .community-message.chat-bubble-own .community-message-bubble{border-color:var(--accent);background:rgba(10,30,20,.9)}
+.community-room-panel .community-message-head b{color:var(--accent)}
+.community-room-panel .room-header-label{color:var(--accent)}
+.community-room-panel .slow-mode-pill{border-color:var(--accent-soft)}
+
+/* Phase 27 — Group chat messenger: sidebar (group, members, notifications, close) · banner · avatar bubbles · composer.
+   Uses the same room parts as the Open Minds room; the banner and sidebar show the real group name and description. */
+.group-room{display:grid;grid-template-columns:250px minmax(0,1fr);gap:16px;align-items:start;padding:18px!important;min-width:0}
+.group-room .room-main{min-width:0;display:grid;gap:12px;align-content:start}
+.group-side-name{margin:0;text-align:center;font:700 19px "Space Grotesk";color:#eefbf3;overflow-wrap:anywhere}
+.group-room .room-icon{font-size:36px;font-weight:700;color:#03210e;background:linear-gradient(135deg,#39f59a,#16c96e);border-color:#39f59a;box-shadow:0 0 28px #39f59a55}
+.group-room .room-icon span{color:#03210e}
+.group-room .room-side-item.room-side-button{width:100%;text-align:left;background:transparent;border:0;font:600 15px "DM Sans";color:#d8f5e4;cursor:pointer;padding:12px 14px;border-radius:14px}
+.group-room .room-side-item.room-side-button:hover,.group-room .room-side-item.room-side-button:focus-visible{background:#0b2d1b;color:#aaffd0;outline:none}
+.group-room .room-side-item.is-active{background:linear-gradient(100deg,#0f4a2c,#0a2a1a);border:1px solid #39f59a66;color:#eefbf3}
+.group-room .room-side{border-color:#36e98b44;background:rgba(3,20,12,.82)}
+.group-room .group-banner{background:radial-gradient(circle at 50% 20%,#7cf8bf40,transparent 45%),linear-gradient(180deg,#0c4a2b,#03140c)}
+.group-room .group-chat-list{max-height:min(52vh,520px);overflow-y:auto;display:grid;gap:12px;padding:4px 6px;align-content:start}
+.group-room .group-message{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:end;max-width:86%;background:none!important;border:0!important;padding:0!important;box-shadow:none!important;backdrop-filter:none!important}
+.group-room .group-message.chat-bubble-own{margin-left:auto;grid-template-columns:minmax(0,1fr) 38px}
+.group-room .group-message.chat-bubble-own .group-message-avatar{order:2}
+.group-room .group-message-avatar{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#39f59a,#16c96e);color:#03210e;font:700 15px "Space Grotesk";box-shadow:0 0 14px #24e78040}
+.group-room .group-message-bubble{min-width:0;padding:10px 14px;border-radius:18px;border:1px solid #36e98b55;background:rgba(6,34,20,.88)}
+.group-room .group-message.chat-bubble-own .group-message-bubble{background:rgba(15,58,36,.92);border-color:#39f59a88;border-bottom-right-radius:6px}
+.group-room .group-message.chat-bubble-incoming .group-message-bubble{border-bottom-left-radius:6px}
+.group-room .group-message-head{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.group-room .group-message-head b{color:#aaffd0;font-size:14px}
+.group-room .group-message-head small{color:#9fd8b8;font-size:11px}
+.group-room .group-message-bubble p{margin:4px 0 0;color:#eefbf3;line-height:1.5;overflow-wrap:anywhere}
+.group-room .room-composer{display:flex;align-items:center;gap:10px;padding:6px 6px 6px 18px;border-radius:999px;border:1px solid #36e98b55;background:rgba(3,20,12,.9)}
+.group-room .room-composer input{flex:1;min-width:0;border:0!important;background:transparent!important;box-shadow:none!important;padding:10px 0!important}
+.group-room .room-send{width:48px;height:48px;min-height:0!important;padding:0!important;border-radius:50%!important;display:grid;place-items:center;font-size:18px!important;flex:0 0 auto;background:linear-gradient(135deg,#39f59a,#16c96e)!important;color:#03210e!important}
+@media (max-width:759px){
+  .group-room{grid-template-columns:minmax(0,1fr);padding:12px!important}
+  .group-room .room-side{grid-template-columns:auto 1fr;grid-template-areas:"icon name" "icon desc" "nav nav" "actions actions";align-items:center}
+  .group-room .room-icon{grid-area:icon;width:64px;height:64px;font-size:26px;margin:0}
+  .group-side-name{grid-area:name;text-align:left}
+  .group-room .room-side-nav{grid-area:nav;grid-auto-flow:column}
+  .group-room .room-side .room-desc{grid-area:desc;text-align:left}
+  .group-room .room-side-actions{grid-area:actions}
+}
+.group-room .room-header-title{margin:0;font:700 20px "Space Grotesk";color:#eefbf3}
+/* Group sidebar: explicit, aligned layout on phone (overrides the earlier grid-area rule). */
+@media (max-width:759px){
+  .group-room .room-side{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:none;gap:10px;justify-items:center;text-align:center;padding:16px 14px}
+  .group-room .room-side .eyebrow{margin:0;grid-area:auto}
+  .group-room .room-icon{width:72px;height:72px;font-size:28px;margin:0;grid-area:auto}
+  .group-side-name{text-align:center;margin:0;font-size:18px}
+  .group-room .room-side .room-desc{grid-area:auto;text-align:center;margin:0;font-size:13px;max-width:34ch}
+  .group-room .room-side-nav{grid-area:auto;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-flow:row;width:100%;gap:6px}
+  .group-room .room-side-item{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 6px;font-size:13px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .group-room .room-side-actions{grid-area:auto;width:100%}
+  .group-room .room-side-actions .secondary{width:100%}
+  .group-room .room-header-title{font-size:18px}
+}
+/* Phone group sidebar as a plain flex column: clears all earlier grid-area placements so nothing overlaps. */
+@media (max-width:759px){
+  .group-room .room-side{display:flex!important;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:16px 14px;grid-template-areas:none!important}
+  .group-room .room-side *{grid-area:auto!important}
+  .group-room .room-side .room-icon{width:72px;height:72px;margin:0 auto}
+  .group-room .room-side .room-desc{margin:0;max-width:34ch}
+  .group-room .room-side-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:100%}
+  .group-room .room-side-actions{width:100%}
+}
+/* One consistent style for every group sidebar item (Chats, Members, Notifications). */
+.group-room .room-side-nav > *{display:flex;align-items:center;justify-content:center;min-height:44px;margin:0;padding:8px 6px;border:1px solid #36e98b33;border-radius:14px;background:#06150e;color:#d8f5e4;font:600 13px "DM Sans";text-align:center;cursor:default;box-sizing:border-box;width:100%}
+.group-room .room-side-nav > button{cursor:pointer}
+.group-room .room-side-nav > .is-active{background:linear-gradient(100deg,#0f4a2c,#0a2a1a);border-color:#39f59a66;color:#eefbf3}
+.group-room .room-side-nav .muted{color:#d8f5e4;font:inherit}
+/* When a group room is open on wide screens, the groups section spans the full workspace so the messenger has room. */
+@media (min-width:1280px){
+  #member-content > #groups-section:has(#group-room:not(.hidden)){grid-column:1 / -1}
+}
+.group-room .room-side-nav > .room-side-button:not(.is-active){background:#06150e!important;color:#d8f5e4!important}
+.group-room .room-side-nav > .room-side-button{border:1px solid #36e98b33!important}
