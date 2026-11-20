@@ -114,3 +114,10 @@ No database migration is included or required for this visual update. Existing a
 - Group chat: banner above the conversation; bubble styling for messages.
 
 Not included: the reference's left group sidebar, member role badges (Creator / Creator Plus), online dots, and the reference's specific artwork (moon/forest backdrops, character photos, feature illustrations). These need assets or data that this project does not have yet.
+
+## Phase 25 — Open Minds room in messenger layout
+- Room opens as a two-column messenger: sidebar (room icon, description, Chats, member count, slow-mode note, Leave room) and main column (header with Close, banner, message list, round composer).
+- Messages show an avatar with a bubble; your messages sit on the right with the emerald bubble style.
+- Phone: the sidebar stacks into a compact card above the conversation.
+- Controls and behaviour are unchanged: send, report message, leave, close, slow mode feedback.
+- Not included: the reference's Members / Group Info / Notifications / Theme sidebar items (no backing features yet), role badges, and online dots.

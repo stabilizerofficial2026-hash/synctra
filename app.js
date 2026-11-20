@@ -839,7 +839,8 @@ async function openCommunityRoom(room){
   const artworkSlug=({open:"open-discussion",tech:"hacker-community"})[room.slug]||room.slug;
   $("community-room-panel").style.setProperty("--room-background", `url("assets/open-minds/${artworkSlug}.webp")`);
   document.body.classList.add("community-room-open");
-  $("community-room-title").textContent=room.icon+"  "+room.room_name;
+  $("community-room-title").textContent=room.room_name;
+  $("community-room-icon").textContent=room.icon||"◎";
   $("community-room-description").textContent=room.description;
   $("community-room-panel").classList.remove("hidden");
   await loadCommunityMessages();
@@ -870,15 +871,17 @@ async function loadCommunityMessages(){
     if(renderedIds.has(row.id))continue;
     renderedIds.add(row.id);
     const item=document.createElement("article");item.className="community-message "+(row.sender_id===currentUser.id?"chat-bubble-own":"chat-bubble-incoming");
+    const avatar=document.createElement("div");avatar.className="community-message-avatar";avatar.setAttribute("aria-hidden","true");avatar.textContent=(names.get(row.sender_id)||"S").trim().charAt(0).toUpperCase();
+    const bubble=document.createElement("div");bubble.className="community-message-bubble";
     const head=document.createElement("div");head.className="community-message-head";
     const author=document.createElement("b");author.textContent=names.get(row.sender_id)||"SyncTrA member";
     const time=document.createElement("small");time.textContent=new Date(row.created_at).toLocaleString();head.append(author,time);
-    const body=document.createElement("p");body.textContent=row.body;item.append(head,body);
+    const body=document.createElement("p");body.textContent=row.body;bubble.append(head,body);item.append(avatar,bubble);
     if(row.sender_id!==currentUser.id){const report=document.createElement("button");report.type="button";report.className="text-button community-report";report.textContent="Report message";report.addEventListener("click",async()=>{
       const reason=window.prompt("Why are you reporting this message? (Spam, harassment, hate speech, threat, or other)");if(!reason?.trim())return;
       const {error:reportError}=await supabase.from("content_reports").insert({reporter_id:currentUser.id,target_type:"community_message",target_id:row.id,reason:reason.trim().slice(0,500)});
       message($("community-chat-feedback"),reportError?"Report could not be submitted: "+reportError.message:"Thank you. Your report has been submitted for review.",Boolean(reportError));
-    });item.append(report);}
+    });bubble.append(report);}
     host.append(item);
   }
   host.scrollTop=host.scrollHeight;

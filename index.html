@@ -314,14 +314,32 @@
             </div>
             <div id="community-rooms" class="community-rooms-grid" aria-live="polite"></div>
             <section id="community-room-panel" class="panel community-room-panel hidden">
-              <div class="feed-heading"><div><p class="eyebrow">OPEN MINDS ROOM</p><h3 id="community-room-title">Room discussion</h3><p id="community-room-description" class="muted"></p></div><div class="group-card-actions"><button id="community-room-leave" class="secondary" type="button">Leave room</button><button id="community-room-close" class="secondary" type="button">Close</button></div></div>
-              <div class="community-chat-toolbar"><span id="community-member-count" class="muted"></span><span class="slow-mode-pill">One message / 15 seconds</span></div>
-              <div id="community-chat-list" class="community-chat-list" aria-live="polite"></div>
-              <form id="community-message-form" class="group-message-form">
-                <input id="community-message-body" maxlength="1000" required placeholder="Share an idea respectfully…">
-                <button class="primary" type="submit">Send</button>
-              </form>
-              <p id="community-chat-feedback" class="message" role="status" aria-live="polite">Respect people. Challenge ideas. No spam or harassment.</p>
+              <aside class="room-side" aria-label="Room details">
+                <div class="room-icon" aria-hidden="true"><span id="community-room-icon">◎</span></div>
+                <p class="eyebrow">OPEN MINDS ROOM</p>
+                <p id="community-room-description" class="muted room-desc"></p>
+                <nav class="room-side-nav" aria-label="Room sections">
+                  <span class="room-side-item is-active">Chats</span>
+                  <span class="room-side-item"><span id="community-member-count" class="muted"></span></span>
+                </nav>
+                <span class="slow-mode-pill">One message / 15 seconds</span>
+                <div class="room-side-actions">
+                  <button id="community-room-leave" class="secondary" type="button">Leave room</button>
+                </div>
+              </aside>
+              <div class="room-main">
+                <header class="room-header">
+                  <span class="room-header-label">Room conversation</span>
+                  <button id="community-room-close" class="secondary room-close" type="button">Close</button>
+                </header>
+                <div class="group-banner room-banner" aria-hidden="true"><strong id="community-room-title">Room discussion</strong><span>Create • Share • Collaborate • Respect</span></div>
+                <div id="community-chat-list" class="community-chat-list" aria-live="polite"></div>
+                <form id="community-message-form" class="group-message-form room-composer">
+                  <input id="community-message-body" maxlength="1000" required placeholder="Share an idea respectfully…">
+                  <button class="primary room-send" type="submit" aria-label="Send message">➤</button>
+                </form>
+                <p id="community-chat-feedback" class="message" role="status" aria-live="polite">Respect people. Challenge ideas. No spam or harassment.</p>
+              </div>
             </section>
           </section>
           <article class="panel group-create-panel">

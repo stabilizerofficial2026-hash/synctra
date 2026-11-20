@@ -1068,3 +1068,64 @@ button,a{touch-action:manipulation}
 .group-chat-list .group-message{max-width:82%;border-radius:18px;border:1px solid #1b704690;background:#06150e;padding:12px 14px}
 .group-chat-list .group-message.chat-bubble-own{margin-left:auto;background:#0f3a24;border-color:#39f59a66}
 .group-chat-list .group-message b{color:#aaffd0}
+
+/* Phase 25 — Open Minds room in the messenger layout (sidebar · banner · avatar bubbles · round composer).
+   Keeps the room artwork background and all controls; only the arrangement and styling change. */
+.community-room-panel{padding:14px!important;display:grid;gap:14px;min-width:0}
+.room-side{display:grid;align-content:start;gap:12px;padding:18px 16px;border-radius:22px;border:1px solid #36e98b44;background:rgba(3,20,12,.82);backdrop-filter:blur(12px);min-width:0}
+.room-icon{display:grid;place-items:center;width:96px;height:96px;margin:0 auto;border-radius:50%;border:2px solid #36e98b;background:radial-gradient(circle at 50% 35%,#7cf8bf55,#04140c 70%);box-shadow:0 0 28px #36e98b55;font-size:40px;color:#eefbf3}
+.room-side .eyebrow{text-align:center;margin:0}
+.room-desc{margin:0;text-align:center;font-size:14px;line-height:1.5}
+.room-side-nav{display:grid;gap:6px;margin-top:6px}
+.room-side-item{display:block;padding:12px 14px;border-radius:14px;color:#d8f5e4;font:600 15px "DM Sans"}
+.room-side-item.is-active{background:linear-gradient(100deg,#0f4a2c,#0a2a1a);border:1px solid #39f59a66;box-shadow:0 0 22px #39f59a22;color:#eefbf3}
+.room-side .slow-mode-pill{justify-self:center}
+.room-side-actions .secondary{width:100%;border-color:#e89a9a88!important;color:#ffc4c4!important}
+.room-main{display:grid;gap:12px;min-width:0;align-content:start}
+.room-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.room-header-label{font:600 13px "DM Sans";letter-spacing:.4px;color:#aaffd0;text-transform:uppercase}
+.room-close{padding:8px 16px!important;min-height:0!important}
+.room-banner{padding:24px 18px!important}
+.room-banner strong{font-size:22px!important}
+.community-chat-list{max-height:min(54vh,520px);overflow-y:auto;padding:4px 6px;gap:12px}
+.community-message{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:end;max-width:86%;border:0!important;background:none!important;padding:0!important;box-shadow:none!important}
+.community-message.chat-bubble-own{margin-left:auto;grid-template-columns:minmax(0,1fr) 38px}
+.community-message.chat-bubble-own .community-message-avatar{order:2}
+.community-message-avatar{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#39f59a,#16c96e);color:#03210e;font:700 15px "Space Grotesk";box-shadow:0 0 14px #24e78040}
+.community-message-bubble{min-width:0;padding:10px 14px;border-radius:18px;border:1px solid #36e98b55;background:rgba(6,34,20,.88)}
+.community-message.chat-bubble-own .community-message-bubble{background:rgba(15,58,36,.92);border-color:#39f59a88;border-bottom-right-radius:6px}
+.community-message.chat-bubble-incoming .community-message-bubble{border-bottom-left-radius:6px}
+.community-message-head{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.community-message-head b{color:#aaffd0;font-size:14px}
+.community-message-head small{color:#9fd8b8;font-size:11px}
+.community-message-bubble p{margin:4px 0 0;color:#eefbf3;line-height:1.5;overflow-wrap:anywhere}
+.community-report{margin-top:4px}
+.room-composer{display:flex;align-items:center;gap:10px;padding:6px 6px 6px 18px;border-radius:999px;border:1px solid #36e98b55;background:rgba(3,20,12,.9)}
+.room-composer input{flex:1;min-width:0;border:0!important;background:transparent!important;box-shadow:none!important;padding:10px 0!important}
+.room-send{width:48px;height:48px;min-height:0!important;padding:0!important;border-radius:50%!important;display:grid;place-items:center;font-size:18px!important;flex:0 0 auto}
+@media (min-width:760px){
+  .community-room-panel{grid-template-columns:250px minmax(0,1fr);align-items:start}
+}
+@media (max-width:759px){
+  .room-side{grid-template-columns:auto 1fr;grid-template-areas:"icon eyebrow" "icon desc" "nav nav" "pill pill" "actions actions";align-items:center;padding:14px}
+  .room-icon{grid-area:icon;width:72px;height:72px;font-size:30px;margin:0}
+  .room-side .eyebrow{grid-area:eyebrow;text-align:left}
+  .room-desc{grid-area:desc;text-align:left}
+  .room-side-nav{grid-area:nav;grid-auto-flow:column;gap:8px}
+  .room-side-item{text-align:center;padding:10px}
+  .room-side .slow-mode-pill{grid-area:pill}
+  .room-side-actions{grid-area:actions}
+}
+/* Room message rows are transparent; the bubble inside carries the colour. */
+.community-message.chat-bubble-incoming,.community-message.chat-bubble-own{background:none!important;border:0!important;border-radius:0!important;justify-self:stretch;align-self:end}
+.community-message.chat-bubble-own{justify-self:end;max-width:86%}
+/* The room overlay uses flex by default; the messenger layout needs a grid, so override the overlay's display. */
+.community-room-panel:not(.hidden){display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-content:start;overflow-y:auto!important}
+@media (min-width:760px){
+  .community-room-panel:not(.hidden){grid-template-columns:250px minmax(0,1fr)!important;align-items:start;padding:clamp(18px,3vw,32px)!important;overflow:hidden!important}
+  .room-main{height:100%;min-height:0}
+  .community-room-panel .community-chat-list{max-height:none;flex:1;min-height:0}
+  .room-side{position:sticky;top:0}
+}
+.community-room-panel:not(.hidden) .room-main{height:auto}
+.community-chat-list .community-message{background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
