@@ -307,11 +307,6 @@
               <div><p class="eyebrow">SYNCTrA · OPEN MINDS</p><h2 id="open-minds-title">Different beliefs. One respectful space.</h2><p class="muted">Explore perspectives, exchange ideas and learn from one another. Disagreement is welcome; harassment is not.</p></div>
               <div class="slow-mode-pill">15s <small>SLOW MODE</small></div>
             </div>
-            <div class="community-tools panel">
-              <div><b>Room ambience</b><small id="community-audio-status">Ambient sound is off</small></div>
-              <button id="community-audio-toggle" class="secondary" type="button" aria-pressed="false">♫ Sound off</button>
-              <label class="community-volume">Volume <input id="community-audio-volume" type="range" min="0" max="30" value="12"></label>
-            </div>
             <div id="community-rooms" class="community-rooms-grid" aria-live="polite"></div>
             <section id="community-room-panel" class="panel community-room-panel hidden">
               <aside class="room-side" aria-label="Room details">
@@ -329,8 +324,15 @@
               </aside>
               <div class="room-main">
                 <header class="room-header">
-                  <span class="room-header-label">Room conversation</span>
-                  <button id="community-room-close" class="secondary room-close" type="button">Close</button>
+                  <div class="room-header-title">
+                    <span class="room-header-label">Room conversation</span>
+                    <small id="community-audio-status" class="room-audio-status">Ambient sound is off</small>
+                  </div>
+                  <div class="room-header-actions">
+                    <button id="community-audio-toggle" class="secondary room-audio-toggle" type="button" aria-pressed="false">♫ Sound off</button>
+                    <label class="community-volume room-volume">Vol. <input id="community-audio-volume" type="range" min="0" max="30" value="12" aria-label="Room ambience volume"></label>
+                    <button id="community-room-close" class="secondary room-close" type="button">Close</button>
+                  </div>
                 </header>
                 <div class="group-banner room-banner" aria-hidden="true"><strong id="community-room-title">Room discussion</strong><span>Create • Share • Collaborate • Respect</span></div>
                 <div id="community-chat-list" class="community-chat-list" aria-live="polite"></div>
