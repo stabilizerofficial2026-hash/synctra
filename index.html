@@ -11,6 +11,14 @@
   <div class="shell">
     <header class="topbar">
       <a class="brand" href="#" aria-label="SyncTrA home"><span class="brand-mark">S</span><span>SyncTrA</span></a>
+      <nav class="top-nav" aria-label="Primary">
+        <a href="#welcome-screen" class="is-current">⌂ <span>Home</span></a>
+        <a href="#gallery-section">⌕ <span>Explore</span></a>
+        <a href="#discover-section">♧ <span>Groups</span></a>
+        <a href="#gallery-section">▣ <span>Studio</span></a>
+        <a href="#plans-section">▤ <span>Marketplace</span></a>
+        <a href="#plans-section" class="top-nav-membership">♛ <span>Private Membership</span></a>
+      </nav>
       <span class="private-tag">PRIVATE MEMBERSHIP</span>
     </header>
 
@@ -30,20 +38,20 @@
         </div>
         <p class="welcome-footnote">Your identity · Your interests · Your creativity · Your harmony</p>
       </div>
-      <section class="welcome-discover" aria-label="Discover SyncTrA">
+      <section id="discover-section" class="welcome-discover" aria-label="Discover SyncTrA">
         <div class="landing-heading"><p class="eyebrow">A WORLD THAT MOVES WITH YOU</p><h2>More than a social feed.<br><span>Your own creative world.</span></h2><p>Explore communities, share ideas, build connections and make space for the things that inspire you.</p></div>
         <div class="landing-feature-grid">
-          <article class="landing-feature"><span>✧</span><h3>OPEN MINDS</h3><p>Explore respectful conversations across beliefs, philosophy, science, technology and more.</p></article>
-          <article class="landing-feature"><span>◈</span><h3>YOUR COMMUNITY</h3><p>Find people with shared interests, join groups and connect through messages.</p></article>
-          <article class="landing-feature"><span>✦</span><h3>CREATIVE EXPRESSION</h3><p>Share your ideas, creations and projects as your creative world grows.</p></article>
-          <article class="landing-feature"><span>⌁</span><h3>YOUR PRIVACY, YOUR CHOICE</h3><p>Use account and sharing controls thoughtfully. We aim for a privacy-conscious space, not a promise of absolute anonymity.</p></article>
+          <article class="landing-feature"><div class="landing-feature-art" aria-hidden="true"></div><span class="landing-feature-icon">✧</span><h3>OPEN MINDS</h3><p>Explore respectful conversations across beliefs, philosophy, science, technology and more.</p></article>
+          <article class="landing-feature"><div class="landing-feature-art" aria-hidden="true"></div><span class="landing-feature-icon">◈</span><h3>YOUR COMMUNITY</h3><p>Find people with shared interests, join groups and connect through messages.</p></article>
+          <article class="landing-feature"><div class="landing-feature-art" aria-hidden="true"></div><span class="landing-feature-icon">✦</span><h3>CREATIVE EXPRESSION</h3><p>Share your ideas, creations and projects as your creative world grows.</p></article>
+          <article class="landing-feature"><div class="landing-feature-art" aria-hidden="true"></div><span class="landing-feature-icon">⌁</span><h3>YOUR PRIVACY, YOUR CHOICE</h3><p>Use account and sharing controls thoughtfully. We aim for a privacy-conscious space, not a promise of absolute anonymity.</p></article>
         </div>
       </section>
-      <section class="ai-gallery" aria-label="SyncTrA AI art gallery">
+      <section id="gallery-section" class="ai-gallery" aria-label="SyncTrA creative gallery">
         <div class="landing-heading gallery-heading">
           <p class="eyebrow">IMAGINATION WITHOUT BOUNDARIES</p>
-          <h2>Step into the <span>AI Art Gallery.</span></h2>
-          <p>Swipe through vivid worlds, experimental portraits and immersive digital creations. Let every image spark a new idea.</p>
+          <h2>Step into the <span>SyncTrA Creative Gallery.</span></h2>
+          <p>Swipe through vivid worlds, cinematic stories, experimental art, music, and immersive digital creations. Let every creation spark a new idea.</p>
         </div>
         <div class="gallery-frame">
           <div class="gallery-toolbar"><span class="gallery-live-dot"></span><span>CURATED CREATIVE INSPIRATION</span><span class="gallery-count" id="gallery-count">01 / 10</span></div>
@@ -61,10 +69,10 @@
           </div>
           <div class="gallery-controls"><button class="gallery-arrow" id="gallery-prev" type="button" aria-label="Previous artwork">←</button><div class="gallery-dots" id="gallery-dots" aria-label="Choose artwork"><button class="gallery-dot is-active" type="button" data-gallery-index="0" aria-label="Show artwork 1" aria-current="true"></button><button class="gallery-dot" type="button" data-gallery-index="1" aria-label="Show artwork 2" aria-current="false"></button><button class="gallery-dot" type="button" data-gallery-index="2" aria-label="Show artwork 3" aria-current="false"></button><button class="gallery-dot" type="button" data-gallery-index="3" aria-label="Show artwork 4" aria-current="false"></button><button class="gallery-dot" type="button" data-gallery-index="4" aria-label="Show artwork 5" aria-current="false"></button><button class="gallery-dot" type="button" data-gallery-index="5" aria-label="Show artwork 6" aria-current="false"></button><button class="gallery-dot" type="button" data-gallery-index="6" aria-label="Show artwork 7" aria-current="false"></button><button class="gallery-dot" type="button" data-gallery-index="7" aria-label="Show artwork 8" aria-current="false"></button><button class="gallery-dot" type="button" data-gallery-index="8" aria-label="Show artwork 9" aria-current="false"></button><button class="gallery-dot" type="button" data-gallery-index="9" aria-label="Show artwork 10" aria-current="false"></button></div><button class="gallery-arrow" id="gallery-next" type="button" aria-label="Next artwork">→</button></div>
         </div>
-        <div class="gallery-footer"><p>Every creation begins with an idea. Discover inspiration, share your imagination and build your own creative world.</p><button id="gallery-join" class="primary" type="button">EVOLVE WITH SYNCTRA <span>↗</span></button></div>
+        <div class="gallery-footer"><p>Every creation begins with an idea. Discover inspiration, share your imagination and build your own creative world.</p><button id="gallery-join" class="primary" type="button">CREATE WITH SYNCTRA <span>▶</span></button></div>
         <p class="gallery-note">Artwork gallery is a visual showcase for inspiration. AI creation features will be available when their generation services are connected.</p>
       </section>
-      <section class="landing-plans" aria-label="SyncTrA membership plans">
+      <section id="plans-section" class="landing-plans" aria-label="SyncTrA membership plans">
         <div class="landing-heading"><p class="eyebrow">CHOOSE YOUR HORIZON</p><h2>Find the plan that fits <span>your creative journey.</span></h2><p>Every tier gives you a place to belong. Choose the capacity that matches how you create and connect.</p></div>
         <div class="landing-plan-grid">
           <article class="landing-plan"><p class="plan-kicker">START YOUR JOURNEY</p><h3>Creator</h3><p class="landing-price">₱199 <small>/ month</small></p><p class="plan-summary">A welcoming home for your ideas and everyday creativity.</p><ul><li>300 monthly credits</li><li>Groups up to 500 members</li><li>512 MiB storage</li><li>15-second profile soundtrack</li></ul><button class="secondary landing-plan-cta" type="button" data-plan-cta="creator">Choose Creator</button></article>
@@ -159,7 +167,12 @@
         <div id="member-content" class="member-content">
         <div class="dash-grid">
           <article id="profile-card" class="panel profile-card">
+            <div class="profile-cover" aria-hidden="true"></div>
             <div class="avatar" id="avatar-letter">S</div>
+            <div class="profile-stats" aria-label="Network counts">
+              <div><b id="profile-followers">0</b><small>Followers</small></div>
+              <div><b id="profile-following">0</b><small>Following</small></div>
+            </div>
             <p class="eyebrow">YOUR MEMBER IDENTITY</p>
             <h2 id="profile-name">Member</h2>
             <p class="muted" id="profile-username">@username</p>
@@ -167,7 +180,12 @@
             <div class="profile-traits"><p><strong>Personality</strong> <span id="profile-personality">Not set</span></p><p><strong>Hobbies</strong> <span id="profile-hobbies">Not set</span></p></div>
             <p id="profile-email" class="small"></p>
             <div class="status-line"><span class="status-dot"></span><span>Account created</span></div>
-            <button id="profile-edit-open" class="secondary profile-edit-open" type="button">Edit profile</button>
+            <div class="profile-quick-actions">
+              <button id="profile-edit-open" class="secondary profile-edit-open" type="button">✎ Edit profile</button>
+              <a class="secondary profile-icon-btn" href="#creative-space" aria-label="Go to your creative space">✦</a>
+              <button id="profile-settings" class="secondary profile-icon-btn" type="button" aria-label="Edit profile settings">⚙</button>
+              <button id="profile-logout" class="secondary profile-icon-btn" type="button" aria-label="Log out">⇥</button>
+            </div>
             <form id="profile-form" class="form compact hidden">
               <label>Display name<input id="edit-display" maxlength="60" required></label>
               <label>Bio<textarea id="edit-bio" maxlength="300" rows="3" placeholder="A little about your creative world"></textarea></label>
@@ -218,6 +236,10 @@
             <button id="refresh-feed" class="secondary" type="button">Refresh</button>
           </div>
           <article class="panel composer">
+            <div class="composer-top">
+              <div class="composer-avatar" id="composer-avatar" aria-hidden="true">S</div>
+              <button id="composer-pill" class="composer-pill" type="button">What's on your creative mind?</button>
+            </div>
             <form id="post-form" class="form">
               <label for="post-body">Share an update with the community</label>
               <textarea id="post-body" rows="2" maxlength="3000" placeholder="What's on your creative mind?" required></textarea>
@@ -323,6 +345,7 @@
           <div id="groups-message" class="message" role="status" aria-live="polite"></div>
           <section id="group-room" class="panel group-room hidden">
             <div class="feed-heading"><div><p class="eyebrow">PRIVATE GROUP ROOM</p><h3 id="group-room-title">Group conversation</h3></div><button id="close-group-room" class="secondary" type="button">Close</button></div>
+            <div class="group-banner" aria-hidden="true"><strong>SyncTrA Creators</strong><span>Create • Share • Collaborate • Support</span></div>
             <div id="group-chat-list" class="group-chat-list"></div>
             <form id="group-message-form" class="group-message-form">
               <input id="group-message-body" maxlength="2000" required placeholder="Write a group message…">

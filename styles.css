@@ -923,3 +923,148 @@ button,a{touch-action:manipulation}
   .mobile-bottom-nav a{min-height:40px}.mobile-bottom-nav a span{font-size:18px}
   .welcome-screen{min-height:auto}.welcome-content{padding-top:18px}
 }
+
+/* Phase 23 — Facebook-style feed and three-column workspace.
+   Layered on top of the existing emerald theme; colours come from the same palette
+   (#36e98b / #1b7046 / #06150e / #aaffd0). Mobile and tablet layouts are unchanged. */
+
+/* Composer header: avatar + "What's on your mind?" pill */
+.composer-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.composer-avatar{width:42px;height:42px;border-radius:13px;flex:0 0 auto;display:grid;place-items:center;background:linear-gradient(135deg,#39f59a,#16c96e);color:#03210e;font:700 17px "Space Grotesk";box-shadow:0 0 18px #24e78040}
+.composer-pill{flex:1;min-width:0;text-align:left;background:#06150e;border:1px solid #1b7046;color:#9fd8b8;border-radius:999px;padding:12px 18px;font:500 15px "DM Sans";cursor:pointer;transition:.18s}
+.composer-pill:hover,.composer-pill:focus-visible{border-color:#39f59a;color:#d8f5e4;box-shadow:0 0 0 3px #39f59a1f;outline:none}
+
+/* Post card */
+.post-card{padding:0 0 6px;overflow:visible;border-radius:18px}
+.post-card .post-top{display:flex;align-items:flex-start;gap:12px;padding:16px 16px 0}
+.post-card .post-avatar{width:42px;height:42px;cursor:pointer;background:linear-gradient(135deg,#39f59a,#16c96e);color:#03210e;box-shadow:0 0 16px #24e78038}
+.post-card .post-identity{display:grid;gap:2px;min-width:0;flex:1}
+.post-card .post-author{padding:0;border:0;background:none;color:#eefbf3;font:600 15px "DM Sans";text-align:left;cursor:pointer;justify-self:start}
+.post-card .post-author:hover{text-decoration:underline}
+.post-card .post-meta{display:flex;flex-wrap:wrap;align-items:center;font-size:12px;color:#8fb9a3}
+.post-card .member-handle{padding:0;border:0;background:none;color:#8fb9a3;font:inherit;cursor:pointer}
+.post-card .member-handle:hover{color:#aaffd0;text-decoration:underline}
+.post-meta-sep{margin:0 6px;color:#6f9a84}
+.post-card .post-time{margin:0;font-size:12px;color:#8fb9a3}
+.post-more-wrap{position:relative;margin-left:auto;flex:0 0 auto}
+.post-more{width:36px;height:36px;border-radius:50%;border:0;background:transparent;color:#aaffd0;font-size:22px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.post-more:hover,.post-more:focus-visible{background:#0d3821;outline:none}
+.post-menu{position:absolute;right:0;top:40px;z-index:30;min-width:210px;display:grid;gap:2px;padding:6px;border-radius:14px;background:#04120bf8;border:1px solid #1b7046;box-shadow:0 18px 40px #000a;backdrop-filter:blur(14px)}
+.post-menu-item{text-align:left;background:transparent;border:0;color:#d8f5e4;padding:10px 12px;border-radius:9px;font:600 13px "DM Sans";cursor:pointer}
+.post-menu-item:hover,.post-menu-item:focus-visible{background:#0d3821;outline:none}
+.post-menu-item.danger{color:#ffb3b3}
+.post-card .post-body{margin:12px 16px 14px;font-size:15px;line-height:1.6;color:#e7f5ec}
+.post-stats{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 16px;padding:9px 0;min-height:38px;border-bottom:1px solid #1b704640;font-size:13px;color:#9fd8b8}
+.post-like-count:not(:empty){display:inline-flex;align-items:center;background:linear-gradient(135deg,#39f59a,#16c96e);color:#03210e;border-radius:999px;padding:2px 9px;font-weight:700;font-size:12px}
+.post-comments-stat{background:none;border:0;color:#9fd8b8;font:inherit;padding:0;cursor:pointer}
+.post-comments-stat:hover{text-decoration:underline;color:#d8f5e4}
+.post-comments-stat:empty{display:none}
+.post-card .post-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin:4px 10px 0;padding:4px 0 2px;border-top:0}
+.post-card .reaction-button{padding:10px 6px;border-radius:10px;font:600 14px "DM Sans";color:#b9d9c6;text-align:center;transition:.15s}
+.post-card .reaction-button:hover,.post-card .reaction-button:focus-visible{background:#0d3821;color:#aaffd0;outline:none}
+.post-card .reaction-button.liked{color:#39f59a;background:#0f3a24}
+.post-card .comments-box{margin:0 14px;padding:6px 2px 14px;border-top:1px solid #1b704640}
+.comment-row{display:flex;gap:9px;align-items:flex-start;margin:10px 0}
+.comment-avatar{width:32px;height:32px;border-radius:10px;flex:0 0 auto;display:grid;place-items:center;background:linear-gradient(135deg,#39f59a,#16c96e);color:#03210e;font:700 13px "Space Grotesk"}
+.comment-bubble{min-width:0;max-width:100%;background:#0a2416;border:1px solid #1b704650;border-radius:16px;padding:8px 12px}
+.comment-bubble b{font-size:13px;color:#d8f5e4}
+.comment-bubble .comment-text{margin:2px 0 0;font-size:14px;line-height:1.5;color:#e2f7ea;white-space:pre-wrap;overflow-wrap:anywhere}
+.post-card .comment-form{display:flex;align-items:center;gap:8px;margin-top:8px}
+.post-card .comment-input{border-radius:999px;padding:10px 16px;font-size:14px;background:#06150e;border:1px solid #1b7046}
+.post-card .comment-send{border-radius:999px;padding:9px 16px;font-size:12px}
+
+/* Three-column workspace on wide screens: profile | feed | creative & membership.
+   Below 1280px the existing stacked layout is kept. */
+@media (min-width:1280px){
+  .dashboard{grid-template-columns:230px minmax(0,1fr)}
+  #member-content{display:grid;grid-template-columns:230px minmax(0,1fr) 260px;column-gap:18px;align-items:start}
+  #member-content > .dash-grid{display:contents}
+  #member-content #profile-card{grid-column:1;grid-row:1;position:sticky;top:96px;margin:0}
+  #member-content #feed-section{grid-column:2;grid-row:1;margin-top:0;min-width:0}
+  #member-content .dash-content{grid-column:3;grid-row:1;position:sticky;top:96px;min-width:0;gap:16px}
+  #member-content > .social-nav,
+  #member-content > #social-hub,
+  #member-content > #groups-section,
+  #member-content > #moderator-panel,
+  #member-content > .info-section,
+  #member-content > #member-profile-view{grid-column:2;min-width:0}
+  .post-card .post-body{margin:12px 16px 14px}
+}
+
+/* Composer collapses to the "What's on your mind?" pill until the member opens it. */
+.composer:not(.is-open) .composer-top + form{display:none}
+.composer.is-open .composer-top{margin-bottom:12px}
+.composer.is-open .composer-pill{border-color:#39f59a33}
+
+/* Phone and tablet: the profile card should span the full content width (it sat at ~two-thirds before). */
+@media (max-width:1279px){
+  #member-content .dash-grid,#member-content .profile-card{width:100%;justify-self:stretch}
+}
+
+/* Phase 24 — reference design pass: welcome nav, gallery, plans, feature cards,
+   profile cover and stats, group-chat banner. Emerald palette, no new colours outside it. */
+
+/* Top navigation (desktop); phones keep the existing compact header */
+.top-nav{display:none}
+@media (min-width:900px){
+  .topbar{justify-content:flex-start;gap:26px}
+  .topbar .brand{flex:0 0 auto}
+  .top-nav{display:flex;align-items:center;gap:6px;flex:1;justify-content:center;flex-wrap:wrap}
+  .top-nav a{display:flex;align-items:center;gap:7px;padding:10px 14px;border-radius:999px;border:1px solid transparent;color:#d8f5e4;text-decoration:none;font:600 13px "DM Sans";transition:.18s}
+  .top-nav a:hover,.top-nav a:focus-visible,.top-nav a.is-current{border-color:#36e98b66;background:#0b2d1b;color:#aaffd0;box-shadow:0 0 22px #1de87922;outline:none}
+  .top-nav a.top-nav-membership{border-color:#36e98b55}
+  .topbar .private-tag{display:none}
+}
+
+/* Welcome hero buttons: pill style with glowing primary */
+.welcome-choice{border-radius:999px!important}
+#welcome-express{background:linear-gradient(100deg,#2be88a,#7dffc0)!important;color:#03210e!important;box-shadow:0 0 34px #36e98b59}
+#welcome-express small{color:#03210e;opacity:.8}
+#welcome-evolve{background:#04120bcc!important;border:1px solid #36e98b88!important;color:#eefbf3!important}
+
+/* Gallery: emerald instead of violet, first card large with the next one peeking */
+.ai-gallery{background:linear-gradient(180deg,#04170e,#020b07)!important;border:1px solid #1b704666!important;border-radius:28px!important}
+.ai-gallery h2 span,.gallery-heading h2 span{background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;color:#59f2a0!important;text-shadow:0 0 22px #36e98b55}
+.gallery-frame{background:#03140c!important;border:1px solid #2fdc8055!important;border-radius:24px!important;box-shadow:0 0 50px #11b95b1f!important}
+.gallery-toolbar{color:#aaffd0!important}
+.gallery-arrow{background:#06331d!important;border:1px solid #36e98b88!important;color:#aaffd0!important}
+.gallery-dot.is-active{background:#39f59a!important;box-shadow:0 0 12px #39f59a!important}
+.gallery-footer .primary{background:linear-gradient(100deg,#2be88a,#7dffc0)!important;color:#03210e!important;border-radius:999px!important}
+@media (min-width:760px){
+  .gallery-track{gap:14px}
+  .gallery-slide{flex:0 0 min(62%,560px)!important}
+}
+
+/* Plans: stronger featured card and emerald pricing */
+.landing-plan{border-radius:22px!important;border-color:#1b704680!important}
+.landing-plan.featured{border:1px solid #39f59a!important;box-shadow:0 0 48px #39f59a33,inset 0 0 30px #39f59a0d!important;transform:translateY(-6px)}
+.plan-ribbon{background:linear-gradient(100deg,#2be88a,#7dffc0)!important;color:#03210e!important}
+.landing-price{color:#59f2a0!important}
+
+/* Feature cards: art band with a round icon badge */
+.landing-feature{position:relative;overflow:hidden;padding-top:0!important;border-radius:20px!important;border-color:#2fdc8055!important}
+.landing-feature-art{height:112px;margin:0 -18px 0;background:radial-gradient(circle at 50% 35%,#7cf8bf66,transparent 58%),linear-gradient(180deg,#0c4a2b,#031a10)}
+.landing-feature-icon{display:grid;place-items:center;width:44px;height:44px;margin:-22px 0 12px;border-radius:50%;border:1px solid #36e98b;background:#04140cf2;color:#aaffd0!important;font-size:18px!important;box-shadow:0 0 20px #36e98b44}
+
+/* Profile card: cover band, overlapping avatar, stat tiles, quick actions */
+.profile-card{padding:0 0 22px!important;overflow:hidden}
+.profile-cover{height:120px;background:radial-gradient(circle at 72% 32%,#7af5c0b0,transparent 38%),linear-gradient(160deg,#0c4a2c,#03140c)}
+.profile-card > *:not(.profile-cover){margin-left:22px;margin-right:22px}
+.profile-card .avatar{margin-top:-38px!important;border:3px solid #06150e;position:relative;z-index:1}
+.profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 22px 6px!important}
+.profile-stats div{border:1px solid #1b7046;border-radius:14px;padding:10px;text-align:center;background:#06150e}
+.profile-stats b{display:block;font:700 22px "Space Grotesk";color:#eefbf3}
+.profile-stats small{color:#8fb9a3}
+.profile-quick-actions{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin-top:12px}
+.profile-quick-actions .profile-edit-open{margin:0!important;width:100%}
+.profile-icon-btn{display:grid;place-items:center;padding:12px 0!important;margin:0!important;text-decoration:none;color:#aaffd0;font-size:18px;border-radius:14px!important}
+.profile-edit-form{margin:0}
+
+/* Group chat: banner over the conversation and bubble-style messages */
+.group-banner{display:grid;justify-items:center;gap:6px;text-align:center;padding:28px 18px;margin:12px 0 10px;border-radius:20px;border:1px solid #36e98b44;background:radial-gradient(circle at 50% 20%,#7cf8bf40,transparent 45%),linear-gradient(180deg,#0c4a2b,#03140c)}
+.group-banner strong{font:700 24px "Space Grotesk";color:#eefbf3}
+.group-banner span{color:#aaffd0;font-size:13px;letter-spacing:.4px}
+.group-chat-list{gap:12px!important;padding:6px 2px!important}
+.group-chat-list .group-message{max-width:82%;border-radius:18px;border:1px solid #1b704690;background:#06150e;padding:12px 14px}
+.group-chat-list .group-message.chat-bubble-own{margin-left:auto;background:#0f3a24;border-color:#39f59a66}
+.group-chat-list .group-message b{color:#aaffd0}

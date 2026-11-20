@@ -71,3 +71,46 @@ No database migration is included or required for this visual update. Existing a
 - Includes touch scrolling, previous/next controls, slide indicators, captions, and a join CTA.
 - Gallery artwork is stored locally in `assets/ai-gallery/` as optimized WebP images.
 - This is a visual showcase only; it does not activate AI generation or payment services.
+
+## Phase 23 — Review fixes and Facebook-style feed
+
+### Fixes
+- **Blocked members are now hidden.** The UI promised this, but the feed never filtered blocked authors. The feed and comment threads now exclude posts and comments from members the viewer has blocked.
+- **Moderator queue no longer crashes** when the RPC returns no data; the admin panel stays hidden for non-admins.
+- **Groups panel no longer crashes** when the embedded plan record is missing; it falls back to the plan ID.
+- **Duplicate likes** (unique-constraint error 23505) are treated as already liked instead of showing an error.
+- **Whitespace-only comments** are rejected before sending.
+- **Comment threads stay open** after posting a comment, instead of collapsing on re-render.
+- Removed two empty stray files (`folder.` and `assets/ai-gallery/folder`).
+
+### Facebook-style feed
+- Composer shows an avatar and a "What's on your creative mind?" pill; the full form opens when tapped.
+- Post header with avatar, name, handle and time, plus a `⋯` menu (Report / Block for others' posts, Delete for your own).
+- Stats row (like count and comment count), then an equal-width action bar: Like, Comment, Share.
+- Comments render as bubbles with a pill-shaped input.
+- Keeps the existing emerald theme, rounded-square avatar pattern and all element IDs.
+
+### Desktop layout (1280px and wider)
+- Three columns: profile card (left) · member feed (centre) · creative space and membership (right).
+- Below 1280px and on phones the stacked layout from earlier phases is unchanged.
+- The profile card now spans the full width on phones and tablets (it previously sat at about two-thirds width).
+
+### Database checks still required (not in this repository)
+- `posts`: allow DELETE where `author_id = auth.uid()`, otherwise "Delete post" will show an error.
+- `reactions`: keep the unique constraint on `(post_id, user_id)`.
+- `posts` and `comments`: consider enforcing the block list in RLS as well, so blocked content is hidden even from direct API calls. The client-side filter is a UI safeguard only.
+
+### Verification
+- `node --check app.js` passes.
+- Browser tests with a mock Supabase client (Chromium/Playwright): 23 interaction checks pass across like, unlike, comment, report, post, delete, block and menu behaviour. Desktop and phone layouts checked at 390px and 1280px with no horizontal overflow.
+- Not tested against the live Supabase project or real payment flows.
+
+## Phase 24 — Reference design pass
+- Welcome page: top navigation (Home, Explore, Groups, Studio, Marketplace, Private Membership) on desktop; pill-style EXPRESS / EVOLVE buttons.
+- Gallery: retitled "SyncTrA Creative Gallery", emerald styling, large lead card with the next card peeking, "Create with SyncTrA" button. Uses the project's own gallery images.
+- Plans: featured card glows; prices and features unchanged (₱199 / ₱399 / ₱799). Checkout remains disabled.
+- Feature cards: art band with round icon badge.
+- Profile card: cover band, overlapping avatar, Followers / Following tiles (live counts), quick-action row (Create, Settings, Log out mapped to existing controls).
+- Group chat: banner above the conversation; bubble styling for messages.
+
+Not included: the reference's left group sidebar, member role badges (Creator / Creator Plus), online dots, and the reference's specific artwork (moon/forest backdrops, character photos, feature illustrations). These need assets or data that this project does not have yet.

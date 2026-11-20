@@ -224,6 +224,7 @@ async function loadMember(user) {
   $("profile-hobbies").textContent = profile.hobbies?.trim() || "Not set";
   $("profile-email").textContent = user.email || "";
   $("avatar-letter").textContent = (profile.display_name || "S").trim().charAt(0).toUpperCase();
+  if ($("composer-avatar")) $("composer-avatar").textContent = (profile.display_name || "S").trim().charAt(0).toUpperCase();
   $("edit-display").value = profile.display_name || "";
   $("edit-bio").value = profile.bio || "";
   $("edit-personality").value = profile.personality_type || "";
@@ -317,121 +318,234 @@ function node(tag, className, text) {
   if (text !== undefined) el.textContent = text;
   return el;
 }
+// Feed state that survives re-renders: which posts have their comment thread open.
+const expandedPostIds = new Set();
+
+function initials(name) {
+  return (name || "M").trim().charAt(0).toUpperCase() || "M";
+}
+
+// Close any open "⋯" post menu when the member clicks elsewhere or presses Escape.
+function closePostMenus(except = null) {
+  document.querySelectorAll(".post-menu:not(.hidden)").forEach(menu => {
+    if (menu !== except) {
+      menu.classList.add("hidden");
+      menu.parentElement?.querySelector(".post-more")?.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+document.addEventListener("click", event => {
+  if (!event.target.closest?.(".post-more-wrap")) closePostMenus();
+});
+document.addEventListener("keydown", event => { if (event.key === "Escape") closePostMenus(); });
+
 async function loadFeed() {
   if (!currentUser) return;
   message(feedMessage, "Loading member posts…");
   $("feed-list").replaceChildren();
-  const { data: posts, error } = await supabase.from("posts")
-    .select("id, author_id, body, created_at")
-    .is("group_id", null).eq("visibility", "members").eq("status", "published")
-    .order("created_at", { ascending: false }).limit(30);
+
+  const [{ data: posts, error }, { data: blockRows }] = await Promise.all([
+    supabase.from("posts")
+      .select("id, author_id, body, created_at")
+      .is("group_id", null).eq("visibility", "members").eq("status", "published")
+      .order("created_at", { ascending: false }).limit(30),
+    supabase.from("blocked_users").select("blocked_user_id").eq("blocker_id", currentUser.id)
+  ]);
 
   if (error) {
     message(feedMessage, "Feed could not be loaded: " + error.message, true);
-    return;
-  }
-  if (!posts?.length) {
-    message(feedMessage, "No posts yet. Be the first to share an update.");
+    await loadBlockedUsers();
     return;
   }
 
-  const ids = posts.map(p => p.id);
-  const authorIds = [...new Set(posts.map(p => p.author_id))];
-  const [{ data: profiles }, { data: reactions }, { data: comments }] = await Promise.all([
-    supabase.from("profiles").select("user_id, username, display_name").in("user_id", authorIds),
+  // Blocking must hide the blocked member's posts and comments from this member's view.
+  const blockedIds = new Set((blockRows || []).map(r => r.blocked_user_id));
+  const visiblePosts = (posts || []).filter(p => !blockedIds.has(p.author_id));
+  if (!visiblePosts.length) {
+    message(feedMessage, posts?.length
+      ? "Posts from members you have blocked are hidden."
+      : "No posts yet. Be the first to share an update.");
+    await loadBlockedUsers();
+    return;
+  }
+
+  const ids = visiblePosts.map(p => p.id);
+  const authorIds = [...new Set(visiblePosts.map(p => p.author_id))];
+  const [{ data: reactions }, { data: comments }] = await Promise.all([
     supabase.from("reactions").select("post_id, user_id").in("post_id", ids),
-    supabase.from("comments").select("id, post_id, author_id, body, created_at").in("post_id", ids).eq("status", "published").order("created_at", { ascending: true })
+    supabase.from("comments").select("id, post_id, author_id, body, created_at")
+      .in("post_id", ids).eq("status", "published").order("created_at", { ascending: true })
   ]);
+  const visibleComments = (comments || []).filter(c => !blockedIds.has(c.author_id));
+  const profileIds = [...new Set([...authorIds, ...visibleComments.map(c => c.author_id)])];
+  const { data: profiles } = await supabase.from("profiles")
+    .select("user_id, username, display_name").in("user_id", profileIds);
   const profileMap = new Map((profiles || []).map(p => [p.user_id, p]));
   const reactionRows = reactions || [];
-  const commentRows = comments || [];
 
-  for (const post of posts) {
-    const author = profileMap.get(post.author_id);
-    const card = node("article", "panel post-card");
-    const top = node("div", "post-top");
-    const avatar = node("div", "post-avatar", (author?.display_name || "M").trim().charAt(0).toUpperCase());
-    const identity = node("div", "post-identity");
-    avatar.setAttribute("role", "button"); avatar.setAttribute("tabindex", "0"); avatar.setAttribute("aria-label", "View member profile");
-    avatar.addEventListener("click", () => openMemberProfile(post.author_id));
-    avatar.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") openMemberProfile(post.author_id); });
-    const authorName = node("button", "member-link", author?.display_name || "SyncTrA member");
-    authorName.type = "button";
-    authorName.addEventListener("click", () => openMemberProfile(post.author_id));
-    const authorHandle = node("button", "member-link member-handle", "@" + (author?.username || "member"));
-    authorHandle.type = "button";
-    authorHandle.addEventListener("click", () => openMemberProfile(post.author_id));
-    identity.append(authorName, authorHandle);
-    top.append(avatar, identity, node("time", "post-time", formatDate(post.created_at)));
-    const body = node("p", "post-body", post.body);
-    const postReactions = reactionRows.filter(r => r.post_id === post.id);
-    const ownReaction = postReactions.some(r => r.user_id === currentUser.id);
-    const postComments = commentRows.filter(c => c.post_id === post.id);
-    const actions = node("div", "post-actions");
-    const like = node("button", ownReaction ? "reaction-button liked" : "reaction-button", `♥ ${postReactions.length} Like`);
-    like.type = "button";
-    like.addEventListener("click", () => toggleLike(post.id, ownReaction));
-    const commentToggle = node("button", "reaction-button", `Comment · ${postComments.length}`);
-    commentToggle.type = "button";
-    actions.append(like, commentToggle);
-    const share=node("button","reaction-button","Share");
-    share.type="button";
-    share.addEventListener("click",async()=>{
-      const username=window.prompt("Share this post. Enter the member username:");
-      if(username===null)return;
-      try{
-        const recipient=await profileForUsername(username);
-        if(!recipient)return message(feedMessage,"No active member found with that username.",true);
-        if(recipient.user_id===currentUser.id)return message(feedMessage,"Choose another member to share this post with.",true);
-        const {error}=await supabase.from("post_shares").insert({post_id:post.id,shared_by:currentUser.id,recipient_id:recipient.user_id});
-        if(error)return message(feedMessage,error.code==="23505"?"You've already shared this post with that member.":error.message,true);
-        message(feedMessage,`Post shared with @${recipient.username}.`);
-        await loadNotifications();
-      }catch(err){message(feedMessage,err.message,true);}
-    });
-    actions.append(share);
-    if (post.author_id !== currentUser.id) {
-      const report = node("button", "reaction-button safety-action", "Report");
-      report.type = "button";
-      report.addEventListener("click", () => reportPost(post.id));
-      const block = node("button", "reaction-button safety-action", "Block member");
-      block.type = "button";
-      block.addEventListener("click", () => blockMember(post.author_id, author?.display_name || "this member"));
-      actions.append(report, block);
-    }
-
-    const commentsBox = node("div", "comments-box");
-    for (const c of postComments) {
-      const cp = profileMap.get(c.author_id);
-      const line = node("p", "comment-line");
-      const strong = node("b", "", (cp?.display_name || "Member") + ": ");
-      line.append(strong, document.createTextNode(c.body));
-      commentsBox.append(line);
-    }
-    const commentForm = node("form", "comment-form");
-    const input = node("input", "comment-input");
-    input.type = "text"; input.maxLength = 1000; input.required = true;
-    input.placeholder = "Write a respectful comment…";
-    const send = node("button", "secondary comment-send", "Send");
-    send.type = "submit";
-    commentForm.append(input, send);
-    commentForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      send.disabled = true;
-      const { error } = await supabase.from("comments").insert({
-        post_id: post.id, author_id: currentUser.id, body: input.value.trim()
-      });
-      send.disabled = false;
-      if (error) return message(feedMessage, "Comment failed: " + error.message, true);
-      await loadFeed();
-    });
-    commentToggle.addEventListener("click", () => commentsBox.classList.toggle("expanded"));
-    commentsBox.append(commentForm);
-    card.append(top, body, actions, commentsBox);
-    $("feed-list").append(card);
+  for (const post of visiblePosts) {
+    $("feed-list").append(buildPostCard(post, {
+      profileMap,
+      reactions: reactionRows.filter(r => r.post_id === post.id),
+      comments: visibleComments.filter(c => c.post_id === post.id)
+    }));
   }
-  message(feedMessage, `Showing ${posts.length} latest post${posts.length === 1 ? "" : "s"}.`);
+  message(feedMessage, `Showing ${visiblePosts.length} latest post${visiblePosts.length === 1 ? "" : "s"}.`);
   await loadBlockedUsers();
+}
+
+function buildPostCard(post, { profileMap, reactions, comments }) {
+  const author = profileMap.get(post.author_id);
+  const authorName = author?.display_name || "SyncTrA member";
+  const handle = "@" + (author?.username || "member");
+  const isOwn = post.author_id === currentUser.id;
+  const ownReaction = reactions.some(r => r.user_id === currentUser.id);
+
+  const card = node("article", "panel post-card");
+  card.dataset.postId = post.id;
+
+  // Header: avatar, name, handle · time, and the ⋯ menu.
+  const top = node("header", "post-top");
+  const avatar = node("div", "post-avatar", initials(authorName));
+  avatar.setAttribute("role", "button");
+  avatar.setAttribute("tabindex", "0");
+  avatar.setAttribute("aria-label", "View member profile");
+  avatar.addEventListener("click", () => openMemberProfile(post.author_id));
+  avatar.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") openMemberProfile(post.author_id); });
+
+  const identity = node("div", "post-identity");
+  const nameLink = node("button", "member-link post-author", authorName);
+  nameLink.type = "button";
+  nameLink.addEventListener("click", () => openMemberProfile(post.author_id));
+  const meta = node("span", "post-meta");
+  const handleLink = node("button", "member-link member-handle", handle);
+  handleLink.type = "button";
+  handleLink.addEventListener("click", () => openMemberProfile(post.author_id));
+  const time = node("time", "post-time", formatDate(post.created_at));
+  time.dateTime = post.created_at;
+  meta.append(handleLink, node("span", "post-meta-sep", "·"), time);
+  identity.append(nameLink, meta);
+
+  const moreWrap = node("div", "post-more-wrap");
+  const more = node("button", "post-more", "⋯");
+  more.type = "button";
+  more.setAttribute("aria-label", "More options for this post");
+  more.setAttribute("aria-haspopup", "menu");
+  more.setAttribute("aria-expanded", "false");
+  const menu = node("div", "post-menu hidden");
+  menu.setAttribute("role", "menu");
+  more.addEventListener("click", e => {
+    e.stopPropagation();
+    const willOpen = menu.classList.contains("hidden");
+    closePostMenus(menu);
+    menu.classList.toggle("hidden", !willOpen);
+    more.setAttribute("aria-expanded", String(willOpen));
+  });
+  if (isOwn) {
+    const del = node("button", "post-menu-item danger", "Delete post");
+    del.type = "button"; del.setAttribute("role", "menuitem");
+    del.addEventListener("click", () => deleteOwnPost(post.id));
+    menu.append(del);
+  } else {
+    const report = node("button", "post-menu-item", "Report post");
+    report.type = "button"; report.setAttribute("role", "menuitem");
+    report.addEventListener("click", () => { closePostMenus(); reportPost(post.id); });
+    const block = node("button", "post-menu-item danger", `Block ${authorName}`);
+    block.type = "button"; block.setAttribute("role", "menuitem");
+    block.addEventListener("click", () => { closePostMenus(); blockMember(post.author_id, authorName); });
+    menu.append(report, block);
+  }
+  moreWrap.append(more, menu);
+  top.append(avatar, identity, moreWrap);
+
+  const body = node("p", "post-body", post.body);
+
+  // Stats row: reaction count on the left, comments on the right.
+  const stats = node("div", "post-stats");
+  const likeCount = node("span", "post-like-count", reactions.length ? `♥ ${reactions.length}` : "");
+  const commentsStat = node("button", "post-comments-stat", comments.length ? `${comments.length} comment${comments.length === 1 ? "" : "s"}` : "");
+  commentsStat.type = "button";
+  stats.append(likeCount, commentsStat);
+
+  // Action bar: Like · Comment · Share.
+  const actions = node("div", "post-actions");
+  const like = node("button", ownReaction ? "reaction-button liked" : "reaction-button", ownReaction ? "♥ Liked" : "♡ Like");
+  like.type = "button";
+  like.setAttribute("aria-pressed", String(ownReaction));
+  like.addEventListener("click", () => toggleLike(post.id, ownReaction));
+  const commentToggle = node("button", "reaction-button", "💬 Comment");
+  commentToggle.type = "button";
+  const share = node("button", "reaction-button", "↗ Share");
+  share.type = "button";
+  share.addEventListener("click", async () => {
+    const username = window.prompt("Share this post. Enter the member username:");
+    if (username === null) return;
+    try {
+      const recipient = await profileForUsername(username);
+      if (!recipient) return message(feedMessage, "No active member found with that username.", true);
+      if (recipient.user_id === currentUser.id) return message(feedMessage, "Choose another member to share this post with.", true);
+      const { error } = await supabase.from("post_shares").insert({ post_id: post.id, shared_by: currentUser.id, recipient_id: recipient.user_id });
+      if (error) return message(feedMessage, error.code === "23505" ? "You've already shared this post with that member." : error.message, true);
+      message(feedMessage, `Post shared with @${recipient.username}.`);
+      await loadNotifications();
+    } catch (err) { message(feedMessage, err.message, true); }
+  });
+  actions.append(like, commentToggle, share);
+
+  // Comment thread: bubbles plus a pill-shaped composer.
+  const commentsBox = node("div", "comments-box");
+  if (expandedPostIds.has(post.id)) commentsBox.classList.add("expanded");
+  for (const c of comments) {
+    const cp = profileMap.get(c.author_id);
+    const row = node("div", "comment-row");
+    row.append(node("div", "comment-avatar", initials(cp?.display_name)));
+    const bubble = node("div", "comment-bubble");
+    bubble.append(node("b", "", cp?.display_name || "Member"), node("p", "comment-text", c.body));
+    row.append(bubble);
+    commentsBox.append(row);
+  }
+  const commentForm = node("form", "comment-form");
+  const input = node("input", "comment-input");
+  input.type = "text"; input.maxLength = 1000; input.required = true;
+  input.placeholder = "Write a comment…";
+  input.setAttribute("aria-label", "Write a comment");
+  const send = node("button", "secondary comment-send", "Send");
+  send.type = "submit";
+  commentForm.append(input, send);
+  commentForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return message(feedMessage, "Write a comment before sending.", true);
+    send.disabled = true;
+    const { error } = await supabase.from("comments").insert({ post_id: post.id, author_id: currentUser.id, body: text });
+    send.disabled = false;
+    if (error) return message(feedMessage, "Comment failed: " + error.message, true);
+    expandedPostIds.add(post.id);
+    await loadFeed();
+  });
+  commentsBox.append(commentForm);
+
+  const toggleComments = () => {
+    const open = commentsBox.classList.toggle("expanded");
+    if (open) expandedPostIds.add(post.id); else expandedPostIds.delete(post.id);
+    commentToggle.setAttribute("aria-expanded", String(open));
+    if (open) input.focus();
+  };
+  commentToggle.addEventListener("click", toggleComments);
+  commentsStat.addEventListener("click", toggleComments);
+
+  card.append(top, body, stats, actions, commentsBox);
+  return card;
+}
+
+async function deleteOwnPost(postId) {
+  closePostMenus();
+  if (!window.confirm("Delete this post? This cannot be undone.")) return;
+  const { error } = await supabase.from("posts").delete().eq("id", postId).eq("author_id", currentUser.id);
+  if (error) return message(feedMessage, "Post could not be deleted: " + error.message, true);
+  expandedPostIds.delete(postId);
+  message(feedMessage, "Post deleted.");
+  await loadFeed();
 }
 
 async function reportPost(postId) {
@@ -504,7 +618,7 @@ async function toggleLike(postId, alreadyLiked) {
   } else {
     result = await supabase.from("reactions").insert({ post_id: postId, user_id: currentUser.id, reaction_type: "like" });
   }
-  if (result.error) return message(feedMessage, "Reaction failed: " + result.error.message, true);
+  if (result.error && result.error.code !== "23505") return message(feedMessage, "Reaction failed: " + result.error.message, true);
   await loadFeed();
 }
 
@@ -524,6 +638,13 @@ $("post-form").addEventListener("submit", async (event) => {
   await loadFeed();
 });
 $("refresh-feed").addEventListener("click", loadFeed);
+$("composer-pill")?.addEventListener("click", () => {
+  const composer = document.querySelector(".composer");
+  composer?.classList.add("is-open");
+  const box = $("post-body");
+  box.focus();
+  box.scrollIntoView({ behavior: "smooth", block: "center" });
+});
 
 
 let activeGroupId = null;
@@ -538,8 +659,9 @@ async function loadGroups() {
     .eq("user_id", currentUser.id).eq("status","active").limit(1);
   const activePlan = plans?.[0];
   const limit = activePlan?.subscription_plans?.group_member_limit;
+  const planName = activePlan?.subscription_plans?.name || String(activePlan?.plan_id || "active").replaceAll("_", " ");
   $("group-plan-note").textContent = activePlan
-    ? `Your active ${activePlan.subscription_plans.name} plan allows you to create groups with up to ${Number(limit).toLocaleString()} members.`
+    ? `Your active ${planName} plan allows you to create groups with up to ${Number(limit || 0).toLocaleString()} members.`
     : "Creating a group requires an active subscription. Your current account has no active paid plan; no charges or plan changes have been made.";
   $("create-group-button").disabled = !activePlan;
   const { data: groups, error } = await supabase.from("groups")
@@ -973,6 +1095,8 @@ async function loadNetwork(){
   if(e1||e2)return message($("network-message"),(e1||e2).message,true);
   $("followers-count").textContent=(followers||[]).length;
   $("following-count").textContent=(following||[]).length;
+  $("profile-followers").textContent=(followers||[]).length;
+  $("profile-following").textContent=(following||[]).length;
   const ids=[...(followers||[]).map(x=>x.follower_id),...(following||[]).map(x=>x.followed_id)];
   const {data:profiles}=ids.length?await supabase.from("profiles").select("user_id,username,display_name").in("user_id",[...new Set(ids)]):{data:[]};
   const pmap=new Map((profiles||[]).map(p=>[p.user_id,p]));
@@ -1018,6 +1142,8 @@ $("new-message-form").addEventListener("submit",async e=>{
 $("refresh-notifications").addEventListener("click",loadNotifications);
 $("refresh-messages").addEventListener("click",loadMessages);
 $("refresh-network").addEventListener("click",loadNetwork);
+$("profile-settings")?.addEventListener("click",()=>$("profile-edit-open")?.click());
+$("profile-logout")?.addEventListener("click",()=>$("logout-button")?.click());
 
 
 // Phase 6 Moderator Center. Moderator authorization is enforced by Supabase RPCs.
@@ -1030,7 +1156,7 @@ async function loadModeratorQueue() {
   host.replaceChildren();
 
   const { data, error } = await supabase.rpc("synctra_moderation_queue");
-  if (error) {
+  if (error || !Array.isArray(data)) {
     panel.classList.add("hidden");
     return; // Normal members do not see the admin panel.
   }
