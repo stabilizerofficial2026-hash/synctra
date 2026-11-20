@@ -314,6 +314,15 @@
             </div>
             <div id="community-rooms" class="community-rooms-grid" aria-live="polite"></div>
             <section id="community-room-panel" class="panel community-room-panel hidden">
+              <header class="room-header">
+                <button id="community-room-back" class="room-back" type="button" aria-label="Back to rooms">‹</button>
+                <span class="room-brand-mark" aria-hidden="true">▶</span>
+                <div class="room-brand-copy"><strong>SyncTrA</strong><small>Group Chat Messenger</small></div>
+                <div class="room-header-actions">
+                  <span class="room-online-indicator" aria-label="Room is active"></span>
+                  <button id="community-room-close" class="secondary room-close" type="button" aria-label="Close room">×</button>
+                </div>
+              </header>
               <aside class="room-side" aria-label="Room details">
                 <div class="room-icon" aria-hidden="true"><span id="community-room-icon">◎</span></div>
                 <p class="eyebrow">OPEN MINDS ROOM</p>
@@ -328,10 +337,6 @@
                 </div>
               </aside>
               <div class="room-main">
-                <header class="room-header">
-                  <span class="room-header-label">Room conversation</span>
-                  <button id="community-room-close" class="secondary room-close" type="button">Close</button>
-                </header>
                 <div class="group-banner room-banner" aria-hidden="true"><strong id="community-room-title">Room discussion</strong><span>Create • Share • Collaborate • Respect</span></div>
                 <div id="community-chat-list" class="community-chat-list" aria-live="polite"></div>
                 <form id="community-message-form" class="group-message-form room-composer">

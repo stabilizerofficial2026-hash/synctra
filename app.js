@@ -947,6 +947,7 @@ $("community-room-close").addEventListener("click",async()=>{
   if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
   if(communityAudioOn){stopCommunityAmbience();$("community-audio-status").textContent="Sound paused outside the room";}
 });
+$("community-room-back").addEventListener("click",()=>$("community-room-close").click());
 $("community-message-form").addEventListener("submit",async e=>{
   e.preventDefault();if(!activeCommunityRoom||!currentUser||communityMessageSending)return;
   const input=$("community-message-body"),body=input.value.trim();if(!body)return;

@@ -134,3 +134,8 @@ Not included: the reference's left group sidebar, member role badges (Creator / 
 - Phone sidebar uses a plain flex column; the group section spans the full width on desktop when a room is open.
 - `phase27-lgbtq-community-room.sql` adds the LGBTQ+ Open Minds room. Run it once in Supabase after checking the table columns. Room artwork (`assets/open-minds/lgbtq.webp`) is not included.
 - Not included: group logos and banner artwork from the screenshots, online dots, role badges (NO.12 etc.), and a Theme switch.
+
+
+## Phase 28 — Reference-led messenger and profile alignment
+
+See `PHASE28-REFERENCE-MESSENGER-README.md`. This is a presentation-layer update to the Open Minds messenger and profile card. Existing Supabase and messaging behavior is retained; no database migration is required. Source checks passed, but authenticated live-device testing remains necessary.
