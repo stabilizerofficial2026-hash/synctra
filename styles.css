@@ -1635,3 +1635,203 @@ button,a{touch-action:manipulation}
   .community-room-panel .room-side .room-desc{font-size:9px!important}
   .community-room-panel>.room-main{padding:7px 6px calc(6px + env(safe-area-inset-bottom))!important}
 }
+
+
+
+/* Phase 30 — reference-matched room frame, reliable sizing, and high-resolution room wallpaper. */
+.community-room-panel:not(.hidden){
+  position:fixed!important;inset:0!important;
+  width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;
+  margin:0!important;
+  display:grid!important;
+  grid-template-columns:clamp(104px,23vw,178px) minmax(0,1fr)!important;
+  grid-template-rows:62px minmax(0,1fr)!important;
+  grid-template-areas:"top top" "side main"!important;
+  gap:0!important;
+  padding:calc(10px + env(safe-area-inset-top)) 10px calc(10px + env(safe-area-inset-bottom))!important;
+  overflow:hidden!important;
+  border:1px solid var(--accent)!important;
+  border-radius:20px!important;
+  background:#020604!important;
+  box-shadow:0 0 26px var(--accent-glow),inset 0 0 0 1px rgba(255,255,255,.035)!important;
+  isolation:isolate!important;
+}
+.community-room-panel:not(.hidden)::before{
+  background-image:
+    linear-gradient(180deg,rgba(1,5,3,.48),rgba(1,5,3,.62) 45%,rgba(1,5,3,.84)),
+    var(--room-wallpaper,var(--room-background))!important;
+  background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;
+}
+.community-room-panel:not(.hidden)::after{
+  pointer-events:none!important;
+}
+.community-room-panel:not(.hidden),
+.community-room-panel:not(.hidden) *{box-sizing:border-box!important}
+.community-room-panel>.room-header{
+  grid-area:top!important;min-width:0!important;width:100%!important;
+  display:flex!important;align-items:center!important;gap:10px!important;
+  padding:6px 10px!important;margin:0!important;
+  border:0!important;border-bottom:1px solid var(--accent-soft)!important;
+  background:rgba(1,7,4,.94)!important;
+}
+.community-room-panel>.room-side{
+  grid-area:side!important;min-width:0!important;width:100%!important;
+  height:100%!important;min-height:0!important;margin:0!important;
+  padding:12px 8px!important;
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  gap:10px!important;overflow:hidden!important;
+  border:0!important;border-right:1px solid var(--accent-soft)!important;
+  border-radius:0!important;
+  background:
+    linear-gradient(180deg,rgba(1,6,4,.52),rgba(1,6,4,.82)),
+    var(--room-wallpaper,var(--room-background)) center/cover no-repeat!important;
+}
+.community-room-panel>.room-main{
+  grid-area:main!important;min-width:0!important;min-height:0!important;
+  width:100%!important;height:100%!important;margin:0!important;
+  padding:10px clamp(8px,1.7vw,16px) calc(8px + env(safe-area-inset-bottom))!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto minmax(0,1fr) auto auto!important;
+  align-content:stretch!important;gap:10px!important;
+  overflow:hidden!important;
+  background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.22))!important;
+}
+.community-room-panel .room-banner,
+.community-room-panel .community-chat-list,
+.community-room-panel #community-message-form,
+.community-room-panel #community-chat-feedback{
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  margin-left:0!important;margin-right:0!important;justify-self:stretch!important;
+}
+.community-room-panel .room-banner{
+  min-height:clamp(112px,20vh,210px)!important;max-height:24vh!important;
+  padding:12px!important;margin-top:0!important;margin-bottom:0!important;
+  border-radius:17px!important;
+}
+.community-room-panel .community-chat-list{
+  min-height:0!important;max-height:none!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  padding:8px 2px 12px!important;gap:12px!important;
+  overscroll-behavior:contain!important;
+}
+.community-room-panel .community-message{
+  min-width:0!important;width:min(100%,680px)!important;max-width:94%!important;
+  grid-template-columns:clamp(32px,5vw,46px) minmax(0,1fr)!important;
+  gap:7px!important;margin:0!important;
+}
+.community-room-panel .community-message.chat-bubble-own{
+  grid-template-columns:minmax(0,1fr) clamp(32px,5vw,46px)!important;
+  margin-left:auto!important;
+}
+.community-room-panel .community-message-avatar{
+  width:clamp(32px,5vw,46px)!important;height:clamp(32px,5vw,46px)!important;
+}
+.community-room-panel .community-message-bubble{
+  min-width:0!important;width:100%!important;padding:9px 11px!important;
+  border-radius:18px!important;
+}
+.community-room-panel .community-message-head{min-width:0!important;gap:3px 7px!important}
+.community-room-panel .community-message-head b{overflow-wrap:anywhere!important}
+.community-room-panel .community-message-bubble p{overflow-wrap:anywhere!important}
+.community-room-panel #community-message-form{
+  min-width:0!important;display:flex!important;align-items:center!important;
+  gap:8px!important;padding:6px 7px 6px 14px!important;
+  border-radius:999px!important;
+}
+.community-room-panel #community-message-body{
+  flex:1 1 0!important;width:0!important;min-width:0!important;
+  height:46px!important;min-height:46px!important;max-height:46px!important;
+  margin:0!important;padding:0 8px!important;border:0!important;
+  background:transparent!important;box-shadow:none!important;
+  font-size:clamp(13px,2vw,16px)!important;
+}
+.community-room-panel #community-message-form .room-send{
+  flex:0 0 46px!important;width:46px!important;height:46px!important;
+  min-width:46px!important;min-height:46px!important;padding:0!important;
+}
+.community-room-panel #community-chat-feedback{
+  margin:0!important;padding:0 4px!important;text-align:center!important;
+  font-size:10px!important;line-height:1.35!important;
+}
+.community-room-panel .room-side .room-icon{
+  width:clamp(48px,8vw,82px)!important;height:clamp(48px,8vw,82px)!important;
+  margin:8px auto 2px!important;flex:0 0 auto!important;
+}
+.community-room-panel .room-side .eyebrow,
+.community-room-panel .room-side .room-desc{
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  text-align:center!important;overflow-wrap:anywhere!important;
+}
+.community-room-panel .room-side-nav{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-flow:row!important;width:100%!important;min-width:0!important;
+  gap:6px!important;margin:8px 0 0!important;
+}
+.community-room-panel .room-side-nav>*{
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  min-height:38px!important;padding:6px 3px!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;
+  text-align:center!important;font-size:clamp(9px,1.35vw,12px)!important;
+}
+.community-room-panel .room-side-actions{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  gap:6px!important;width:100%!important;min-width:0!important;
+  margin-top:8px!important;
+}
+.community-room-panel .room-side-actions button{
+  width:100%!important;min-width:0!important;min-height:36px!important;
+  padding:6px 4px!important;font-size:10px!important;white-space:normal!important;
+}
+.community-room-panel .room-side-actions .room-report-group{
+  border-color:var(--accent-soft)!important;color:var(--accent)!important;
+}
+@media(max-width:420px){
+  .community-room-panel:not(.hidden){
+    grid-template-columns:clamp(88px,24vw,104px) minmax(0,1fr)!important;
+    grid-template-rows:56px minmax(0,1fr)!important;
+    padding:calc(7px + env(safe-area-inset-top)) 6px calc(7px + env(safe-area-inset-bottom))!important;
+    border-radius:15px!important;
+  }
+  .community-room-panel>.room-header{gap:5px!important;padding:5px 6px!important}
+  .community-room-panel>.room-side{padding:9px 5px!important;gap:7px!important}
+  .community-room-panel>.room-main{padding:7px 6px calc(6px + env(safe-area-inset-bottom))!important;gap:7px!important}
+  .community-room-panel .room-brand-copy strong{font-size:15px!important}
+  .community-room-panel .room-brand-copy small{font-size:8px!important}
+  .community-room-panel .room-back,
+  .community-room-panel .room-close{width:32px!important;height:32px!important;flex-basis:32px!important}
+  .community-room-panel .room-brand-mark{width:32px!important;height:32px!important;flex-basis:32px!important}
+  .community-room-panel .room-banner{min-height:104px!important;max-height:19vh!important;padding:8px!important}
+  .community-room-panel .community-message{max-width:100%!important;gap:5px!important}
+  .community-room-panel .community-message-bubble{padding:7px 8px!important}
+  .community-room-panel .community-message-bubble p{font-size:12px!important}
+  .community-room-panel #community-message-body{height:42px!important;min-height:42px!important;max-height:42px!important}
+  .community-room-panel #community-message-form .room-send{flex-basis:42px!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important}
+}
+@media(min-width:900px){
+  .community-room-panel:not(.hidden){grid-template-columns:220px minmax(0,1fr)!important}
+}
+
+/* Keep the focal moon visible behind the conversation rather than hidden beneath the banner. */
+.community-room-panel:not(.hidden)::before{background-position:center 64%!important}
+
+.community-room-panel:not(.hidden)::before{
+  background-size:auto 145%!important;
+  background-position:center top!important;
+}
+
+/* Let the cinematic room wallpaper continue behind the conversation, with the moon
+   positioned below the banner so it remains visible in the message viewport. */
+.community-room-panel>.room-main{
+  background-image:
+    linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.52)),
+    var(--room-wallpaper,var(--room-background))!important;
+  background-size:100% 100%,auto 150%!important;
+  background-position:center,center top!important;
+  background-repeat:no-repeat!important;
+}
+
+.community-room-panel .room-report-note{
+  display:block;width:100%;padding:0 3px;color:var(--accent);
+  font-size:9px!important;line-height:1.3;text-align:center;overflow-wrap:anywhere;
+}

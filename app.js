@@ -851,6 +851,8 @@ async function openCommunityRoom(room){
   $("community-room-panel").dataset.roomSlug=room.slug;
   const artworkSlug=({open:"open-discussion",tech:"hacker-community"})[room.slug]||room.slug;
   $("community-room-panel").style.setProperty("--room-background", `url("assets/open-minds/${artworkSlug}.webp")`);
+  const wallpaperSlug = room.slug === "satanism" ? "backgrounds/satanism-room" : artworkSlug;
+  $("community-room-panel").style.setProperty("--room-wallpaper", `url("assets/open-minds/${wallpaperSlug}.webp")`);
   document.body.classList.add("community-room-open");
   $("community-room-title").textContent=room.room_name;
   $("community-room-icon").textContent=room.icon||"◎";
@@ -864,6 +866,41 @@ async function openCommunityRoom(room){
   if(communityAudioOn)startCommunityAmbience(room.soundscape);
   $("community-message-body").focus({ preventScroll: true });
 }
+
+// Report a room once per account. The database counts distinct reporters and
+// applies a 60-day suspension at the configured threshold.
+$("community-room-report")?.addEventListener("click", async () => {
+  if (!activeCommunityRoom || !currentUser) return;
+  const reason = window.prompt("Why should this group be reviewed? Please describe the concern (at least 3 characters).");
+  if (reason === null) return;
+  const cleanReason = reason.trim().slice(0, 500);
+  if (cleanReason.length < 3) {
+    return message($("community-chat-feedback"), "Please enter at least 3 characters so the report can be reviewed.", true);
+  }
+  const button = $("community-room-report");
+  button.disabled = true;
+  const { data, error } = await supabase.rpc("synctra_submit_room_report", {
+    p_room_id: activeCommunityRoom.id,
+    p_reason: cleanReason
+  });
+  button.disabled = false;
+  if (error) {
+    const duplicate = /already reported|duplicate|unique/i.test(error.message || "");
+    message($("community-chat-feedback"),
+      duplicate ? "You have already reported this group. Your earlier report remains on record." :
+      "The group report could not be submitted: " + error.message, true);
+    return;
+  }
+  if (data?.suspended) {
+    $("community-message-body").disabled = true;
+    $("community-message-form").querySelector('button[type="submit"]')?.setAttribute("disabled", "disabled");
+    message($("community-chat-feedback"),
+      "This room has reached 10 unique reports and is now suspended for 60 days. Messaging is paused while the room may be appealed.");
+  } else {
+    message($("community-chat-feedback"),
+      `Group report submitted. ${Number(data?.report_count || 0)} unique report(s) recorded; 10 trigger a 60-day room suspension.`);
+  }
+});
 
 async function loadCommunityMessages(){
   if(!activeCommunityRoom)return;

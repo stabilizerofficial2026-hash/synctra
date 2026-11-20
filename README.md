@@ -139,3 +139,14 @@ Not included: the reference's left group sidebar, member role badges (Creator / 
 ## Phase 28 — Reference-led messenger and profile alignment
 
 See `PHASE28-REFERENCE-MESSENGER-README.md`. This is a presentation-layer update to the Open Minds messenger and profile card. Existing Supabase and messaging behavior is retained; no database migration is required. Source checks passed, but authenticated live-device testing remains necessary.
+
+
+## Phase 30 — Reference-matched room messenger and group reporting
+
+- Consolidated the final room overlay sizing so it uses the viewport inset rather than a `100vw` width that can overflow mobile visual viewports.
+- Locked the room into a two-column frame with a full-width header, a compact left rail, and a min-width-safe conversation panel.
+- Aligned the banner, chat list, composer, and feedback line to the same main-panel width.
+- Added a dedicated high-resolution Satanism room wallpaper while preserving the room's existing banner artwork.
+- Added a Report group action. One eligible member can submit one report per room.
+- Added `phase30-group-report-suspension.sql`: ten distinct eligible member reports suspend a room for 60 days; an accepted appeal restores it.
+- Apply the Phase 30 SQL migration in the Supabase SQL Editor before deploying the updated app files.
