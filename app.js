@@ -803,44 +803,6 @@ let communityMessageSending = false;
 let communityAudioContext = null;
 let communityAudioNodes = [];
 let communityAudioOn = false;
-// Theme songs per Open Minds room (keyed by room slug). Add more rooms here.
-const roomThemeSongs = {
-  open: "assets/open-minds/theme/open-discussion.mp3"
-};
-const THEME_VOLUME = 0.25;
-let themeAudio = null;
-function setThemeUi(on){
-  const b = $("room-theme-toggle");
-  if(!b) return;
-  b.textContent = on ? "♪ Theme on" : "♪ Theme off";
-  b.setAttribute("aria-pressed", String(on));
-}
-function stopThemeSong(){
-  if(themeAudio){ themeAudio.pause(); themeAudio.removeAttribute("src"); themeAudio.load(); themeAudio = null; }
-  setThemeUi(false);
-}
-function startThemeSong(slug){
-  stopThemeSong();
-  const src = roomThemeSongs[slug];
-  const b = $("room-theme-toggle");
-  if(!b) return;
-  if(!src){ b.hidden = true; return; }
-  b.hidden = false;
-  themeAudio = new Audio(src);
-  themeAudio.loop = true;
-  themeAudio.volume = THEME_VOLUME;
-  themeAudio.play()
-    .then(() => setThemeUi(true))
-    .catch(() => { setThemeUi(false); message($("community-chat-feedback"), "Tap ♪ Theme to play the room's theme song.", false); });
-}
-$("room-theme-toggle")?.addEventListener("click", () => {
-  if(!themeAudio) return;
-  if(themeAudio.paused){
-    themeAudio.play().then(() => setThemeUi(true)).catch(() => setThemeUi(false));
-  } else {
-    themeAudio.pause(); setThemeUi(false);
-  }
-});
 let communityAudioVolume = 0.12;
 const roomToneMap = {open:174.61,islam:196,christianity:220,buddhism:164.81,taoism:146.83,science:261.63,atheism:185,satanism:155.56,tech:207.65,hinduism:233.08,judaism:246.94,activists:130.81};
 
@@ -894,7 +856,6 @@ async function openCommunityRoom(room){
   $("community-room-icon").textContent=room.icon||"◎";
   $("community-room-description").textContent=room.description;
   $("community-room-panel").classList.remove("hidden");
-  startThemeSong(room.slug);
   await loadCommunityMessages();
   if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
   communityRealtimeChannel=supabase.channel("open-minds-"+room.id)
@@ -978,11 +939,9 @@ $("community-room-leave").addEventListener("click",async()=>{
   document.body.classList.remove("community-room-open");
   if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
   if(communityAudioOn){stopCommunityAmbience();$("community-audio-status").textContent="Sound paused outside the room";}
-  stopThemeSong();
   message($("groups-message"),"You left "+room.room_name+".");await loadCommunityRooms();
 });
 $("community-room-close").addEventListener("click",async()=>{
-  stopThemeSong();
   $("community-room-panel").classList.add("hidden");activeCommunityRoom=null;
   document.body.classList.remove("community-room-open");
   if(communityRealtimeChannel){await supabase.removeChannel(communityRealtimeChannel);communityRealtimeChannel=null;}
@@ -1201,6 +1160,7 @@ $("refresh-messages").addEventListener("click",loadMessages);
 $("refresh-network").addEventListener("click",loadNetwork);
 $("group-side-notifications")?.addEventListener("click",()=>{$("notifications-panel")?.scrollIntoView({behavior:"smooth",block:"start"});});
 $("profile-settings")?.addEventListener("click",()=>$("profile-edit-open")?.click());
+$("profile-logout")?.addEventListener("click",()=>$("logout-button")?.click());
 
 
 // Phase 6 Moderator Center. Moderator authorization is enforced by Supabase RPCs.
