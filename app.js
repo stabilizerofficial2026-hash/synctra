@@ -1282,6 +1282,47 @@ document.addEventListener("click", event => {
   });
   observer.observe(dashboard, {attributes:true, attributeFilter:["class"]});
 
+  // Swipeable public AI art gallery on the welcome page.
+  const galleryTrack = $("ai-gallery-track");
+  if (galleryTrack) {
+    const gallerySlides = [...galleryTrack.querySelectorAll(".gallery-slide")];
+    const galleryDots = [...document.querySelectorAll("#gallery-dots .gallery-dot")];
+    const galleryCount = $("gallery-count");
+    let galleryIndex = 0;
+    const setGalleryIndex = index => {
+      galleryIndex = Math.max(0, Math.min(gallerySlides.length - 1, index));
+      gallerySlides[galleryIndex]?.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
+      galleryDots.forEach((dot, i) => {
+        dot.classList.toggle("is-active", i === galleryIndex);
+        if (i === galleryIndex) dot.setAttribute("aria-current", "true"); else dot.removeAttribute("aria-current");
+      });
+      if (galleryCount) galleryCount.textContent = `${String(galleryIndex + 1).padStart(2,"0")} / ${String(gallerySlides.length).padStart(2,"0")}`;
+    };
+    $("gallery-prev")?.addEventListener("click", () => setGalleryIndex((galleryIndex - 1 + gallerySlides.length) % gallerySlides.length));
+    $("gallery-next")?.addEventListener("click", () => setGalleryIndex((galleryIndex + 1) % gallerySlides.length));
+    galleryDots.forEach((dot, i) => dot.addEventListener("click", () => setGalleryIndex(i)));
+    let galleryScrollTimer;
+    galleryTrack.addEventListener("scroll", () => {
+      clearTimeout(galleryScrollTimer);
+      galleryScrollTimer = setTimeout(() => {
+        const center = galleryTrack.getBoundingClientRect().left + galleryTrack.clientWidth / 2;
+        let nearest = 0, distance = Infinity;
+        gallerySlides.forEach((slide, i) => {
+          const rect = slide.getBoundingClientRect();
+          const d = Math.abs(rect.left + rect.width / 2 - center);
+          if (d < distance) { distance = d; nearest = i; }
+        });
+        galleryIndex = nearest;
+        galleryDots.forEach((dot, i) => {
+          dot.classList.toggle("is-active", i === nearest);
+          if (i === nearest) dot.setAttribute("aria-current", "true"); else dot.removeAttribute("aria-current");
+        });
+        if (galleryCount) galleryCount.textContent = `${String(nearest + 1).padStart(2,"0")} / ${String(gallerySlides.length).padStart(2,"0")}`;
+      }, 90);
+    }, {passive:true});
+    $("gallery-join")?.addEventListener("click", () => $("welcome-evolve")?.click());
+  }
+
   // Swipe horizontally between the five primary mobile destinations only.
   const primary = ["feed-section", "groups-section", "creative-space", "messages-panel", "profile-card"];
   let sx=0, sy=0, started=0;

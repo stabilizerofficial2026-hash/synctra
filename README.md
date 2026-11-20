@@ -64,3 +64,10 @@ No database migration is included or required for this visual update. Existing a
 - HTML duplicate-ID check passed.
 - ZIP integrity check performed after packaging.
 - No live browser or production deployment test was performed.
+
+
+## Phase 20 — Public AI Art Gallery
+- Added a 10-artwork swipeable gallery to the welcome page, positioned above membership plans.
+- Includes touch scrolling, previous/next controls, slide indicators, captions, and a join CTA.
+- Gallery artwork is stored locally in `assets/ai-gallery/` as optimized WebP images.
+- This is a visual showcase only; it does not activate AI generation or payment services.
