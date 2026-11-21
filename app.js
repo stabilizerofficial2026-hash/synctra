@@ -851,7 +851,7 @@ async function openCommunityRoom(room){
   $("community-room-panel").dataset.roomSlug=room.slug;
   const artworkSlug=({open:"open-discussion",tech:"hacker-community"})[room.slug]||room.slug;
   $("community-room-panel").style.setProperty("--room-background", `url("assets/open-minds/${artworkSlug}.webp")`);
-  const wallpaperSlug = room.slug === "satanism" ? "backgrounds/satanism-room" : artworkSlug;
+  const wallpaperSlug = artworkSlug; // Use the included high-resolution room artwork; no missing optional wallpaper path.
   $("community-room-panel").style.setProperty("--room-wallpaper", `url("assets/open-minds/${wallpaperSlug}.webp")`);
   document.body.classList.add("community-room-open");
   $("community-room-title").textContent=room.room_name;
@@ -1413,7 +1413,9 @@ document.addEventListener("click", event => {
   const drawerLinks = [...(drawer?.querySelectorAll('a[href^="#"]') || [])]
     .filter(a => !a.classList.contains("app-nav-brand"));
   const bottomLinks = [...document.querySelectorAll(".mobile-bottom-nav a[href^='#']")];
-  const allLinks = [...drawerLinks, ...bottomLinks];
+  const quickbarLinks = [...document.querySelectorAll(".mobile-quickbar a[href^='#']")];
+  const profileActionLinks = [...document.querySelectorAll(".profile-quick-actions a[href^='#']")];
+  const allLinks = [...new Set([...drawerLinks, ...bottomLinks, ...quickbarLinks, ...profileActionLinks])];
   let activeTarget = "feed-section";
 
   function focusWorkspace(targetId, sourceLink = null, scroll = true) {
@@ -1438,7 +1440,7 @@ document.addEventListener("click", event => {
         (link.dataset.workspace === "garden" && targetId === "groups-section") ||
         (link.dataset.workspace === "create" && targetId === "creative-space") ||
         (link.dataset.workspace === "chat" && targetId === "messages-panel") ||
-        (link.dataset.workspace === "you" && targetId === "profile-card");
+        (link.dataset.workspace === "you" && targetId === "profile-section");
       link.classList.toggle("is-current", active);
       if (active) link.setAttribute("aria-current", "page"); else link.removeAttribute("aria-current");
     });

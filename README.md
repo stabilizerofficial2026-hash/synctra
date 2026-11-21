@@ -150,3 +150,21 @@ See `PHASE28-REFERENCE-MESSENGER-README.md`. This is a presentation-layer update
 - Added a Report group action. One eligible member can submit one report per room.
 - Added `phase30-group-report-suspension.sql`: ten distinct eligible member reports suspend a room for 60 days; an accepted appeal restores it.
 - Apply the Phase 30 SQL migration in the Supabase SQL Editor before deploying the updated app files.
+
+
+## Phase 31 — Dedicated app sections and restored profile workspace
+
+- Moved the existing signed-in profile card into its own `#profile-section` workspace so the Profile destination opens independently instead of being buried inside the dashboard grid.
+- Updated the application drawer to provide distinct destinations for News Feed, Notifications, Private Messages, Group Rooms, Studios, Profile, and Network.
+- Updated the five-item phone navigation to Feed, Rooms, Create, Messages, and Profile.
+- Kept existing profile editor controls, Supabase queries, authentication, message flows, room moderation, and report handling in place.
+- Refined profile cover, avatar overlap, statistics, action controls, mobile gutters, and section widths.
+- The mobile notification shortcut and profile-to-studio shortcut now participate in workspace navigation so they reveal their destination rather than pointing at a collapsed section.
+
+### Validation
+- JavaScript syntax checked with `node --check app.js`.
+- HTML structure, duplicate IDs, required navigation targets, and ZIP integrity checked.
+- No Supabase schema or data migration is included in Phase 31.
+- The existing Phase 30 room-report migration remains a separate required deployment step if it has not already been applied.
+- Live authenticated Android testing is still required at 320px, 360px, 390px, and 430px.
+- Fixed the Satanism room wallpaper reference to use the room artwork actually included in this ZIP, preventing a broken background-image request when the optional Phase 30 background asset is absent.\n
