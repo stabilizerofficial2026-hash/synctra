@@ -2130,3 +2130,99 @@ button{line-height:1.25}
  .community-room-panel .community-message.chat-bubble-own{grid-template-columns:minmax(0,1fr) 26px!important}
  .community-room-panel .community-message-avatar{width:26px!important;height:26px!important}
 }
+
+/* PHASE 34 — hard mobile breakpoint + full-width message rows.
+   Covers Android browsers reporting a 681–900 CSS-pixel viewport. */
+@media (max-width: 900px) {
+  #community-room-panel.community-room-panel:not(.hidden) {
+    display: grid !important;
+    grid-template-columns: 96px minmax(0, 1fr) !important;
+    grid-template-rows: 58px minmax(0, 1fr) !important;
+    grid-template-areas: "top top" "side main" !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px) !important;
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px) !important;
+    padding: 6px !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+  #community-room-panel > .room-header { grid-area: top !important; width:100% !important; min-width:0 !important; }
+  #community-room-panel > .room-side {
+    grid-area: side !important; width:100% !important; min-width:0 !important;
+    max-width:100% !important; height:100% !important; min-height:0 !important;
+    overflow-x:hidden !important; overflow-y:auto !important;
+    display:flex !important; flex-direction:column !important; align-items:stretch !important;
+    padding:8px 5px !important; gap:8px !important;
+  }
+  #community-room-panel > .room-main {
+    grid-area: main !important; display:flex !important; flex-direction:column !important;
+    width:100% !important; min-width:0 !important; max-width:100% !important;
+    min-height:0 !important; height:100% !important; overflow:hidden !important;
+    padding:8px !important; gap:9px !important; box-sizing:border-box !important;
+  }
+  #community-room-panel .room-side .room-icon { width:48px !important; height:48px !important; flex:0 0 48px !important; margin:0 auto !important; }
+  #community-room-panel .room-side .eyebrow { font-size:8px !important; line-height:1.2 !important; text-align:center !important; overflow-wrap:normal !important; }
+  #community-room-panel .room-side-title { font-size:12px !important; line-height:1.2 !important; text-align:center !important; overflow-wrap:break-word !important; }
+  #community-room-panel .room-side .room-desc { display:none !important; }
+  #community-room-panel .room-side-nav { display:grid !important; grid-auto-flow:row !important; grid-template-columns:minmax(0,1fr) !important; gap:6px !important; width:100% !important; min-width:0 !important; }
+  #community-room-panel .room-side-nav button,
+  #community-room-panel .room-side-actions button {
+    display:flex !important; width:100% !important; min-width:0 !important; max-width:100% !important;
+    min-height:40px !important; height:auto !important; justify-content:center !important;
+    text-align:center !important; white-space:normal !important; word-break:normal !important;
+    overflow-wrap:break-word !important; padding:7px 3px !important; font-size:10px !important; line-height:1.2 !important;
+  }
+  #community-room-panel .room-theme-selector-wrap { width:100% !important; min-width:0 !important; }
+  #community-room-panel .room-theme-selector-wrap select { display:block !important; width:100% !important; min-width:0 !important; max-width:100% !important; font-size:9px !important; }
+  #community-room-panel .room-side .slow-mode-pill { align-self:center !important; max-width:100% !important; font-size:9px !important; padding:7px 4px !important; }
+  #community-room-panel .room-side-actions { display:grid !important; grid-template-columns:minmax(0,1fr) !important; gap:6px !important; width:100% !important; min-width:0 !important; margin-top:auto !important; }
+  #community-room-panel .room-report-note { font-size:9px !important; line-height:1.25 !important; text-align:center !important; overflow-wrap:anywhere !important; }
+  #community-room-panel .room-banner { width:100% !important; min-width:0 !important; max-width:100% !important; flex:0 0 auto !important; min-height:104px !important; padding:14px 8px !important; }
+  #community-room-panel .community-chat-list {
+    display:flex !important; flex:1 1 0 !important; flex-direction:column !important;
+    width:100% !important; min-width:0 !important; max-width:100% !important;
+    min-height:0 !important; max-height:none !important; overflow-x:hidden !important;
+    overflow-y:auto !important; padding:8px 2px !important; gap:10px !important;
+  }
+  #community-room-panel .community-chat-list > .community-message {
+    display:grid !important; grid-template-columns:32px minmax(0,1fr) !important;
+    align-self:stretch !important; justify-self:stretch !important;
+    width:100% !important; min-width:0 !important; max-width:100% !important;
+    margin:0 !important; gap:7px !important; box-sizing:border-box !important;
+  }
+  #community-room-panel .community-chat-list > .community-message.chat-bubble-own {
+    grid-template-columns:minmax(0,1fr) 32px !important;
+    width:100% !important; max-width:100% !important; margin-left:0 !important;
+  }
+  #community-room-panel .community-message .avatar-status-wrap { width:32px !important; min-width:32px !important; }
+  #community-room-panel .community-message-avatar { width:30px !important; height:30px !important; }
+  #community-room-panel .community-message-bubble {
+    display:block !important; width:100% !important; min-width:0 !important; max-width:100% !important;
+    box-sizing:border-box !important; overflow:hidden !important; padding:9px 10px !important;
+  }
+  #community-room-panel .community-message-head { display:flex !important; flex-wrap:wrap !important; min-width:0 !important; max-width:100% !important; gap:3px 6px !important; }
+  #community-room-panel .community-message-head b,
+  #community-room-panel .community-message-head span,
+  #community-room-panel .community-message-head small { min-width:0 !important; max-width:100% !important; overflow-wrap:anywhere !important; }
+  #community-room-panel .community-message-bubble p {
+    display:block !important; width:100% !important; min-width:0 !important; max-width:100% !important;
+    white-space:pre-wrap !important; word-break:normal !important; overflow-wrap:anywhere !important;
+    line-height:1.4 !important; font-size:13px !important;
+  }
+  #community-room-panel #community-message-form {
+    display:flex !important; flex:0 0 auto !important; width:100% !important;
+    min-width:0 !important; max-width:100% !important; box-sizing:border-box !important;
+  }
+  #community-room-panel #community-message-body { flex:1 1 0 !important; width:0 !important; min-width:0 !important; max-width:100% !important; }
+  #community-room-panel #community-chat-feedback { flex:0 0 auto !important; width:100% !important; max-width:100% !important; text-align:center !important; overflow-wrap:anywhere !important; }
+}
+@media (max-width: 420px) {
+  #community-room-panel.community-room-panel:not(.hidden) { grid-template-columns:78px minmax(0,1fr) !important; }
+  #community-room-panel .room-side { padding:7px 3px !important; }
+  #community-room-panel .room-side-nav button,
+  #community-room-panel .room-side-actions button { font-size:9px !important; }
+  #community-room-panel > .room-main { padding:6px 5px !important; }
+}
