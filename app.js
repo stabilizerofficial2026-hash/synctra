@@ -65,6 +65,9 @@ const GROUP_THEMES = {
     subtitle: "Philosophy · Symbolism · Self-Determination & Atmospheric Inquiry",
     icon: "⛤",
     artwork: "assets/open-minds/satanism.webp",
+    wallpaper: "assets/open-minds/satanism-wallpaper.webp",
+    bannerArtwork: "assets/open-minds/satanism-banner.webp",
+    emblem: "assets/open-minds/satanism-emblem.webp",
     tone: 155.56
   },
   lgbtq: {
@@ -143,12 +146,24 @@ function applyCommunityTheme(slug, room = null) {
   const theme = getThemeConfig(slug);
   panel.dataset.roomSlug = theme.slug;
   panel.style.setProperty("--room-background", `url("${theme.artwork}")`);
-  panel.style.setProperty("--room-wallpaper", `url("${theme.artwork}")`);
+  panel.style.setProperty("--room-wallpaper", `url("${theme.wallpaper || theme.artwork}")`);
+  panel.style.setProperty("--room-banner-art", `url("${theme.bannerArtwork || theme.artwork}")`);
+  panel.style.setProperty("--room-emblem", theme.emblem ? `url("${theme.emblem}")` : "none");
   if ($("community-room-category")) $("community-room-category").textContent = theme.category;
   if ($("community-banner-category")) $("community-banner-category").textContent = theme.category;
   if ($("community-banner-subtitle")) $("community-banner-subtitle").textContent = theme.subtitle;
   if ($("community-room-icon") && room) {
-    $("community-room-icon").textContent = room.icon || theme.icon;
+    const iconHost = $("community-room-icon");
+    if (theme.emblem) {
+      iconHost.replaceChildren();
+      const emblem = document.createElement("img");
+      emblem.src = theme.emblem;
+      emblem.alt = `${room.room_name} emblem`;
+      emblem.decoding = "async";
+      iconHost.append(emblem);
+    } else {
+      iconHost.textContent = room.icon || theme.icon;
+    }
   }
 }
 
