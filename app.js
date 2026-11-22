@@ -65,19 +65,10 @@ const GROUP_THEMES = {
     subtitle: "Philosophy · Symbolism · Self-Determination & Atmospheric Inquiry",
     icon: "⛤",
     artwork: "assets/open-minds/satanism.webp",
-    // This source package contains one approved Satanism artwork (900x440).
-    // Reuse it for banner and wallpaper until the separate Phase 36 assets arrive.
-    wallpaper: "assets/open-minds/satanism.webp",
-    bannerArtwork: "assets/open-minds/satanism.webp",
+    wallpaper: "assets/open-minds/satanism-wallpaper.webp",
+    bannerArtwork: "assets/open-minds/satanism-banner.webp",
+    emblem: "assets/open-minds/satanism-emblem.webp",
     tone: 155.56
-  },
-  judaism: {
-    slug: "judaism",
-    category: "STAR OF DAVID · FAITH & HERITAGE",
-    subtitle: "History · Scripture · Culture · Dialogue & Reflection",
-    icon: "✡",
-    artwork: "assets/open-minds/judaism.webp",
-    tone: 207.65
   },
   lgbtq: {
     slug: "lgbtq",
