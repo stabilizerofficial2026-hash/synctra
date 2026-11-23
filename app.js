@@ -19,20 +19,12 @@ let currentSubscription = null;
 // REUSABLE COMMUNITY THEME CONFIGURATIONS
 // =========================================================================
 const GROUP_THEMES = {
-  open: {
-    slug: "open-discussion",
-    category: "EMERALD SANCTUARY · HARMONY",
-    subtitle: "Nature · Leaves · Harmony · Open Perspectives",
-    icon: "🌿",
-    artwork: "assets/open-minds/open-discussion.webp",
-    tone: 174.61
-  },
   "open-discussion": {
     slug: "open-discussion",
     category: "EMERALD SANCTUARY · HARMONY",
     subtitle: "Nature · Leaves · Harmony · Open Perspectives",
     icon: "🌿",
-    artwork: "assets/open-minds/open-discussion.webp",
+    artwork: "assets/open-minds/clean/open-discussion.webp",
     tone: 174.61
   },
   activists: {
@@ -40,7 +32,7 @@ const GROUP_THEMES = {
     category: "EARTH & EQUALITY · SOCIAL ACTION",
     subtitle: "Social Justice · Equality · Community · Environmental Stewardship",
     icon: "✊",
-    artwork: "assets/open-minds/activists.webp",
+    artwork: "assets/open-minds/clean/activists.webp",
     tone: 130.81
   },
   christianity: {
@@ -48,7 +40,7 @@ const GROUP_THEMES = {
     category: "SACRED LIGHT · SCRIPTURE & PEACE",
     subtitle: "Faith · Cross · Scripture · Peaceful Sky & Golden Light",
     icon: "✝",
-    artwork: "assets/open-minds/christianity.webp",
+    artwork: "assets/open-minds/clean/christianity.webp",
     tone: 220.0
   },
   hinduism: {
@@ -56,7 +48,7 @@ const GROUP_THEMES = {
     category: "DHARMA & DEVOTION · SACRED HERITAGE",
     subtitle: "Om · Traditional Temple Architecture · Spiritual Philosophy",
     icon: "ॐ",
-    artwork: "assets/open-minds/hinduism.webp",
+    artwork: "assets/open-minds/clean/hinduism.webp",
     tone: 233.08
   },
   satanism: {
@@ -64,9 +56,9 @@ const GROUP_THEMES = {
     category: "OBSIDIAN & CRIMSON · INDIVIDUAL SOVEREIGNTY",
     subtitle: "Philosophy · Symbolism · Self-Determination & Atmospheric Inquiry",
     icon: "⛤",
-    artwork: "assets/open-minds/satanism.webp",
-    wallpaper: "assets/open-minds/satanism-wallpaper.webp",
+    artwork: "assets/open-minds/clean/satanism.webp",
     bannerArtwork: "assets/open-minds/satanism-banner.webp",
+    wallpaper: "assets/open-minds/satanism-wallpaper.webp",
     emblem: "assets/open-minds/satanism-emblem.webp",
     tone: 155.56
   },
@@ -75,7 +67,7 @@ const GROUP_THEMES = {
     category: "PRISM SPECTRUM · INCLUSIVE COMMUNITY",
     subtitle: "Pride · Equality · Creative Identity · Rainbow Harmony",
     icon: "🌈",
-    artwork: "assets/ai-gallery/immersive-color-world.webp",
+    artwork: "assets/open-minds/lgbtq.webp",
     tone: 261.63
   },
   islam: {
@@ -83,7 +75,7 @@ const GROUP_THEMES = {
     category: "CRESCENT & HARMONY · FAITH & CULTURE",
     subtitle: "Beliefs · Culture · History & Contemplation",
     icon: "☪",
-    artwork: "assets/open-minds/islam.webp",
+    artwork: "assets/open-minds/clean/islam.webp",
     tone: 196.0
   },
   buddhism: {
@@ -91,7 +83,7 @@ const GROUP_THEMES = {
     category: "LOTUS STILLNESS · MINDFULNESS",
     subtitle: "Mindfulness · Compassion · Philosophy & Practice",
     icon: "☸",
-    artwork: "assets/open-minds/buddhism.webp",
+    artwork: "assets/open-minds/clean/buddhism.webp",
     tone: 164.81
   },
   taoism: {
@@ -99,7 +91,7 @@ const GROUP_THEMES = {
     category: "FLOWING TAO · NATURAL BALANCE",
     subtitle: "Balance · Nature · Wu Wei & Harmony",
     icon: "☯",
-    artwork: "assets/open-minds/taoism.webp",
+    artwork: "assets/open-minds/clean/taoism.webp",
     tone: 146.83
   },
   science: {
@@ -107,7 +99,7 @@ const GROUP_THEMES = {
     category: "COSMIC INQUIRY · EVIDENCE & DISCOVERY",
     subtitle: "Evidence · Discovery · Curiosity & Rational Exploration",
     icon: "⚛",
-    artwork: "assets/open-minds/science.webp",
+    artwork: "assets/open-minds/clean/science.webp",
     tone: 261.63
   },
   atheism: {
@@ -115,7 +107,7 @@ const GROUP_THEMES = {
     category: "SECULAR REASON · ETHICS & HUMANISM",
     subtitle: "Reason · Secular Ethics · Critical Thought",
     icon: "◎",
-    artwork: "assets/open-minds/atheism.webp",
+    artwork: "assets/open-minds/clean/atheism.webp",
     tone: 185.0
   },
   tech: {
@@ -123,19 +115,29 @@ const GROUP_THEMES = {
     category: "CYBER SANCTUARY · ETHICAL TECH",
     subtitle: "Ethical Cybersecurity · Systems · Digital Craft",
     icon: "⌘",
-    artwork: "assets/open-minds/hacker-community.webp",
+    artwork: "assets/open-minds/clean/hacker-community.webp",
     tone: 207.65
-  }
+  },
+  judaism: {
+    slug: "judaism",
+    category: "FAITH & TRADITION · RESPECTFUL DIALOGUE",
+    subtitle: "Faith · Tradition · Teachings · Respectful Dialogue",
+    icon: "✡️",
+    artwork: "assets/open-minds/clean/judaism.webp",
+    tone: 220.0
+  },
 };
 
 function getThemeConfig(slug) {
-  const normalized = String(slug || "open").toLowerCase().trim();
-  return GROUP_THEMES[normalized] || {
+  const normalized = String(slug || "open-discussion").toLowerCase().trim();
+  // Database slug -> theme key where they differ (the hacker room is stored as hacker-community, themed as tech).
+  const themeAliases = { "hacker-community": "tech" };
+  return GROUP_THEMES[themeAliases[normalized] || normalized] || {
     slug: normalized,
     category: "OPEN MINDS · COMMUNITY",
     subtitle: "Create • Share • Collaborate • Respect",
     icon: "◎",
-    artwork: "assets/open-minds/open-discussion.webp",
+    artwork: "assets/open-minds/clean/open-discussion.webp",
     tone: 174.61
   };
 }
@@ -145,25 +147,34 @@ function applyCommunityTheme(slug, room = null) {
   if (!panel) return;
   const theme = getThemeConfig(slug);
   panel.dataset.roomSlug = theme.slug;
-  panel.style.setProperty("--room-background", `url("${theme.artwork}")`);
+  panel.style.setProperty("--room-background", `url("${theme.bannerArtwork || theme.artwork}")`);
   panel.style.setProperty("--room-wallpaper", `url("${theme.wallpaper || theme.artwork}")`);
-  panel.style.setProperty("--room-banner-art", `url("${theme.bannerArtwork || theme.artwork}")`);
-  panel.style.setProperty("--room-emblem", theme.emblem ? `url("${theme.emblem}")` : "none");
-  if ($("community-room-category")) $("community-room-category").textContent = theme.category;
+  panel.style.setProperty("--room-wallpaper", `url("${theme.artwork}")`);
+  if ($("community-room-category")) $("community-room-category").textContent = "Group Chat";
   if ($("community-banner-category")) $("community-banner-category").textContent = theme.category;
   if ($("community-banner-subtitle")) $("community-banner-subtitle").textContent = theme.subtitle;
-  if ($("community-room-icon") && room) {
-    const iconHost = $("community-room-icon");
-    if (theme.emblem) {
-      iconHost.replaceChildren();
-      const emblem = document.createElement("img");
-      emblem.src = theme.emblem;
-      emblem.alt = `${room.room_name} emblem`;
-      emblem.decoding = "async";
-      iconHost.append(emblem);
-    } else {
-      iconHost.textContent = room.icon || theme.icon;
+  const emblem = $("community-room-icon");
+  if (emblem) {
+    const img = document.createElement("img");
+    img.src = theme.emblem || `assets/rooms/${theme.slug}-emblem.webp`;
+    img.alt = "";
+    img.width = 256;
+    img.height = 256;
+    emblem.replaceChildren(img);
+  }
+  panel.style.setProperty("--room-sidebar-art", `url("assets/rooms/${theme.slug}-sidebar.webp")`);
+  const bannerEl = panel.querySelector(".room-banner");
+  if (bannerEl) {
+    let bannerEmblem = bannerEl.querySelector(".room-banner-emblem");
+    if (!bannerEmblem) {
+      bannerEmblem = document.createElement("img");
+      bannerEmblem.className = "room-banner-emblem";
+      bannerEmblem.alt = "";
+      bannerEmblem.width = 256;
+      bannerEmblem.height = 256;
+      bannerEl.prepend(bannerEmblem);
     }
+    bannerEmblem.src = theme.emblem || `assets/rooms/${theme.slug}-emblem.webp`;
   }
 }
 
@@ -1263,12 +1274,13 @@ async function openGroup(group) {
 async function loadGroupMessages() {
   if (!activeGroupId) return;
   $("group-chat-list").replaceChildren();
-  const { data: rows, error } = await supabase
+  const { data: newestFirst, error } = await supabase
     .from("group_messages")
     .select("id,sender_id,body,created_at")
     .eq("group_id", activeGroupId)
-    .order("created_at", { ascending: true })
+    .order("created_at", { ascending: false })
     .limit(100);
+  const rows = [...(newestFirst || [])].reverse();
   if (error)
     return message($("groups-message"), "Messages unavailable: " + error.message, true);
   const ids = [...new Set((rows || []).map((r) => r.sender_id))];
@@ -1299,8 +1311,8 @@ async function loadGroupMessages() {
     avatar.className = "group-message-avatar";
     avatar.setAttribute("aria-hidden", "true");
     avatar.textContent = name.trim().charAt(0).toUpperCase();
-    const onlineDot = node("span", "avatar-online-dot");
-    avatarWrap.append(avatar, onlineDot);
+    // No presence data exists in this project yet, so no online dot is rendered.
+    avatarWrap.append(avatar);
 
     const bubble = document.createElement("div");
     bubble.className = "group-message-bubble";
@@ -1322,7 +1334,9 @@ async function loadGroupMessages() {
     const body = document.createElement("p");
     body.textContent = row.body;
     bubble.append(head, body);
-    item.append(avatarWrap, bubble);
+    // Own rows place the bubble first so the grid's wide/narrow columns match DOM order.
+    if (isOwn) item.append(bubble, avatarWrap);
+    else item.append(avatarWrap, bubble);
     $("group-chat-list").append(item);
   }
   $("group-chat-list").scrollTop = $("group-chat-list").scrollHeight;
@@ -1751,13 +1765,14 @@ async function loadCommunityMessages() {
   const roomId = activeCommunityRoom.id;
   const loadToken = ++communityMessageLoadToken;
   const host = $("community-chat-list");
-  const { data: rows, error } = await supabase
+  const { data: newestFirst, error } = await supabase
     .from("community_messages")
     .select("id,sender_id,body,created_at")
     .eq("room_id", roomId)
     .eq("moderation_status", "published")
-    .order("created_at", { ascending: true })
+    .order("created_at", { ascending: false })
     .limit(100);
+  const rows = [...(newestFirst || [])].reverse();
   if (loadToken !== communityMessageLoadToken || activeCommunityRoom?.id !== roomId) return;
   if (error) {
     message($("community-chat-feedback"), "Messages unavailable: " + error.message, true);
@@ -1798,8 +1813,8 @@ async function loadCommunityMessages() {
     avatar.className = "community-message-avatar";
     avatar.setAttribute("aria-hidden", "true");
     avatar.textContent = (names.get(row.sender_id) || "S").trim().charAt(0).toUpperCase();
-    const onlineDot = node("span", "avatar-online-dot");
-    avatarWrap.append(avatar, onlineDot);
+    // No presence data exists in this project yet, so no online dot is rendered.
+    avatarWrap.append(avatar);
 
     const bubble = document.createElement("div");
     bubble.className = "community-message-bubble";
@@ -1822,7 +1837,9 @@ async function loadCommunityMessages() {
     const body = document.createElement("p");
     body.textContent = row.body;
     bubble.append(head, body);
-    item.append(avatarWrap, bubble);
+    // Own rows place the bubble first so the grid's wide/narrow columns match DOM order.
+    if (isOwn) item.append(bubble, avatarWrap);
+    else item.append(avatarWrap, bubble);
 
     if (!isOwn) {
       const report = document.createElement("button");
@@ -1907,7 +1924,7 @@ function toggleAmbientSound() {
     $("community-audio-toggle").setAttribute("aria-pressed", String(communityAudioOn));
   }
   if (communityAudioOn) {
-    startCommunityAmbience(activeCommunityRoom?.soundscape || activeCommunityRoom?.slug || "open");
+    startCommunityAmbience(activeCommunityRoom?.soundscape || activeCommunityRoom?.slug || "open-discussion");
     if ($("community-audio-status"))
       $("community-audio-status").textContent = "Ambient sound is playing";
     if ($("profile-sound-status"))
@@ -1992,6 +2009,8 @@ $("community-message-form").addEventListener("submit", async (e) => {
   }
   input.value = "";
   $("community-emoji-tray")?.classList.add("hidden");
+  // Reload so the sender sees their message even if realtime is delayed.
+  await loadCommunityMessages();
   message(
     $("community-chat-feedback"),
     "Message sent. Slow mode allows one message every 15 seconds."

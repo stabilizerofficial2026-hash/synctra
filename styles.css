@@ -55,7 +55,7 @@
   --text:#f0fdf4;--muted:#9cc6b2;--teal:#10b981;--teal2:#6ee7b7;
   --emerald:#34d399;--gold:#cca35e;--danger:#ff9caa;
 }
-html{scroll-behavior:smooth}
+
 body{
   background:
     radial-gradient(ellipse at 12% 5%,#123d2c66 0,transparent 34%),
@@ -425,7 +425,7 @@ footer{border-color:#174a32;color:#71927e}
 .plan-card{border-color:#23824d;background:linear-gradient(145deg,#071a10,#020906)}
 #moderator-panel{margin-top:24px}
 @media(max-width:1000px){.dashboard{grid-template-columns:175px minmax(0,1fr);gap:14px}.dash-grid{grid-template-columns:1fr}.profile-card{display:grid;grid-template-columns:85px 1fr;column-gap:15px;align-items:center}.profile-card .avatar{grid-row:1 / span 4}.profile-card .eyebrow,.profile-card h2,.profile-card .muted,.profile-card .profile-bio,.profile-card .small,.profile-card .status-line,.profile-card form{grid-column:2}.social-grid{grid-template-columns:1fr}}
-@media(max-width:680px){.shell{padding:0 12px}.topbar{height:65px;padding:0 2px}.dashboard{display:flex;flex-direction:column;gap:13px;padding-top:12px}.dash-head{order:0;width:100%;padding:4px 2px 10px}.app-nav{order:1;position:static;min-height:0;width:100%;display:flex;flex-direction:row;overflow-x:auto;gap:5px;padding:8px;border-radius:14px;scrollbar-width:none}.app-nav::-webkit-scrollbar{display:none}.app-nav a{white-space:nowrap;padding:10px;font-size:11px}.app-nav a.app-nav-brand{display:none}.member-hero{order:2;width:100%;margin:0}.hero-art{min-height:160px;padding:23px 13px}.hero-art h2{font-size:19px}.hero-art p{font-size:11px}.membership-gate{order:3;width:100%}#member-content{order:4;width:100%}.dash-grid{display:flex;flex-direction:column}.profile-card{display:block}.profile-card .avatar{margin-bottom:12px}.feed-section,.social-nav,.social-hub,.groups-section,#moderator-panel{width:100%}.social-nav{overflow-x:auto;flex-wrap:nowrap}.social-nav a{white-space:nowrap}.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dash-head h1{font-size:25px}.dash-head .muted{font-size:12px}}
+@media(max-width:680px){.shell{padding:0 12px}.topbar{height:65px;padding:0 2px}.dashboard{display:flex;flex-direction:column;gap:13px;padding-top:12px}.dash-head{order:0;width:100%;padding:4px 2px 10px}.app-nav{order:1;position:static;min-height:0;width:100%;display:flex;flex-direction:row;overflow-x:auto;gap:5px;padding:8px;border-radius:14px;scrollbar-width:none}.app-nav::-webkit-scrollbar{display:none}.app-nav a{white-space:nowrap;padding:10px;font-size:11px}.member-hero{order:2;width:100%;margin:0}.hero-art{min-height:160px;padding:23px 13px}.hero-art h2{font-size:19px}.hero-art p{font-size:11px}.membership-gate{order:3;width:100%}#member-content{order:4;width:100%}.dash-grid{display:flex;flex-direction:column}.profile-card{display:block}.profile-card .avatar{margin-bottom:12px}.feed-section,.social-nav,.social-hub,.groups-section,#moderator-panel{width:100%}.social-nav{overflow-x:auto;flex-wrap:nowrap}.social-nav a{white-space:nowrap}.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dash-head h1{font-size:25px}.dash-head .muted{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.app-nav a{transition:none}}
 
 
@@ -481,7 +481,7 @@ footer{border-color:#174a32;color:#71927e}
   .mobile-quickbar .quickbar-brand{display:flex;flex-direction:column;align-items:center;font:700 15px "Space Grotesk";color:#baffd2;letter-spacing:.4px}.mobile-quickbar .quickbar-brand small{font:600 7px "DM Sans";letter-spacing:1.5px;color:#7eaa8d;margin-top:1px}
   .mobile-quickbar a{width:38px;height:38px;display:grid;place-items:center;border:1px solid #1b7046;border-radius:12px;color:#9af0bf;text-decoration:none}.mobile-quickbar .menu-toggle{display:flex;align-items:center;gap:7px;min-height:38px;padding:7px 11px;border-radius:11px;font-size:12px}.mobile-quickbar .menu-toggle span:first-child{font-size:20px;line-height:1}
   .app-nav{display:none!important;order:1;position:fixed;z-index:120;top:132px;left:12px;bottom:88px;min-height:0;width:min(82vw,320px);flex-direction:column;overflow-y:auto;overscroll-behavior:contain;padding:14px;border-radius:18px;border:1px solid #2b9b65;background:linear-gradient(180deg,#071b11f8,#020906fa);box-shadow:0 22px 70px #000c}
-  .app-nav.menu-open{display:flex!important}
+  
   .app-nav.menu-open::before{content:"";position:fixed;z-index:-1;inset:0;background:#0009;backdrop-filter:blur(2px)}
   .app-nav a{white-space:normal;padding:13px;font-size:14px;border-radius:12px}
   .app-nav a.app-nav-brand{display:none}
@@ -872,7 +872,7 @@ body.community-room-open{overflow:hidden!important}
 :root{--phone-safe-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:76px;scroll-padding-bottom:calc(88px + var(--phone-safe-bottom));-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{min-width:320px;overflow-x:hidden}
-img,video,canvas,svg{max-width:100%}
+
 button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
 button,a{touch-action:manipulation}
 @media(max-width:680px){
@@ -1104,7 +1104,7 @@ button,a{touch-action:manipulation}
 .room-composer input{flex:1;min-width:0;border:0!important;background:transparent!important;box-shadow:none!important;padding:10px 0!important}
 .room-send{width:48px;height:48px;min-height:0!important;padding:0!important;border-radius:50%!important;display:grid;place-items:center;font-size:18px!important;flex:0 0 auto}
 @media (min-width:760px){
-  .community-room-panel{grid-template-columns:250px minmax(0,1fr);align-items:start}
+  .community-room-panel{align-items:start}
 }
 @media (max-width:759px){
   .room-side{grid-template-columns:auto 1fr;grid-template-areas:"icon eyebrow" "icon desc" "nav nav" "pill pill" "actions actions";align-items:center;padding:14px}
@@ -1120,9 +1120,9 @@ button,a{touch-action:manipulation}
 .community-message.chat-bubble-incoming,.community-message.chat-bubble-own{background:none!important;border:0!important;border-radius:0!important;justify-self:stretch;align-self:end}
 .community-message.chat-bubble-own{justify-self:end;max-width:86%}
 /* The room overlay uses flex by default; the messenger layout needs a grid, so override the overlay's display. */
-.community-room-panel:not(.hidden){display:grid!important;grid-template-columns:minmax(0,1fr)!important;align-content:start;overflow-y:auto!important}
+.community-room-panel:not(.hidden){display:grid!important;align-content:start;overflow-y:auto!important}
 @media (min-width:760px){
-  .community-room-panel:not(.hidden){grid-template-columns:250px minmax(0,1fr)!important;align-items:start;padding:clamp(18px,3vw,32px)!important;overflow:hidden!important}
+  .community-room-panel:not(.hidden){align-items:start;padding:clamp(18px,3vw,32px)!important;overflow:hidden!important}
   .room-main{height:100%;min-height:0}
   .community-room-panel .community-chat-list{max-height:none;flex:1;min-height:0}
   .room-side{position:sticky;top:0}
@@ -1138,7 +1138,30 @@ button,a{touch-action:manipulation}
 .community-room-panel[data-room-slug="islam"]{--accent:#5ef59a;--accent-soft:#e6c65a55;--accent-deep:#1faa64;--accent-glow:#e6c65a2e}
 .community-room-panel[data-room-slug="christianity"]{--accent:#ffd24a;--accent-soft:#ffd24a4d;--accent-deep:#e0a80f;--accent-glow:#ffd24a33}
 .community-room-panel[data-room-slug="hinduism"]{--accent:#ff9a2e;--accent-soft:#ff9a2e4d;--accent-deep:#e06b10;--accent-glow:#ff9a2e33}
+.community-room-panel[data-room-slug="judaism"]{--accent:#4da3ff;--accent-soft:#4da3ff4d;--accent-deep:#2a6fd6;--accent-glow:#4da3ff33}
+#community-room-panel[data-room-slug="judaism"]{--gold:#e7c26a;--gold-soft:rgba(231,194,106,.5)}
+#community-room-panel[data-room-slug="judaism"] .room-banner{border-color:var(--gold)!important}
+#community-room-panel[data-room-slug="judaism"] #community-side-title{color:#f5d98a!important}
+#community-room-panel[data-room-slug="judaism"] .chat-day-separator{border-color:var(--gold)!important;color:#f5d98a!important}
 .community-room-panel[data-room-slug="satanism"]{--accent:#ff3d3d;--accent-soft:#ff3d3d4d;--accent-deep:#b81818;--accent-glow:#ff3d3d33}
+#community-room-panel[data-room-slug="satanism"] #community-room-title,#community-room-panel[data-room-slug="satanism"] #community-banner-category{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;}
+#community-room-panel[data-room-slug="satanism"]{--gold:#d4af37;--gold-soft:rgba(212,175,55,.55);border-color:var(--gold)!important;box-shadow:inset 0 0 0 1px rgba(120,10,16,.6),inset 0 0 0 3px rgba(0,0,0,.55),inset 0 0 0 4px rgba(212,175,55,.42),0 0 28px rgba(190,20,30,.35)!important}
+#community-room-panel[data-room-slug="satanism"] .room-banner{border-color:var(--gold)!important;box-shadow:0 0 0 1px rgba(120,10,16,.7),0 0 26px rgba(200,25,35,.45)!important}
+#community-room-panel[data-room-slug="satanism"] .room-side-nav > .room-side-item{background:transparent!important;border:0!important;border-bottom:1px solid rgba(212,175,55,.28)!important;border-radius:0!important;box-shadow:none!important}
+#community-room-panel[data-room-slug="satanism"] .room-side-nav > .room-side-item.is-active{background:linear-gradient(90deg,rgba(200,29,43,.38),rgba(200,29,43,0))!important;border-left:2px solid #d4af37!important;border-bottom-color:transparent!important}
+#community-room-panel[data-room-slug="satanism"] .room-banner{background-image:linear-gradient(180deg,rgba(0,0,0,.02) 0%,rgba(0,0,0,.28) 60%,rgba(0,0,0,.72) 100%),var(--room-background)!important;padding-bottom:30px!important;min-height:176px!important}
+#community-room-panel[data-room-slug="satanism"] #community-banner-subtitle{position:absolute!important;left:8px!important;right:8px!important;bottom:6px!important;margin:0!important;text-align:center!important;}
+#community-room-panel[data-room-slug="satanism"] .room-banner-emblem{display:none!important}
+#community-room-panel[data-room-slug="satanism"] .room-side{border-color:var(--gold-soft)!important}
+#community-room-panel[data-room-slug="satanism"] #community-side-title{color:#f3d978!important}
+#community-room-panel[data-room-slug="satanism"] .community-message-bubble{border-color:var(--gold-soft)!important;background:linear-gradient(160deg,rgba(38,4,8,.94),rgba(10,2,4,.97))!important}
+#community-room-panel[data-room-slug="satanism"] .community-message.chat-bubble-own .community-message-bubble{border-color:var(--gold)!important;background:linear-gradient(160deg,rgba(110,8,18,.55),rgba(30,3,6,.96))!important}
+#community-room-panel[data-room-slug="satanism"] #community-message-form{border:1.5px solid var(--gold)!important;background:rgba(10,2,4,.94)!important;border-radius:999px!important}
+#community-room-panel[data-room-slug="satanism"] #community-message-body{color:#f7e9d2!important}
+#community-room-panel[data-room-slug="satanism"] #community-emoji-toggle{border-color:var(--gold)!important;color:#f3d978!important}
+#community-room-panel[data-room-slug="satanism"] #community-message-form button[type="submit"]{background:linear-gradient(145deg,#c81d2b,#6d0b14)!important;border:1.5px solid var(--gold)!important;color:#fff!important}
+#community-room-panel[data-room-slug="satanism"] .chat-day-separator{border-color:var(--gold)!important;color:#f3d978!important}
+#community-room-panel[data-room-slug="satanism"]>.room-main{background-image:linear-gradient(180deg,rgba(4,0,2,.12) 0%,rgba(4,0,2,.42) 100%),var(--room-wallpaper)!important;background-size:cover!important;background-position:center bottom!important}
 .community-room-panel[data-room-slug="atheism"]{--accent:#4fb3ff;--accent-soft:#4fb3ff4d;--accent-deep:#1d78d6;--accent-glow:#4fb3ff33}
 .community-room-panel[data-room-slug="science"]{--accent:#39f59a;--accent-soft:#39f59a4d;--accent-deep:#16c96e;--accent-glow:#39f59a33}
 .community-room-panel[data-room-slug="activists"]{--accent:#6dff6d;--accent-soft:#6dff6d4d;--accent-deep:#2db82d;--accent-glow:#6dff6d33}
@@ -1269,7 +1292,7 @@ button,a{touch-action:manipulation}
    All rules are presentation-only; existing message, membership and Supabase flows remain intact. */
 .community-room-panel:not(.hidden){
   display:grid!important;
-  grid-template-columns:clamp(88px,21vw,176px) minmax(0,1fr)!important;
+  
   grid-template-rows:62px minmax(0,1fr)!important;
   grid-template-areas:"top top" "side main"!important;
   gap:0!important;
@@ -1485,7 +1508,7 @@ button,a{touch-action:manipulation}
 }
 #profile-card .profile-quick-actions>*{min-width:0;min-height:48px!important;margin:0!important}
 @media(max-width:600px){
-  .community-room-panel:not(.hidden){grid-template-columns:82px minmax(0,1fr)!important;grid-template-rows:58px minmax(0,1fr)!important}
+  .community-room-panel:not(.hidden){grid-template-rows:58px minmax(0,1fr)!important}
   .community-room-panel>.room-header{gap:7px;padding:6px 8px}
   .room-back{width:36px;height:36px;flex-basis:36px;font-size:26px}
   .room-brand-mark{width:36px;height:36px;flex-basis:36px;font-size:17px}
@@ -1520,7 +1543,7 @@ button,a{touch-action:manipulation}
   #profile-card>.avatar{margin-top:-36px!important}
 }
 @media(max-width:360px){
-  .community-room-panel:not(.hidden){grid-template-columns:76px minmax(0,1fr)!important}
+  .community-room-panel:not(.hidden){}
   .room-brand-copy strong{font-size:15px}
   .room-brand-copy small{font-size:8px}
   .room-back,.community-room-panel .room-close{width:32px;height:32px;flex-basis:32px}
@@ -1543,7 +1566,6 @@ button,a{touch-action:manipulation}
   background:conic-gradient(#ff4d6d,#ffb84d,#f9f871,#4ade80,#38bdf8,#a78bfa,#ff4d6d);
   color:#050505;text-shadow:none;box-shadow:0 0 18px #d946ef55;
 }
-.community-room-panel #community-member-count::before{content:"Members ";}
 
 /* Phase 29 — hard alignment pass for the Open Minds room on real phone viewports.
    Keep the reference's compact left rail, but prevent the sidebar and conversation
@@ -1556,15 +1578,12 @@ button,a{touch-action:manipulation}
   border:1px solid var(--accent-soft)!important;
   border-radius:18px!important;
   overflow:hidden!important;
-  grid-template-columns:clamp(104px,21vw,150px) minmax(0,1fr)!important;
+  
   grid-template-rows:62px minmax(0,1fr)!important;
   grid-template-areas:"top top" "side main"!important;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.025)!important;
 }
-.community-room-panel:not(.hidden),
-.community-room-panel:not(.hidden) *{
-  box-sizing:border-box!important;
-}
+
 .community-room-panel>.room-header{
   width:100%!important;min-width:0!important;max-width:100%!important;
   border:0!important;border-bottom:1px solid var(--accent-soft)!important;
@@ -1624,14 +1643,14 @@ button,a{touch-action:manipulation}
 
 @media(max-width:420px){
   .community-room-panel:not(.hidden){
-    grid-template-columns:clamp(92px,24vw,112px) minmax(0,1fr)!important;
+    
     grid-template-rows:56px minmax(0,1fr)!important;
     border-radius:14px!important;
   }
   .community-room-panel>.room-header{gap:5px!important;padding:5px 7px!important}
   .room-back,.community-room-panel .room-close{width:32px!important;height:32px!important;flex-basis:32px!important}
   .room-brand-mark{width:32px!important;height:32px!important;flex-basis:32px!important}
-  .community-room-panel>.room-side{padding:9px 5px!important;gap:7px!important}
+  
   .community-room-panel .room-side .room-desc{font-size:9px!important}
   .community-room-panel>.room-main{padding:7px 6px calc(6px + env(safe-area-inset-bottom))!important}
 }
@@ -1644,7 +1663,7 @@ button,a{touch-action:manipulation}
   width:auto!important;height:auto!important;max-width:none!important;max-height:none!important;
   margin:0!important;
   display:grid!important;
-  grid-template-columns:clamp(104px,23vw,178px) minmax(0,1fr)!important;
+  
   grid-template-rows:62px minmax(0,1fr)!important;
   grid-template-areas:"top top" "side main"!important;
   gap:0!important;
@@ -1788,7 +1807,7 @@ button,a{touch-action:manipulation}
 }
 @media(max-width:420px){
   .community-room-panel:not(.hidden){
-    grid-template-columns:clamp(88px,24vw,104px) minmax(0,1fr)!important;
+    
     grid-template-rows:56px minmax(0,1fr)!important;
     padding:calc(7px + env(safe-area-inset-top)) 6px calc(7px + env(safe-area-inset-bottom))!important;
     border-radius:15px!important;
@@ -1809,7 +1828,7 @@ button,a{touch-action:manipulation}
   .community-room-panel #community-message-form .room-send{flex-basis:42px!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important}
 }
 @media(min-width:900px){
-  .community-room-panel:not(.hidden){grid-template-columns:220px minmax(0,1fr)!important}
+  .community-room-panel:not(.hidden){}
 }
 
 /* Keep the focal moon visible behind the conversation rather than hidden beneath the banner. */
@@ -2058,12 +2077,12 @@ button{line-height:1.25}
 }
 @media(max-width:380px){
   .community-room-panel:not(.hidden){
-    grid-template-columns:78px minmax(0,1fr)!important;
+    
     padding:calc(5px + env(safe-area-inset-top)) 4px calc(5px + env(safe-area-inset-bottom))!important;
   }
   .community-room-panel>.room-header{gap:4px!important;padding:4px!important}
   .community-room-panel .room-brand-mark{width:28px!important;height:28px!important;flex-basis:28px!important}
-  .community-room-panel .room-brand-copy strong{font-size:13px!important}
+  
   .community-room-panel .room-brand-copy small{font-size:7px!important}
   .community-room-panel .room-side{padding:7px 3px!important}
   .community-room-panel .room-main{padding:5px 4px calc(5px + env(safe-area-inset-bottom))!important}
@@ -2079,7 +2098,7 @@ button{line-height:1.25}
 
 
 /* PHASE 33 — repair actual community-room mobile grid and prevent vertical word stacking. */
-.community-room-panel:not(.hidden){grid-template-columns:clamp(92px,22vw,176px) minmax(0,1fr)!important;grid-template-rows:60px minmax(0,1fr)!important;grid-template-areas:"top top" "side main"!important;align-items:stretch!important}
+.community-room-panel:not(.hidden){grid-template-rows:60px minmax(0,1fr)!important;grid-template-areas:"top top" "side main"!important;align-items:stretch!important}
 .community-room-panel>.room-header{grid-area:top!important;min-width:0!important;overflow:hidden!important}
 .community-room-panel>.room-side{grid-area:side!important;min-width:0!important;overflow-x:hidden!important;overflow-y:auto!important}
 .community-room-panel>.room-main{grid-area:main!important;display:flex!important;flex-direction:column!important;min-width:0!important;min-height:0!important;overflow:hidden!important}
@@ -2095,7 +2114,7 @@ button{line-height:1.25}
 .community-room-panel #community-message-body{min-width:0!important;max-width:100%!important}
 .community-room-panel #community-chat-feedback{flex:0 0 auto!important;max-width:100%!important;overflow-wrap:break-word!important}
 @media(max-width:680px){
- .community-room-panel:not(.hidden){grid-template-columns:92px minmax(0,1fr)!important;grid-template-rows:56px minmax(0,1fr)!important;padding:calc(6px + env(safe-area-inset-top)) 5px calc(6px + env(safe-area-inset-bottom))!important}
+ .community-room-panel:not(.hidden){grid-template-rows:56px minmax(0,1fr)!important;padding:calc(6px + env(safe-area-inset-top)) 5px calc(6px + env(safe-area-inset-bottom))!important}
  .community-room-panel>.room-header{gap:6px!important;padding:5px 7px!important}
  .community-room-panel>.room-side{padding:9px 5px!important;gap:8px!important}
  .community-room-panel>.room-main{padding:7px 6px calc(6px + env(safe-area-inset-bottom))!important;gap:8px!important}
@@ -2121,7 +2140,7 @@ button{line-height:1.25}
  .community-room-panel #community-message-form .room-send{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;flex-basis:42px!important}
 }
 @media(max-width:380px){
- .community-room-panel:not(.hidden){grid-template-columns:84px minmax(0,1fr)!important;grid-template-rows:52px minmax(0,1fr)!important}
+ .community-room-panel:not(.hidden){grid-template-rows:52px minmax(0,1fr)!important}
  .community-room-panel .room-brand-copy strong{font-size:13px!important}
  .community-room-panel .room-brand-copy small{font-size:8px!important}
  .community-room-panel .room-side-nav button,.community-room-panel .room-side-actions button{font-size:9px!important}
@@ -2136,7 +2155,7 @@ button{line-height:1.25}
 @media (max-width: 900px) {
   #community-room-panel.community-room-panel:not(.hidden) {
     display: grid !important;
-    grid-template-columns: 96px minmax(0, 1fr) !important;
+    
     grid-template-rows: 58px minmax(0, 1fr) !important;
     grid-template-areas: "top top" "side main" !important;
     width: 100% !important;
@@ -2166,7 +2185,7 @@ button{line-height:1.25}
   #community-room-panel .room-side .room-icon { width:48px !important; height:48px !important; flex:0 0 48px !important; margin:0 auto !important; }
   #community-room-panel .room-side .eyebrow { font-size:8px !important; line-height:1.2 !important; text-align:center !important; overflow-wrap:normal !important; }
   #community-room-panel .room-side-title { font-size:12px !important; line-height:1.2 !important; text-align:center !important; overflow-wrap:break-word !important; }
-  #community-room-panel .room-side .room-desc { display:none !important; }
+  
   #community-room-panel .room-side-nav { display:grid !important; grid-auto-flow:row !important; grid-template-columns:minmax(0,1fr) !important; gap:6px !important; width:100% !important; min-width:0 !important; }
   #community-room-panel .room-side-nav button,
   #community-room-panel .room-side-actions button {
@@ -2220,7 +2239,7 @@ button{line-height:1.25}
   #community-room-panel #community-chat-feedback { flex:0 0 auto !important; width:100% !important; max-width:100% !important; text-align:center !important; overflow-wrap:anywhere !important; }
 }
 @media (max-width: 420px) {
-  #community-room-panel.community-room-panel:not(.hidden) { grid-template-columns:78px minmax(0,1fr) !important; }
+  #community-room-panel.community-room-panel:not(.hidden) {  }
   #community-room-panel .room-side { padding:7px 3px !important; }
   #community-room-panel .room-side-nav button,
   #community-room-panel .room-side-actions button { font-size:9px !important; }
@@ -2233,7 +2252,7 @@ button{line-height:1.25}
    All sizing is constrained to the room panel so message content cannot collapse into a thin strip. */
 #community-room-panel.community-room-panel:not(.hidden) {
   display:grid!important;
-  grid-template-columns: minmax(116px, 22%) minmax(0, 1fr)!important;
+  
   grid-template-rows: 62px minmax(0, 1fr)!important;
   grid-template-areas:"top top" "side main"!important;
   width:100vw!important;height:100dvh!important;max-width:100vw!important;max-height:100dvh!important;
@@ -2316,7 +2335,7 @@ button{line-height:1.25}
 }
 @media (max-width: 900px) {
   #community-room-panel.community-room-panel:not(.hidden) {
-    grid-template-columns:78px minmax(0,1fr)!important;
+    
     grid-template-rows:54px minmax(0,1fr)!important;
     padding:5px!important;border-radius:16px!important;
   }
@@ -2324,7 +2343,7 @@ button{line-height:1.25}
   #community-room-panel .room-brand-copy strong {font-size:13px!important;}
   #community-room-panel .room-brand-copy small {font-size:8px!important;}
   #community-room-panel .room-header-actions {gap:4px!important;min-width:0!important;}
-  #community-room-panel .room-header-btn {width:36px!important;height:36px!important;min-width:36px!important;}
+  
   #community-room-panel .room-back,#community-room-panel .room-close,
   #community-room-panel .room-brand-mark {width:34px!important;height:34px!important;min-width:34px!important;flex:0 0 34px!important;}
   #community-room-panel > .room-side {padding:8px 4px!important;gap:7px!important;}
@@ -2361,323 +2380,77 @@ button{line-height:1.25}
   #community-room-panel #community-message-form .room-send {flex:0 0 40px!important;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;}
 }
 @media (max-width: 360px) {
-  #community-room-panel.community-room-panel:not(.hidden) {grid-template-columns:70px minmax(0,1fr)!important;}
+  #community-room-panel.community-room-panel:not(.hidden) {}
   #community-room-panel .room-side-nav button,#community-room-panel .room-side-actions button {font-size:8px!important;}
   #community-room-panel .community-message-head b {font-size:10px!important;}
 }
 
-/* SyncTrA Satanism room — reference-led crimson / obsidian skin.
-   Scoped to this room only; other community themes retain their existing appearance. */
-#community-room-panel[data-room-slug="satanism"] {
-  --accent:#ff3a32;
-  --accent-soft:rgba(255,58,50,.48);
-  --accent-deep:#8e090d;
-  --accent-glow:rgba(255,25,25,.42);
-  --room-background:url("assets/open-minds/satanism-wallpaper.webp");
-  --room-wallpaper:url("assets/open-minds/satanism-wallpaper.webp");
-  --room-banner-art:url("assets/open-minds/satanism-banner.webp");
-  color:#fff2e8;
-  background:#080303!important;
-}
-#community-room-panel[data-room-slug="satanism"]::before {
-  background-image:linear-gradient(180deg,rgba(5,0,0,.30),rgba(5,0,0,.68) 58%,rgba(5,0,0,.92)),var(--room-wallpaper);
-  background-size:cover;
-  background-position:center 44%;
-}
-#community-room-panel[data-room-slug="satanism"]::after {
-  background:radial-gradient(ellipse at 50% 4%,rgba(255,35,25,.20),transparent 48%),radial-gradient(ellipse at 50% 100%,rgba(255,20,15,.12),transparent 52%);
-}
-#community-room-panel[data-room-slug="satanism"] > .room-header,
-#community-room-panel[data-room-slug="satanism"] > .room-side,
-#community-room-panel[data-room-slug="satanism"] .room-banner,
-#community-room-panel[data-room-slug="satanism"] .room-composer {
-  border:1px solid rgba(255,91,62,.72);
-  box-shadow:0 0 14px rgba(255,24,20,.20),inset 0 0 14px rgba(255,30,20,.08);
-}
-#community-room-panel[data-room-slug="satanism"] > .room-header {
-  background:linear-gradient(100deg,rgba(12,3,3,.98),rgba(39,4,5,.94),rgba(8,3,3,.98));
-}
-#community-room-panel[data-room-slug="satanism"] .room-brand-mark {
-  color:#ffdbb0;
-  border-color:#ff6a43;
-  background:radial-gradient(circle,#8f080d,#160304 72%);
-  box-shadow:0 0 18px rgba(255,35,25,.48);
-}
-#community-room-panel[data-room-slug="satanism"] > .room-side {
-  background:linear-gradient(180deg,rgba(10,1,2,.58),rgba(8,1,2,.94)),var(--room-wallpaper) center/cover no-repeat;
-  border-color:rgba(255,85,57,.72);
-}
-#community-room-panel[data-room-slug="satanism"] .room-icon {
-  width:clamp(62px,9vw,104px);
-  height:clamp(62px,9vw,104px);
-  margin-inline:auto;
-  padding:5px;
-  border:1px solid #ff694b;
-  border-radius:50%;
-  background:radial-gradient(circle,#350507,#080202 72%);
-  box-shadow:0 0 24px rgba(255,25,25,.50),inset 0 0 12px rgba(255,95,60,.18);
-}
-#community-room-panel[data-room-slug="satanism"] .room-icon span {display:grid;place-items:center;width:100%;height:100%;}
-#community-room-panel[data-room-slug="satanism"] .room-icon img {
-  display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 7px rgba(255,35,25,.72));
-}
-#community-room-panel[data-room-slug="satanism"] .room-side .eyebrow,
-#community-room-panel[data-room-slug="satanism"] .room-banner-tag {color:#ffc18c;letter-spacing:.12em;}
-#community-room-panel[data-room-slug="satanism"] .room-side-title {color:#fff1df;text-shadow:0 0 12px rgba(255,50,35,.38);}
-#community-room-panel[data-room-slug="satanism"] .room-side-nav button,
-#community-room-panel[data-room-slug="satanism"] .room-side-actions button {
-  border-color:rgba(255,103,74,.42);
-  color:#f8e8dc;
-  background:linear-gradient(100deg,rgba(36,5,7,.92),rgba(9,3,4,.86));
-}
-#community-room-panel[data-room-slug="satanism"] .room-side-nav button.is-active,
-#community-room-panel[data-room-slug="satanism"] .room-side-nav button:hover {
-  border-color:#ff5143;
-  background:linear-gradient(100deg,#9f1015,rgba(35,4,6,.96));
-  box-shadow:0 0 16px rgba(255,30,25,.42);
-}
-#community-room-panel[data-room-slug="satanism"] .room-theme-select,
-#community-room-panel[data-room-slug="satanism"] .slow-mode-pill {
-  color:#ffe6d1;background:rgba(16,3,4,.94);border-color:rgba(255,91,62,.58);
-}
-#community-room-panel[data-room-slug="satanism"] .room-banner {
-  position:relative;
-  min-height:clamp(150px,22vh,250px);
-  padding:clamp(20px,4vw,42px) 16px;
-  background-image:linear-gradient(180deg,rgba(5,0,0,.12),rgba(8,0,0,.34) 48%,rgba(5,0,0,.86)),var(--room-banner-art);
-  background-size:cover;
-  background-position:center 48%;
-  border:1px solid #ff6548;
-  border-radius:22px;
-  box-shadow:0 0 26px rgba(255,20,18,.36),inset 0 0 28px rgba(0,0,0,.32);
-}
-#community-room-panel[data-room-slug="satanism"] .room-banner strong {
-  color:#fff0df;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:clamp(26px,4vw,48px);
-  letter-spacing:.015em;
-  text-shadow:0 2px 2px #000,0 0 14px #a20c10,0 0 28px rgba(255,35,25,.62);
-}
-#community-room-panel[data-room-slug="satanism"] .room-banner span {color:#ffe0c4;text-shadow:0 1px 5px #000;}
-#community-room-panel[data-room-slug="satanism"] .community-chat-list {scrollbar-color:#9d171b #100506;}
-#community-room-panel[data-room-slug="satanism"] .community-message-bubble {
-  background:linear-gradient(145deg,rgba(30,5,7,.96),rgba(8,3,4,.97));
-  border:1px solid rgba(255,65,55,.78);
-  border-radius:17px;
-  box-shadow:0 0 12px rgba(255,24,22,.22),inset 0 0 12px rgba(255,35,30,.07);
-}
-#community-room-panel[data-room-slug="satanism"] .community-message.chat-bubble-own .community-message-bubble {
-  background:linear-gradient(145deg,rgba(76,7,11,.96),rgba(20,3,5,.98));
-  border-color:#ff5547;
-  box-shadow:0 0 16px rgba(255,30,25,.30);
-}
-#community-room-panel[data-room-slug="satanism"] .community-message-head b {color:#ffd19e;}
-#community-room-panel[data-room-slug="satanism"] .community-message-bubble p {color:#fff3eb;}
-#community-room-panel[data-room-slug="satanism"] .room-composer {
-  background:linear-gradient(100deg,rgba(14,3,4,.98),rgba(38,4,7,.96));
-  border-color:#ff5b47;
-  border-radius:24px;
-}
-#community-room-panel[data-room-slug="satanism"] #community-message-body {color:#fff4ed;}
-#community-room-panel[data-room-slug="satanism"] #community-message-body::placeholder {color:#c9aaa0;}
-#community-room-panel[data-room-slug="satanism"] .room-send {
-  color:#fff!important;
-  background:linear-gradient(145deg,#ff6048,#9c080f)!important;
-  border:1px solid #ffb18c;
-  box-shadow:0 0 20px rgba(255,25,20,.58);
-}
-#community-room-panel[data-room-slug="satanism"] .chat-day-separator {
-  color:#ffe4cc;background:rgba(65,5,9,.88);border:1px solid rgba(255,90,65,.65);
-  box-shadow:0 0 12px rgba(255,25,20,.24);
-}
+/* ==========================================================================
+   ROOM SHELL (consolidated). Replaces the appended Phase 2–4b override blocks.
+   Scope: #community-room-panel. Per-room values come from applyCommunityTheme():
+   data-room-slug, --accent, --room-background, --room-sidebar-art and the emblem <img>.
+   "html body" is used only where a higher-priority !important must be beaten.
+   ========================================================================== */
+:root { --room-nav-h: 64px; }
+html body #community-room-panel { --glow: color-mix(in srgb, var(--accent, #39f59a) 35%, transparent); }
+
+.sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0 0 0 0)!important; white-space:nowrap!important; border:0!important; }
+.ico { width:20px; height:20px; display:block; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.mobile-bottom-nav a > span .ico { width:22px; height:22px; margin:0 auto; }
+
+/* Header and back/close controls: 44px circular targets */
+html body #community-room-panel .room-header-btn,
+html body #community-room-panel .room-back,
+html body #community-room-panel .room-close { width:44px!important; height:44px!important; min-width:44px!important; min-height:44px!important; }
+html body #community-room-panel .room-header-btn { padding:0!important; border-radius:50%!important; border:1.5px solid var(--accent,#39f59a)!important; background:rgba(0,0,0,.45)!important; color:#fff!important; display:inline-flex!important; align-items:center!important; justify-content:center!important; font-size:18px!important; line-height:1!important; cursor:pointer; }
+html body #community-room-panel .room-header-btn:focus-visible { outline:2px solid var(--accent,#39f59a); outline-offset:2px; }
+html body #community-room-panel .room-header-btn .ico,
+html body #community-room-panel .room-back .ico,
+html body #community-room-panel .room-close .ico { width:22px; height:22px; }
+html body #community-room-panel #community-member-count { display:inline!important; }
+
+/* Composer: emoji toggle and send button */
+html body #community-room-panel #community-emoji-toggle { width:44px!important; height:44px!important; min-width:44px!important; min-height:44px!important; padding:0!important; border-radius:50%!important; border:1px solid var(--accent,#39f59a)!important; background:rgba(255,255,255,.06)!important; color:#f3fff7!important; font-size:22px!important; line-height:1!important; display:inline-flex!important; align-items:center!important; justify-content:center!important; }
+html body #community-room-panel #community-message-form button[type="submit"] { width:44px!important; height:44px!important; min-width:44px!important; min-height:44px!important; border-radius:50%!important; }
+
+/* Sidebar: artwork, emblem and items */
+html body #community-room-panel > .room-side { background-image:linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.38)), var(--room-sidebar-art, none)!important; background-size:cover!important; background-position:center!important; }
+html body #community-room-panel .room-icon { width:60px!important; height:60px!important; border-radius:50%!important; overflow:hidden!important; padding:0!important; display:flex; align-items:center; justify-content:center; border:2px solid var(--accent,#39f59a)!important; }
+html body #community-room-panel .room-icon img { width:100%!important; height:100%!important; object-fit:cover; display:block; }
+html body #community-room-panel .room-side-nav > .room-side-item { display:flex!important; align-items:center; justify-content:flex-start; gap:8px; min-height:44px!important; height:auto!important; }
+html body #community-room-panel .room-side-item .ico { width:18px; height:18px; }
+html body #community-room-panel #community-room-category{font-size:11px!important;line-height:1.2!important;letter-spacing:.02em!important;text-transform:none!important;white-space:nowrap!important;color:rgba(243,255,247,.82)!important;}
+
+/* Theme selector: full sidebar width and readable */
+html body #community-room-panel .room-side-nav > .room-theme-selector-wrap { display:block!important; width:100%!important; min-width:0!important; padding:0!important; }
+html body #community-room-panel .room-theme-selector-wrap select.room-theme-select { display:block!important; width:100%!important; min-width:0!important; max-width:100%!important; height:44px!important; min-height:44px!important; padding:0 8px!important; font-size:12px!important; border-radius:12px!important; border:1px solid var(--accent,#39f59a)!important; background:rgba(0,0,0,.55)!important; color:#f3fff7!important; }
+html body #community-room-panel .room-theme-selector-wrap select.room-theme-select{color:transparent!important;font-size:0!important;text-indent:-9999px!important;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23f3fff7' stroke-width='1.8' stroke-linecap='round'><circle cx='12' cy='12' r='9'/><circle cx='8' cy='10' r='1.2'/><circle cx='12' cy='7.5' r='1.2'/><circle cx='16' cy='10' r='1.2'/></svg>")!important;background-repeat:no-repeat!important;background-position:center!important;background-size:20px 20px!important;}
+
+/* Banner: taller, emblem above the title, accent border */
+html body #community-room-panel .room-banner { position:relative!important; min-height:150px!important; display:flex!important; flex-direction:column!important; align-items:center!important; justify-content:center!important; gap:4px!important; text-align:center!important; padding:14px 16px!important; border-radius:22px!important; overflow:hidden!important; border:1.5px solid var(--accent,#39f59a)!important; background-image:linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.8) 100%), var(--room-background, none)!important; background-size:cover!important; background-position:center!important; box-shadow:0 0 24px -8px var(--glow)!important; }
+html body #community-room-panel .room-banner-emblem { width:64px!important; height:64px!important; border-radius:50%!important; object-fit:cover!important; border:1.5px solid var(--accent,#39f59a)!important; box-shadow:0 0 14px var(--glow)!important; margin-bottom:2px!important; }
+html body #community-room-panel #community-room-title { font-size:clamp(22px,6vw,30px)!important; line-height:1.1!important; }
+
+/* Chat bubbles */
+html body #community-room-panel .community-message-bubble { border:1px solid color-mix(in srgb, var(--accent,#39f59a) 55%, transparent)!important; background:linear-gradient(160deg, rgba(12,22,16,.94), rgba(6,10,8,.97))!important; border-radius:18px!important; box-shadow:0 0 12px -5px var(--glow)!important; padding:10px 13px!important; }
+html body #community-room-panel .community-message.chat-bubble-own .community-message-bubble { background:linear-gradient(160deg, color-mix(in srgb, var(--accent,#39f59a) 24%, #0a0f0c), #07100b)!important; }
+html body #community-room-panel .community-message-avatar { width:38px!important; height:38px!important; border-radius:50%!important; border:2px solid var(--accent,#39f59a)!important; box-shadow:0 0 10px -2px var(--glow)!important; font-size:14px!important; }
+html body #community-room-panel .community-message-head small { color:rgba(243,255,247,.62)!important; font-size:11px!important; margin-left:auto; }
+html body #community-room-panel .member-tier-chip { border:1px solid var(--accent,#39f59a)!important; border-radius:999px; padding:1px 7px; font-size:10px; }
+html body #community-room-panel .community-report { font-size:11px; opacity:.7; }
+
+/* Today / Yesterday separators */
+html body #community-room-panel #community-chat-list > .chat-day-separator { display:flex; visibility:visible; opacity:1; justify-content:center; align-items:center; height:auto; min-height:24px; margin:6px auto 4px; padding:4px 14px; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent,#39f59a)!important; border:1px solid var(--accent,#39f59a); border-radius:999px; background:rgba(0,0,0,.45); width:max-content; max-width:90%; }
+
+/* Phone layout: rail width, stacked sidebar labels, navigation, panel above navigation */
 @media (max-width:900px) {
-  #community-room-panel[data-room-slug="satanism"] .room-banner {min-height:clamp(126px,19vh,190px);padding:16px 8px;}
-  #community-room-panel[data-room-slug="satanism"] .room-banner strong {font-size:clamp(22px,5vw,34px);}
-  #community-room-panel[data-room-slug="satanism"] .room-icon {width:58px;height:58px;}
-}
-@media (max-width:420px) {
-  #community-room-panel[data-room-slug="satanism"] .room-banner {min-height:124px;border-radius:14px;background-position:center;}
-  #community-room-panel[data-room-slug="satanism"] .room-banner strong {font-size:clamp(19px,5.2vw,25px);}
-  #community-room-panel[data-room-slug="satanism"] .community-message-bubble {border-radius:13px;}
+  #community-room-panel.community-room-panel:not(.hidden) {  }
+  html body #community-room-panel .room-side-nav > .room-side-item { flex-direction:column; justify-content:center; text-align:center; gap:4px; font-size:11px; line-height:1.15; padding:8px 4px; min-height:52px!important; }
+  body:has(#community-room-panel:not(.hidden)) .mobile-bottom-nav { display:grid!important; position:fixed; left:0; right:0!important; bottom:0!important; z-index:120!important; padding-bottom:env(safe-area-inset-bottom,0px)!important; }
+  html body #community-room-panel.community-room-panel:not(.hidden) { top:0!important; bottom:calc(var(--room-nav-h) + env(safe-area-inset-bottom,0px))!important; height:auto!important; max-height:none!important; }
 }
 
-
-
-/* ============================================================
-   PHASE 37 — Reference proportion and phone layout calibration
-   Keeps Phase 36 artwork, theme mapping, HTML IDs and app logic.
-   ============================================================ */
-
-/* The reference is a two-column messenger: a proportional room rail
-   and a wide conversation canvas. Scale the rail with the viewport. */
-#community-room-panel.community-room-panel:not(.hidden) {
-  grid-template-columns: clamp(76px, 20vw, 156px) minmax(0, 1fr) !important;
-  grid-template-rows: 62px minmax(0, 1fr) !important;
-}
-#community-room-panel > .room-side {
-  min-width: 0 !important;
-  padding: clamp(7px, 1.5vw, 14px) clamp(4px, .8vw, 10px) !important;
-  gap: clamp(6px, 1vw, 12px) !important;
-}
-#community-room-panel .room-icon {
-  width: clamp(48px, 9vw, 104px) !important;
-  height: clamp(48px, 9vw, 104px) !important;
-  flex: 0 0 auto !important;
-  margin-inline: auto !important;
-}
-#community-room-panel .room-side .eyebrow {
-  font-size: clamp(8px, 1vw, 11px) !important;
-  text-align: center !important;
-  line-height: 1.25 !important;
-}
-#community-room-panel .room-side-title {
-  font-size: clamp(11px, 1.45vw, 17px) !important;
-  line-height: 1.2 !important;
-  text-align: center !important;
-}
-#community-room-panel .room-side-nav {
-  display: grid !important;
-  grid-template-columns: minmax(0,1fr) !important;
-  gap: clamp(4px, .65vw, 8px) !important;
-  width: 100% !important;
-}
-#community-room-panel .room-side-nav button,
-#community-room-panel .room-side-actions button {
-  min-width: 0 !important;
-  min-height: clamp(36px, 5.2vw, 52px) !important;
-  padding: clamp(5px, .8vw, 10px) 4px !important;
-  justify-content: center !important;
-  font-size: clamp(8px, 1.05vw, 13px) !important;
-  line-height: 1.2 !important;
-  white-space: normal !important;
-  overflow-wrap: anywhere !important;
-}
-#community-room-panel .room-banner {
-  min-height: clamp(145px, 21vh, 265px) !important;
-  padding: clamp(16px, 3vw, 34px) 12px !important;
-  border-radius: clamp(14px, 2.2vw, 23px) !important;
-  background-position: center 46% !important;
-}
-#community-room-panel .room-banner strong {
-  font-size: clamp(23px, 4.8vw, 49px) !important;
-  line-height: 1.05 !important;
-}
-#community-room-panel .room-banner span {
-  font-size: clamp(9px, 1.45vw, 15px) !important;
-  line-height: 1.35 !important;
-}
-#community-room-panel .community-chat-list {
-  padding-inline: clamp(2px, .8vw, 10px) !important;
-}
-#community-room-panel .community-message-bubble {
-  min-width: 0 !important;
-  max-width: 100% !important;
-}
-#community-room-panel .community-message-head {
-  gap: 4px 7px !important;
-}
-#community-room-panel .community-message-head b {
-  font-size: clamp(10px, 1.25vw, 14px) !important;
-}
-#community-room-panel .community-message-bubble p {
-  font-size: clamp(12px, 1.65vw, 17px) !important;
-  line-height: 1.38 !important;
-}
-#community-room-panel .room-composer {
-  min-width: 0 !important;
-  gap: clamp(4px, .8vw, 10px) !important;
-}
-#community-room-panel #community-message-body {
-  min-width: 0 !important;
-  font-size: clamp(12px, 1.5vw, 16px) !important;
-}
-
-/* Tablet and phone: keep the reference's left rail, but preserve enough
-   message width for natural wrapping and comfortable thumb targets. */
-@media (max-width: 900px) {
-  #community-room-panel.community-room-panel:not(.hidden) {
-    grid-template-columns: clamp(76px, 20vw, 156px) minmax(0, 1fr) !important;
-    grid-template-rows: 56px minmax(0, 1fr) !important;
-  }
-  #community-room-panel > .room-side {
-    align-items: stretch !important;
-    padding: 8px clamp(3px, .8vw, 9px) !important;
-  }
-  #community-room-panel .room-icon {
-    width: clamp(48px, 9vw, 82px) !important;
-    height: clamp(48px, 9vw, 82px) !important;
-  }
-  #community-room-panel .room-side-nav button,
-  #community-room-panel .room-side-actions button {
-    font-size: clamp(8px, 1.15vw, 12px) !important;
-    min-height: 40px !important;
-  }
-  #community-room-panel .room-banner {
-    min-height: clamp(128px, 20vh, 210px) !important;
-  }
-}
-@media (max-width: 520px) {
-  #community-room-panel.community-room-panel:not(.hidden) {
-    grid-template-columns: 76px minmax(0, 1fr) !important;
-    grid-template-rows: 52px minmax(0, 1fr) !important;
-    padding: 4px !important;
-    border-radius: 12px !important;
-  }
-  #community-room-panel > .room-header {
-    gap: 4px !important;
-    padding-inline: 3px !important;
-  }
-  #community-room-panel .room-brand-copy strong { font-size: 12px !important; }
-  #community-room-panel .room-brand-copy small { font-size: 8px !important; }
-  #community-room-panel .room-header-btn {
-    width: 32px !important;
-    height: 32px !important;
-    min-width: 32px !important;
-  }
-  #community-room-panel .room-banner {
-    min-height: 124px !important;
-    padding: 12px 6px !important;
-  }
-  #community-room-panel .room-banner strong {
-    font-size: clamp(19px, 5.5vw, 27px) !important;
-  }
-  #community-room-panel .room-banner span { font-size: 9px !important; }
-  #community-room-panel .community-message-head b { font-size: 10px !important; }
-  #community-room-panel .community-message-bubble p { font-size: 12px !important; }
-  #community-room-panel .room-side-nav button,
-  #community-room-panel .room-side-actions button {
-    min-height: 36px !important;
-    font-size: 8px !important;
-    padding-inline: 2px !important;
-  }
-}
-@media (max-width: 360px) {
-  #community-room-panel.community-room-panel:not(.hidden) {
-    grid-template-columns: 68px minmax(0,1fr) !important;
-  }
-  #community-room-panel .room-icon { width: 44px !important; height: 44px !important; }
-  #community-room-panel .room-side-title { font-size: 10px !important; }
-}
-
-/* Keep the profile's reference layout compact and legible on phones. */
-@media (max-width: 520px) {
-  .profile-card,
-  #profile-section {
-    min-width: 0 !important;
-    overflow: hidden !important;
-  }
-  .profile-stats {
-    grid-template-columns: repeat(3, minmax(0,1fr)) !important;
-  }
-  .profile-actions {
-    display: grid !important;
-    grid-template-columns: minmax(0,1.4fr) repeat(3,minmax(0,.65fr)) !important;
-    gap: 6px !important;
-  }
-  .profile-actions button {
-    min-width: 0 !important;
-    min-height: 44px !important;
-    padding: 7px 4px !important;
-    font-size: 11px !important;
-  }
-}
+#community-room-panel .room-report-note{color:#ffe1dc;font-size:11px!important;line-height:1.3!important;text-shadow:0 0 3px rgba(0,0,0,.95);opacity:1}
+/* Consolidated: room panel grid. One rule per regime; every other panel grid declaration was overridden in all regimes. */
+#community-room-panel.community-room-panel:not(.hidden){grid-template-columns:minmax(116px,22%) minmax(0,1fr)}
+@media (max-width:900px){#community-room-panel.community-room-panel:not(.hidden){grid-template-columns:86px minmax(0,1fr)}}
